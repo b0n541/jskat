@@ -165,7 +165,13 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
      * @return TRUE, if the game is a schwarz game
      */
     public static boolean isSchwarz(final SkatGameData gameData) {
-        return gameData.isPlayerMadeNoTrick()
-                || gameData.getResult().isSchwarz();
+        final Player declarer = gameData.getDeclarer();
+        final boolean declarerMadeTrick = gameData.getTricks().stream()
+                .anyMatch(trick -> trick.getTrickWinner() == declarer);
+        final boolean opponentsMadeTrick = gameData.getTricks().stream()
+                .map(trick -> trick.getTrickWinner())
+                .anyMatch(winner -> winner != null && winner != declarer);
+
+        return !declarerMadeTrick || !opponentsMadeTrick || gameData.getResult().isSchwarz();
     }
 }

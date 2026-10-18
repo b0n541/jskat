@@ -5,6 +5,7 @@ import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameContract;
 import org.jskat.data.SkatGameData;
+import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -51,6 +52,21 @@ public class SchneiderSchwarzRuleTest extends AbstractJSkatTest {
         data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
 
         assertThat(SuitGrandRule.isSchwarz(data)).isTrue();
+    }
+
+    @Test
+    public void oneDefenderWithoutTrickDoesNotMakeOpponentPartySchwarz() {
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
+
+        final Trick declarerTrick = new Trick(0, Player.FOREHAND);
+        declarerTrick.setTrickWinner(Player.FOREHAND);
+        data.addTrick(declarerTrick);
+
+        final Trick opponentTrick = new Trick(1, Player.FOREHAND);
+        opponentTrick.setTrickWinner(Player.MIDDLEHAND);
+        data.addTrick(opponentTrick);
+
+        assertThat(SuitGrandRule.isSchwarz(data)).isFalse();
     }
 
     /**

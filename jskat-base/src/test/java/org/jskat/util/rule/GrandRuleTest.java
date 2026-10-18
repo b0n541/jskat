@@ -240,6 +240,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
         data.setDeclarer(Player.FOREHAND);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
         data.setDeclarerScore(120);
+        data.getResult().setSchwarz(true);
         data.calcResult();
         assertThat(data.getResult().getGameValue()).isEqualTo(96);
     }
@@ -269,8 +270,8 @@ public class GrandRuleTest extends AbstractJSkatTest {
         data.setDeclarer(Player.FOREHAND);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
         data.setDeclarerScore(120);
-        data.getGameResult().setSchneider(true);
-        data.getGameResult().setSchwarz(true);
+        data.getResult().setSchneider(true);
+        data.getResult().setSchwarz(true);
         data.calcResult();
         assertThat(data.getResult().getGameValue()).isEqualTo(168);
     }
@@ -327,6 +328,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
         data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarerScore(120);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.SJ, Card.HJ, Card.DJ));
+        data.getResult().setSchwarz(true);
         data.calcResult();
         assertThat(data.getResult().getGameValue()).isEqualTo(168);
     }

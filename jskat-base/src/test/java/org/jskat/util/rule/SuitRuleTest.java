@@ -214,6 +214,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
         data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(120);
+        data.getResult().setSchwarz(true);
 
         data.calcResult();
 
@@ -247,8 +248,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
         data.setAnnouncement(new GameAnnouncement(contract.withHand().withSchneider().withSchwarz()));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(120);
-        data.getGameResult().setSchneider(true);
-        data.getGameResult().setSchwarz(true);
+        data.getResult().setSchneider(true);
+        data.getResult().setSchwarz(true);
 
         data.calcResult();
 

@@ -626,10 +626,10 @@ public class MessageParser {
                 gameData.getResult().setSchneider(true);
             }
 
-        } else if ("z:1".equals(token)) {
+        } else if ("z:0".equals(token) || "z:1".equals(token)) {
 
             if (isNotNullGame(gameData)) {
-                gameData.getResult().setSchwarz(true);
+                gameData.getResult().setSchwarz("z:1".equals(token));
             }
         }
     }

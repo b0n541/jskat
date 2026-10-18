@@ -61,7 +61,7 @@ public class SkatGameDataTest {
     }
 
     @Test
-    void schneiderSchwarz() {
+    void declarerScoreDeterminesSchneiderButNotSchwarz() {
 
         assertFalse(gameData.isSchneider());
         assertFalse(gameData.isSchwarz());
@@ -74,7 +74,7 @@ public class SkatGameDataTest {
         gameData.setDeclarerScore(0);
 
         assertTrue(gameData.isSchneider());
-        assertTrue(gameData.isSchwarz());
+        assertFalse(gameData.isSchwarz());
 
         gameData.setDeclarerScore(15);
 
@@ -109,6 +109,82 @@ public class SkatGameDataTest {
         gameData.setDeclarerScore(120);
 
         assertTrue(gameData.isSchneider());
+        assertFalse(gameData.isSchwarz());
+    }
+
+    @Test
+    void zeroPointTrickPreventsDeclarerSchwarz() {
+        gameData.setDeclarer(Player.FOREHAND);
+        gameData.setAnnouncement(
+                new GameAnnouncement(
+                        new GameContract(GameType.CLUBS),
+                        CardList.of(Card.D7, Card.D8)));
+
+        final Trick trick = new Trick(0, Player.FOREHAND);
+        trick.addCard(Card.C7);
+        trick.addCard(Card.S8);
+        trick.addCard(Card.H9);
+        trick.setTrickWinner(Player.FOREHAND);
+        gameData.addTrick(trick);
+
+        final Trick opponentTrick = new Trick(1, Player.MIDDLEHAND);
+        opponentTrick.addCard(Card.CA);
+        opponentTrick.addCard(Card.ST);
+        opponentTrick.addCard(Card.H7);
+        opponentTrick.setTrickWinner(Player.MIDDLEHAND);
+        gameData.addTrick(opponentTrick);
+
+        gameData.setSchneiderSchwarz();
+
+        assertFalse(gameData.isSchwarz());
+    }
+
+    @Test
+    void zeroPointTrickPreventsOpponentSchwarz() {
+        gameData.setDeclarer(Player.FOREHAND);
+        gameData.setAnnouncement(
+                new GameAnnouncement(
+                        new GameContract(GameType.CLUBS),
+                        CardList.of(Card.D7, Card.D8)));
+        gameData.addPlayerPoints(Player.FOREHAND, 120);
+
+        final Trick declarerTrick = new Trick(0, Player.FOREHAND);
+        declarerTrick.addCard(Card.CA);
+        declarerTrick.addCard(Card.ST);
+        declarerTrick.addCard(Card.H7);
+        declarerTrick.setTrickWinner(Player.FOREHAND);
+        gameData.addTrick(declarerTrick);
+
+        final Trick opponentTrick = new Trick(1, Player.FOREHAND);
+        opponentTrick.addCard(Card.C7);
+        opponentTrick.addCard(Card.S8);
+        opponentTrick.addCard(Card.H9);
+        opponentTrick.setTrickWinner(Player.MIDDLEHAND);
+        gameData.addTrick(opponentTrick);
+
+        gameData.setSchneiderSchwarz();
+
+        assertFalse(gameData.isSchwarz());
+    }
+
+    @Test
+    void skatPointsDoNotPreventDeclarerSchwarz() {
+        gameData.setDeclarer(Player.FOREHAND);
+        gameData.setAnnouncement(
+                new GameAnnouncement(
+                        new GameContract(GameType.CLUBS),
+                        CardList.of(Card.CA, Card.D7)));
+        gameData.addPlayerPoints(Player.FOREHAND, 11);
+
+        final Trick trick = new Trick(0, Player.FOREHAND);
+        trick.addCard(Card.C7);
+        trick.addCard(Card.S8);
+        trick.addCard(Card.H9);
+        trick.setTrickWinner(Player.MIDDLEHAND);
+        gameData.addTrick(trick);
+
+        gameData.setSchneiderSchwarz();
+
         assertTrue(gameData.isSchwarz());
     }
 

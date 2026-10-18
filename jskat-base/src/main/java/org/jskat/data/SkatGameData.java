@@ -7,6 +7,7 @@ import org.jskat.util.*;
 import org.jskat.util.rule.RamschRule;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
+import org.jskat.util.rule.SuitGrandRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -413,7 +414,6 @@ public class SkatGameData {
 
         playerPoints.put(declarer, newScore);
         result.setSchneider(GameType.GRAND_SUIT.contains(getGameType()) && (newScore < 31 || newScore > 89));
-        result.setSchwarz(GameType.GRAND_SUIT.contains(getGameType()) && (newScore == 0 || newScore == 120));
     }
 
     /**
@@ -944,7 +944,7 @@ public class SkatGameData {
     }
 
     /**
-     * Sets the schneider and schwarz flag according the player points
+     * Sets the schneider flag according to player points and the schwarz flag according to won tricks.
      */
     public void setSchneiderSchwarz() {
         // FIXME this is rule logic --> move to SuitGrandRule
@@ -954,7 +954,7 @@ public class SkatGameData {
             result.setSchneider(true);
         }
 
-        if (declarerPoints == 120 || declarerPoints == 0) {
+        if (SuitGrandRule.isSchwarz(this)) {
             result.setSchwarz(true);
         }
     }

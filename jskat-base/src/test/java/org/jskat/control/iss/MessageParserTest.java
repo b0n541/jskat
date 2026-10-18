@@ -28,6 +28,17 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class MessageParserTest extends AbstractJSkatTest {
 
+    @Test
+    public void zeroPointTrickIsNotSchwarz() {
+        final String gameSummary = "(;P0[foo]P1[bar]P2[baz]MV[0 C.D7.D8]"
+                + "R[d:0 loss v:-48 m:1 bidok p:0 t:1 s:1 z:0];)";
+
+        final SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
+
+        assertThat(gameData.getDeclarerScore()).isZero();
+        assertThat(gameData.isSchwarz()).isFalse();
+    }
+
     /**
      * Test the parsing of the game summary
      */
