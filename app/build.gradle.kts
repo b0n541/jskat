@@ -25,7 +25,7 @@ javafx {
     version = javafxVersion
 }
 
-version = "0.24.0"
+version = "0.25.0-SNAPSHOT"
 
 val applicationVersion = version.toString()
 val generatedVersionSourceDirectory = layout.buildDirectory.dir("generated/sources/application-version/kotlin")
