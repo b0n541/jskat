@@ -367,9 +367,10 @@ public class SkatGame {
             setActivePlayer(Player.FOREHAND);
 
             // check whether forehand holds at least one bid
-            if (getPlayerInstance(Player.FOREHAND).bidMore(18) > 0) {
+            final int foreHandBidValue = getPlayerInstance(Player.FOREHAND).bidMore(18);
+            if (foreHandBidValue > 0) {
                 log.debug("Fore hand holds 18");
-                eventBus.post(new TableGameMoveEvent(tableName, new BidEvent(secondWinner, data.getMaxBidValue())));
+                eventBus.post(new TableGameMoveEvent(tableName, new BidEvent(secondWinner, foreHandBidValue)));
             } else {
                 log.debug("Fore hand passes too");
                 eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(Player.FOREHAND, data.getNextBidValue())));

@@ -1,9 +1,11 @@
 package org.jskat.control;
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.ai.test.*;
+import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.data.*;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatTableOptions.RuleSet;
@@ -13,6 +15,7 @@ import org.jskat.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -122,6 +125,42 @@ public class SkatGameTest extends AbstractJSkatTest {
         final SkatGameResult result = game.getGameResult();
         assertFalse(result.isWon());
         assertThat(result.getGameValue()).isEqualTo(0);
+    }
+
+    @Test
+    public void testForehandBid18IsReportedWhenBothOtherPlayersPass() throws Exception {
+        final JSkatPlayer forehand = mock(JSkatPlayer.class);
+        final JSkatPlayer middlehand = mock(JSkatPlayer.class);
+        final JSkatPlayer rearhand = mock(JSkatPlayer.class);
+        when(forehand.getPlayerName()).thenReturn("forehand");
+        when(middlehand.getPlayerName()).thenReturn("middlehand");
+        when(rearhand.getPlayerName()).thenReturn("rearhand");
+        when(forehand.bidMore(anyInt())).thenReturn(18);
+        when(middlehand.bidMore(anyInt())).thenReturn(0);
+        when(rearhand.bidMore(anyInt())).thenReturn(0);
+
+        final BidEventCapture capture = new BidEventCapture();
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(TABLE_NAME).register(capture);
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD, forehand, middlehand, rearhand);
+        game.setMaxSleep(0);
+
+        final Method bidding = SkatGame.class.getDeclaredMethod("bidding");
+        bidding.setAccessible(true);
+        bidding.invoke(game);
+
+        assertThat(capture.bids).anySatisfy(event -> {
+            assertThat(event.player).isEqualTo(Player.FOREHAND);
+            assertThat(event.bid).isEqualTo(18);
+        });
+    }
+
+    private static final class BidEventCapture {
+        private final List<BidEvent> bids = new ArrayList<>();
+
+        @Subscribe
+        public void on(BidEvent event) {
+            bids.add(event);
+        }
     }
 
     private static JSkatPlayer getNoBiddingPlayer() {
