@@ -76,12 +76,10 @@ the application directly with `java -jar` when using the fat JAR.
 
 ## Contribution workflow
 
-1. Check [`.scratch/`](.scratch/) for an existing specification or ticket related
-   to your change.
-2. Create a feature branch from `develop`.
-3. Make a focused change and add or update tests where appropriate.
-4. Run `./gradlew test`.
-5. Open a pull request targeting `develop`.
+1. Create a feature branch from `develop`.
+2. Make a focused change and add or update tests where appropriate.
+3. Run `./gradlew test`.
+4. Open a pull request targeting `develop`.
 
 For ticketed work, include the ticket number in the commit subject, for example:
 `#194 Add replay navigation`.
