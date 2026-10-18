@@ -11,6 +11,11 @@ import java.util.Vector;
  * Some tools that are used in the whole application and by the skat players
  */
 public class Tools {
+    /**
+     * Creates an instance of this type.
+     */
+    public Tools() {
+    }
 
     /**
      * Converts an int array to a String

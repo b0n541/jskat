@@ -6,6 +6,11 @@ import org.jskat.util.*;
  * Rules that are in common for suit, grand and ramsch games
  */
 public abstract class SuitGrandRamschRule extends AbstractSkatRule {
+    /**
+     * Creates an instance of this type.
+     */
+    protected SuitGrandRamschRule() {
+    }
 
     /**
      * @see SkatRule#isCardAllowed(GameType, Card, CardList, Card)

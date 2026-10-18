@@ -12,6 +12,9 @@ import java.util.ResourceBundle;
  */
 public class JSkatResourceBundle {
 
+    /**
+     * Shared localized string resources.
+     */
     public final static JSkatResourceBundle INSTANCE = new JSkatResourceBundle();
 
     private JSkatOptions options = null;

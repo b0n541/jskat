@@ -13,8 +13,16 @@ import java.util.Objects;
  */
 public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
 
+    /**
+     * Card played into the trick.
+     */
     public final Card card;
 
+    /**
+     * Performs trick card played event.
+     * @param player player value.
+     * @param card card value.
+     */
     public TrickCardPlayedEvent(final Player player, final Card card) {
         super(player);
         this.card = card;

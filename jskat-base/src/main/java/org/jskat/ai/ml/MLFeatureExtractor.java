@@ -13,6 +13,11 @@ import java.util.Map;
  * Implements feature engineering matching the skat-ml-models interface.
  */
 public class MLFeatureExtractor {
+    /**
+     * Creates an instance of this type.
+     */
+    public MLFeatureExtractor() {
+    }
 
     /**
      * Card ordering for ML models (jacks first, then suits).
@@ -128,6 +133,8 @@ public class MLFeatureExtractor {
     /**
      * Gets the ML index for a card (0-31).
      * This is the canonical card encoding used by skat-ml-models.
+      * @param card card value.
+      * @return result of this operation.
      */
     public static int getMLIndex(Card card) {
         return CARD_TO_ML_INDEX.get(card);
@@ -136,6 +143,8 @@ public class MLFeatureExtractor {
     /**
      * Gets the game type index (0-5).
      * Order: DIAMONDS, HEARTS, SPADES, CLUBS, GRAND, NULL
+      * @param gameType game type value.
+      * @return result of this operation.
      */
     public static int getGameTypeIndex(GameType gameType) {
         return switch (gameType) {
@@ -152,6 +161,8 @@ public class MLFeatureExtractor {
     /**
      * Gets the position index (0-2).
      * Order: FOREHAND, MIDDLEHAND, REARHAND
+      * @param position position value.
+      * @return result of this operation.
      */
     public static int getPositionIndex(Player position) {
         return position.ordinal();

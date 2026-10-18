@@ -11,6 +11,8 @@ import org.jskat.gui.action.AbstractJSkatAction;
 public class SendChatMessageAction extends AbstractJSkatAction {
 
     /**
+     * Creates the send chat message action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public SendChatMessageAction() {

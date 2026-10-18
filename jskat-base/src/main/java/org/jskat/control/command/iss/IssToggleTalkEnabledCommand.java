@@ -5,8 +5,15 @@ package org.jskat.control.command.iss;
  * setting on ISS.
  */
 public class IssToggleTalkEnabledCommand {
+    /**
+     * Name of the table whose talk state should change.
+     */
     public final String tableName;
 
+    /**
+     * Performs iss toggle talk enabled command.
+     * @param tableName table name value.
+     */
     public IssToggleTalkEnabledCommand(String tableName) {
         this.tableName = tableName;
     }

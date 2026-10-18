@@ -1124,11 +1124,19 @@ public class SkatGame {
         return data.getGameState();
     }
 
+    /**
+     * Moves a card from the skat into the player's hand.
+     * @param command command identifying the card to take
+     */
     @Subscribe
     public void takeCardFromSkatOn(final TakeCardFromSkatCommand command) {
         eventBus.post(new SkatCardTakenEvent(tableName, command.card));
     }
 
+    /**
+     * Moves a card from the player's hand into the skat.
+     * @param command command identifying the card to discard
+     */
     @Subscribe
     public void putCardIntoSkatOn(final PutCardIntoSkatCommand command) {
         eventBus.post(new SkatCardPutEvent(tableName, command.card));

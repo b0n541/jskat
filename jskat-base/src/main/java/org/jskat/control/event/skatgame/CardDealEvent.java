@@ -14,9 +14,20 @@ import java.util.Objects;
  */
 public final class CardDealEvent implements SkatGameEvent {
 
+    /**
+     * Cards dealt to each player.
+     */
     public final Map<Player, CardList> playerCards;
+    /**
+     * Cards dealt into the skat.
+     */
     public final CardList skat;
 
+    /**
+     * Creates an event describing the deal.
+     * @param playerCards cards dealt to each player
+     * @param skat cards dealt into the skat
+     */
     public CardDealEvent(Map<Player, CardList> playerCards, CardList skat) {
         this.playerCards = Collections.unmodifiableMap(playerCards);
         this.skat = skat.getImmutableCopy();

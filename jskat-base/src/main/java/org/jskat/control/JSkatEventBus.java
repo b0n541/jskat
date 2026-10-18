@@ -25,8 +25,14 @@ public class JSkatEventBus {
 
     private final EventBus mainEventBus;
 
+    /**
+     * Shared event bus for application events.
+     */
     public final static JSkatEventBus INSTANCE = new JSkatEventBus();
     // TODO should be private
+    /**
+     * Event buses used for table-specific events, keyed by table name.
+     */
     public final static Map<String, EventBus> TABLE_EVENT_BUSSES = new HashMap<>();
 
     private JSkatEventBus() {
@@ -34,19 +40,35 @@ public class JSkatEventBus {
         mainEventBus.register(this);
     }
 
+    /**
+     * Performs register.
+     * @param listener listener value.
+     */
     public void register(Object listener) {
         mainEventBus.register(listener);
     }
 
+    /**
+     * Performs post.
+     * @param event event value.
+     */
     public void post(Object event) {
         mainEventBus.post(event);
     }
 
+    /**
+     * Logs events that have no registered subscribers.
+     * @param event unmatched event wrapper
+     */
     @Subscribe
     public void on(DeadEvent event) {
         LOG.error("Received dead event: " + event.getEvent());
     }
 
+    /**
+     * Creates an event bus for a newly created table.
+     * @param command table creation command
+     */
     @Subscribe
     public void createTableEventBusOn(final CreateTableCommand command) {
         if (!JSkatEventBus.TABLE_EVENT_BUSSES.containsKey(command.tableName)) {
@@ -57,6 +79,10 @@ public class JSkatEventBus {
         }
     }
 
+    /**
+     * Removes the event bus for a deleted table.
+     * @param command table removal command
+     */
     @Subscribe
     public void removeTableEventBusOn(final RemoveTableCommand command) {
         JSkatEventBus.TABLE_EVENT_BUSSES.remove(command.tableName);
@@ -64,6 +90,10 @@ public class JSkatEventBus {
         post(new TableRemovedEvent(command.tableName, command.tableType));
     }
 
+    /**
+     * Dispatches a table event to the bus for its table.
+     * @param event table event to dispatch
+     */
     @Subscribe
     public void dispatchTableEventOn(AbstractTableEvent event) {
         if (event instanceof TableGameMoveEvent tableGameMoveEvent) {
@@ -75,6 +105,10 @@ public class JSkatEventBus {
         }
     }
 
+    /**
+     * Dispatches a table command to the bus for its table.
+     * @param command table command to dispatch
+     */
     @Subscribe
     public void dispatchTableCommandOn(AbstractTableCommand command) {
         if (JSkatEventBus.TABLE_EVENT_BUSSES.containsKey(command.tableName)) {

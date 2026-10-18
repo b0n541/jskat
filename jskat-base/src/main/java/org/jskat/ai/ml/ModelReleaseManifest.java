@@ -15,7 +15,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/** Parsed model-release manifest. The manifest owns the file inventory and integrity data. */
+/**
+ * Parsed model-release manifest. The manifest owns the file inventory and integrity data.
+ */
 public final class ModelReleaseManifest {
 
     private static final ObjectMapper JSON = new ObjectMapper();
@@ -25,6 +27,12 @@ public final class ModelReleaseManifest {
     private final List<ModelAsset> assets;
     private final String sourceJson;
 
+    /**
+     * Performs model release manifest.
+     * @param version version value.
+     * @param baseUrl base url value.
+     * @param assets assets value.
+     */
     public ModelReleaseManifest(final String version, final URI baseUrl, final List<ModelAsset> assets) {
         this(version, baseUrl, assets, null);
     }
@@ -37,6 +45,11 @@ public final class ModelReleaseManifest {
         this.sourceJson = sourceJson;
     }
 
+    /**
+     * Performs parse.
+     * @param json json value.
+     * @return parse result.
+     */
     public static ModelReleaseManifest parse(final String json) {
         try {
             final JsonNode root = JSON.readTree(json);
@@ -115,18 +128,34 @@ public final class ModelReleaseManifest {
         return new IllegalArgumentException(message);
     }
 
+    /**
+     * Performs version.
+     * @return version result.
+     */
     public String version() {
         return version;
     }
 
+    /**
+     * Performs base url.
+     * @return base url result.
+     */
     public URI baseUrl() {
         return baseUrl;
     }
 
+    /**
+     * Performs assets.
+     * @return assets result.
+     */
     public List<ModelAsset> assets() {
         return assets;
     }
 
+    /**
+     * Performs source json.
+     * @return source json result.
+     */
     public String sourceJson() {
         if (sourceJson != null) {
             return sourceJson;
@@ -149,10 +178,19 @@ public final class ModelReleaseManifest {
         }
     }
 
+    /**
+     * Total bytes.
+     * @return total bytes result.
+     */
     public long totalBytes() {
         return assets.stream().mapToLong(ModelAsset::sizeBytes).sum();
     }
 
+    /**
+     * Performs asset.
+     * @param name name value.
+     * @return asset result.
+     */
     public ModelAsset asset(final String name) {
         return assets.stream()
                 .filter(asset -> asset.name().equals(name))

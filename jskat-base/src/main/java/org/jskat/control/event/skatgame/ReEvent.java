@@ -8,6 +8,10 @@ import org.jskat.util.Player;
  */
 public final class ReEvent extends AbstractPlayerMoveEvent {
 
+    /**
+     * Performs re event.
+     * @param player player value.
+     */
     public ReEvent(Player player) {
         super(player);
     }

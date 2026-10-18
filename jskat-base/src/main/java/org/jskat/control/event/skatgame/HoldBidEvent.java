@@ -7,6 +7,11 @@ import org.jskat.util.Player;
  */
 public final class HoldBidEvent extends AbstractBidEvent {
 
+    /**
+     * Performs hold bid event.
+     * @param player player value.
+     * @param bid bid value.
+     */
     public HoldBidEvent(Player player, Integer bid) {
         super(player, bid);
     }

@@ -10,6 +10,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class GameAnnounceAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the game announce action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public GameAnnounceAction() {

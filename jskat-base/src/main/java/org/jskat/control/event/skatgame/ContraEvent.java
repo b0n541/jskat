@@ -8,6 +8,10 @@ import org.jskat.util.Player;
  */
 public final class ContraEvent extends AbstractPlayerMoveEvent {
 
+    /**
+     * Performs contra event.
+     * @param player player value.
+     */
     public ContraEvent(Player player) {
         super(player);
     }

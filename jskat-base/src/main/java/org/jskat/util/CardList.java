@@ -17,6 +17,9 @@ public class CardList implements Iterable<Card> {
 
     private static final Logger LOG = LoggerFactory.getLogger(CardList.class);
 
+    /**
+     * Performs card list.
+     */
     protected List<Card> cards = new ArrayList<>();
 
     /**
@@ -26,6 +29,10 @@ public class CardList implements Iterable<Card> {
 
     }
 
+    /**
+     * Performs empty.
+     * @return empty result.
+     */
     public static final CardList empty() {
         return new CardList();
     }
@@ -45,13 +52,26 @@ public class CardList implements Iterable<Card> {
      * @param newCards Predefined cards
      */
     public CardList(final CardList newCards) {
+        /**
+         * Performs card list.
+         * @param cards cards value.
+         */
         cards.addAll(newCards.cards);
     }
 
+    /**
+     * Performs card list.
+     * @param cards cards value.
+     */
     public CardList(final Card... cards) {
         this(Arrays.asList(cards));
     }
 
+    /**
+     * Performs of.
+     * @param cards cards value.
+     * @return of result.
+     */
     public static CardList of(final Card... cards) {
         return new CardList(cards);
     }

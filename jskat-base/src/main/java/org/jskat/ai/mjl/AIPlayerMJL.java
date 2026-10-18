@@ -18,14 +18,15 @@ public class AIPlayerMJL extends AbstractAIPlayer {
     private CardPlayer aiPlayer;
     int maxBidValue = -1;
 
+    /**
+     * Performs a i player m j l.
+     */
     public AIPlayerMJL() {
         log.debug(".new()");
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.JSkatPlayer#preparateForNewGame()
      */
     @Override
     public void prepareForNewGame() {
@@ -36,9 +37,7 @@ public class AIPlayerMJL extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.JSkatPlayer#bidMore(int)
      */
     @Override
     public int bidMore(final int nextBidValue) {
@@ -53,9 +52,7 @@ public class AIPlayerMJL extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.JSkatPlayer#holdBid(int)
      */
     @Override
     public boolean holdBid(final int currBidValue) {
@@ -70,9 +67,7 @@ public class AIPlayerMJL extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.JSkatPlayer#lookIntoSkat()
      */
     @Override
     public boolean pickUpSkat() {
@@ -82,9 +77,7 @@ public class AIPlayerMJL extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.JSkatPlayer#announceGame()
      */
     @Override
     public GameContract announceGame() {
@@ -92,9 +85,7 @@ public class AIPlayerMJL extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.JSkatPlayer#discardSkat()
      */
     @Override
     public CardList getCardsToDiscard() {
@@ -113,9 +104,7 @@ public class AIPlayerMJL extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.AbstractJSkatPlayer#startGame()
      */
     @Override
     public void startGame() {
@@ -134,9 +123,7 @@ public class AIPlayerMJL extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.JSkatPlayer#playCard()
      */
     @Override
     public Card playCard() {

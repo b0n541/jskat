@@ -5,6 +5,7 @@ import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 
 /**
+ * Implements the card player strategy for Skat.
  * @author Markus J. Luzius (markus@luzius.de)
  * 
  */

@@ -12,11 +12,18 @@ import org.slf4j.LoggerFactory;
  * Implementation of skat rules for Ramsch games
  */
 public class RamschRule extends SuitGrandRamschRule {
+    /**
+     * Creates an instance of this type.
+     */
+    public RamschRule() {
+    }
 
     private static final Logger log = LoggerFactory.getLogger(RamschRule.class);
 
     /**
-     * {@inheritDoc}
+     * Determines whether the given game was overbid.
+     * @param gameData current game data
+     * @return {@code true} when the bid exceeds the game value
      */
     @Override
     public int getGameValueForWonGame(final SkatGameData gameData) {
@@ -26,7 +33,9 @@ public class RamschRule extends SuitGrandRamschRule {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the base multiplier for a Ramsch game.
+     * @param gameData current game data
+     * @return Ramsch multiplier
      */
     @Override
     public int calcGameResult(final SkatGameData gameData) {
@@ -124,7 +133,9 @@ public class RamschRule extends SuitGrandRamschRule {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the base multiplier for a Ramsch game.
+     * @param gameData current game data
+     * @return Ramsch multiplier
      */
     public int getBaseMultiplier(final SkatGameData gameData) {
 
@@ -147,7 +158,8 @@ public class RamschRule extends SuitGrandRamschRule {
     }
 
     /**
-     * {@inheritDoc}
+ * Returns the base multiplier for a Ramsch game.
+     *
      */
     @Override
     public boolean isPlayWithJacks(final SkatGameData gameData) {

@@ -11,6 +11,11 @@ import java.security.CodeSource;
  * Resolves the default save path for desktop applications
  */
 public class DesktopSavePathResolver implements SavePathResolver {
+    /**
+     * Creates an instance of this type.
+     */
+    public DesktopSavePathResolver() {
+    }
 
     private final static Logger log = LoggerFactory.getLogger(DesktopSavePathResolver.class);
 

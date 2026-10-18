@@ -178,6 +178,10 @@ public class SkatGameData {
         log.debug("Game data created");
     }
 
+    /**
+     * Applies a game event to this data object and records it for replay.
+     * @param event event to apply
+     */
     @Subscribe
     public void adjustDataOn(final SkatGameEvent event) {
         event.processForward(this);
@@ -718,6 +722,10 @@ public class SkatGameData {
                 Player.REARHAND, dealtCards.get(Player.REARHAND).getImmutableCopy());
     }
 
+    /**
+     * Returns or indicates dealt declarer cards and skat.
+     * @return get dealt declarer cards and skat result.
+     */
     public CardList getDealtDeclarerCardsAndSkat() {
         final CardList declarerCards = new CardList(getDealtCards().get(getDeclarer()));
         declarerCards.addAll(getDealtSkat());
@@ -796,6 +804,10 @@ public class SkatGameData {
         playerBids.get(player).add(bidValue);
     }
 
+    /**
+     * Remove last player bid.
+     * @param player player value.
+     */
     public void removeLastPlayerBid(final Player player) {
         final int lastIndex = playerBids.get(player).size() - 1;
         playerBids.get(player).remove(lastIndex);
@@ -859,6 +871,10 @@ public class SkatGameData {
         return announcement.contract();
     }
 
+    /**
+     * Returns or indicates announcement.
+     * @return get announcement result.
+     */
     public GameAnnouncement getAnnouncement() {
         return announcement;
     }
@@ -959,6 +975,9 @@ public class SkatGameData {
         }
     }
 
+    /**
+     * Sets jungfrau durchmarsch.
+     */
     public void setJungfrauDurchmarsch() {
         // FIXME this is rule logic --> move to RamschRule
         for (final Player currPlayer : Player.values()) {

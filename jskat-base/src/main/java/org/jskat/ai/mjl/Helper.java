@@ -6,9 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Implements the helper strategy for Skat.
  * @author Markus J. Luzius (markus@luzius.de)
  */
 public class Helper {
+    /**
+     * Creates an instance of this type.
+     */
+    public Helper() {
+    }
 
     private static final Logger log = LoggerFactory.getLogger(Helper.class);
 

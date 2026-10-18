@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class PreferencesAction extends AbstractJSkatAction {
 
     /**
+     * Creates the preferences action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public PreferencesAction() {

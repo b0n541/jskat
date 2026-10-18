@@ -10,6 +10,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class PlaySchiebeRamschAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the play schiebe ramsch action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public PlaySchiebeRamschAction() {

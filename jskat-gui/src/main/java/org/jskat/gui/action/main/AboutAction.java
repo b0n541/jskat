@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class AboutAction extends AbstractJSkatAction {
 
     /**
+     * Creates the about action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public AboutAction() {

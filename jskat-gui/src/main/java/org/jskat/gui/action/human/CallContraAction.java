@@ -10,6 +10,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class CallContraAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the call contra action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public CallContraAction() {

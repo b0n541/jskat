@@ -11,6 +11,9 @@ import org.jskat.util.Suit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Defines the algorithm suit type.
+ */
 public class AlgorithmSuit extends AbstractAlgorithmAI {
 
 	private static final Logger log = LoggerFactory.getLogger(AlgorithmSuit.class);
@@ -83,9 +86,21 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 		oSituation.setCardsAfterDiscarding(cardsAfterDiscarding);
 
 		return tDiscardCards;
+	/**
+	 * Provides this API member.
+	 */
 	}
 
 	// static methods for creating JUnit-tests and test cardplaybehavior
+	/**
+	 * Play start game card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @return play start game card result.
+	 */
 	public static Card playStartGameCard(final CardList pCards, final CardList pTrickCards,
 			final CardList pPlayedCards, final CardList pNotOpponentCards,
 			final Situation pSituation) {
@@ -118,6 +133,9 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 			tAcesCount++; // Diamonds
 		}
 
+		/**
+		 * Provides this API member.
+		 */
 		if (tAcesCount > 1) {
 			return getLowValueTrumpCard(pCards, pSituation.getTrumpSuit());
 		}
@@ -126,6 +144,15 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 				pNotOpponentCards, pSituation);
 	}
 
+	/**
+	 * Play forehand card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @return play forehand card result.
+	 */
 	public static Card playForehandCard(final CardList pCards, final CardList pTrickCards,
 			final CardList pPlayedCards, final CardList pNotOpponentCards,
 			final Situation pSituation) {
@@ -208,6 +235,9 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 
 			// Wenn eine hoehere Karte beim Gegner ist, als die eigene Hoechste
 			if (!Helper.isHighestSuitCard(possibleHighCard,
+					/**
+					 * Provides this API member.
+					 */
 					pSituation.getGameType(), pPlayedCards, pTrickCards)) {
 				possibleCards.add(possibleLowCard);
 			}
@@ -229,6 +259,15 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 		return getRandomAllowedCard(pCards, null, pSituation.getGameType());
 	}
 
+	/**
+	 * Play middlehand card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @return play middlehand card result.
+	 */
 	public static Card playMiddlehandCard(final CardList pCards,
 			final CardList pTrickCards, final CardList pPlayedCards,
 			final CardList pNotOpponentCards, final Situation pSituation) {
@@ -316,6 +355,12 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 					continue;
 				} else if (possibleHighCard.getRank() == Rank.ACE
 						&& possibleLowCard.getPoints() <= 3) {
+					/**
+					 * Performs if.
+					 * @param possibleHighCard possible high card value.
+					 * @param pPlayedCards p played cards value.
+					 * @return if result.
+					 */
 					possibleCards.add(possibleLowCard);
 				} else if (Helper.isHighestSuitCard(possibleHighCard,
 						pSituation.getGameType(), pPlayedCards, pTrickCards)) {
@@ -346,6 +391,15 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 				pSituation.getGameType());
 	}
 
+	/**
+	 * Play rearhand card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @return play rearhand card result.
+	 */
 	public static Card playRearhandCard(final CardList pCards, final CardList pTrickCards,
 			final CardList pPlayedCards, final CardList pNotOpponentCards,
 			final Situation pSituation) {
@@ -470,6 +524,9 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 			}
 			// Wenn nur eine Karte dieser Farbe, die zudem <= 4 Punkte Wert ist
 			// und eine Karte mit Wert >= 10 noch im Spiel ist -> abwerfen
+			/**
+			 * Provides this API member.
+			 */
 			if (pCards.getSuitCount(s, false) == 1
 					&& pCards.get(pCards.getFirstIndexOfSuit(s)).getPoints() <= 4
 					&& (!pNotOpponentCards.contains(Card.getCard(
@@ -507,6 +564,12 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 				pSituation.getGameType());
 	}
 
+	/**
+	 * Discard skat cards.
+	 * @param pBid p bid value.
+	 * @param pOwnCards p own cards value.
+	 * @return discard skat cards result.
+	 */
 	public static CardList discardSkatCards(final BidEvaluator pBid,
 			final CardList pOwnCards) {
 		final CardList tCards = new CardList(pOwnCards);

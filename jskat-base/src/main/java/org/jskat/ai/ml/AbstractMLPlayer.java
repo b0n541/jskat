@@ -28,7 +28,19 @@ import java.util.Random;
  */
 public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoCloseable {
 
+    /**
+     * Creates an ML player before its model assets are initialized.
+     */
+    protected AbstractMLPlayer() {
+    }
+
+    /**
+     * Logger for model inference and decision messages.
+     */
     private static final Logger logger = LoggerFactory.getLogger(AbstractMLPlayer.class);
+    /**
+     * Random source used when model inference cannot produce a decision.
+     */
     protected final Random random = new Random();
 
     /**
@@ -36,22 +48,45 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
      */
     protected static final float BID_CONFIDENCE_THRESHOLD = 0.70f;
 
-    // ONNX model wrappers
+    /**
+     * Shared dense model used to estimate bids.
+     */
     protected ONNXModelWrapper biddingDenseModel;
+    /**
+     * Shared transformer model used to select cards during play.
+     */
     protected TransformerModelWrapper cardPlayTransformerModel;
 
-    // Cached decisions (since getCardsToDiscard and announceGame are called separately)
+    /**
+     * Discard choice cached between discard and game announcement callbacks.
+     */
     protected CardList cachedDiscard;
+    /**
+     * Contract cached between discard and game announcement callbacks.
+     */
     protected GameContract cachedGameContract;
 
-    // ML-based bidding state
+    /**
+     * Highest bid accepted by the bidding model for the current hand.
+     */
     protected int mlMaxBidValue = 0;
+    /**
+     * Whether the model prefers picking up the skat.
+     */
     protected boolean mlShouldPickupSkat = true;
+    /**
+     * Whether bidding inference has run for the current hand.
+     */
     protected boolean bidCalculated = false;
 
     /**
      * Initializes shared models (bidding dense, card play transformer).
      * Subclasses should call this and then initialize their own game evaluation model.
+     */
+    /**
+     * Loads the shared bidding and card-play models.
+     * Subclasses should call this before running inference.
+     * @param models resolved paths to required model assets
      */
     protected void initializeSharedModels(final ResolvedModelSet models) {
         try {
@@ -147,6 +182,12 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         }
     }
 
+    /**
+     * Finds the highest bid whose predicted success probability reaches a threshold.
+     * @param probabilities success probability for each supported bid
+     * @param threshold minimum probability required to bid
+     * @return highest qualifying bid value, or zero when none qualifies
+     */
     protected int findMaxBid(float[] probabilities, float threshold) {
         for (int i = probabilities.length - 1; i >= 0; i--) {
             if (probabilities[i] >= threshold) {
@@ -233,6 +274,12 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         }
     }
 
+    /**
+     * Searches possible discards and contracts for the strongest expected outcome.
+     * @param currentHand hand including the picked up skat
+     * @param position player's seat
+     * @return best discard and contract found
+     */
     protected DiscardSearchResult searchDiscardSpace(CardList currentHand, Player position) {
         logger.debug("=== DISCARD SEARCH ===");
         logger.debug("Current hand (12 cards): {}", currentHand);
@@ -319,6 +366,15 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         }
     }
 
+    /**
+     * Searches contracts that satisfy the current bid constraint.
+     * @param playingHand cards retained for play
+     * @param matadorHand hand used to count top cards
+     * @param position player's seat
+     * @param isHandGame whether the skat remains unseen
+     * @param skatCards cards in the skat
+     * @return best candidate contract found
+     */
     protected GameSearchResult searchGameAnnouncements(CardList playingHand, CardList matadorHand, Player position, boolean isHandGame, CardList skatCards) {
         GameSearchResult best = null;
         double bestEV = Double.NEGATIVE_INFINITY;
@@ -384,6 +440,17 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
      * Evaluates a specific game contract. Subclasses implement this with their game evaluation model.
      * Returns null if the game doesn't meet the bid constraint.
      */
+    /**
+     * Evaluates a candidate contract using the subclass's game model.
+     * @param playingHand cards held while playing
+     * @param matadorHand hand used to determine top cards
+     * @param position player's seat
+     * @param contract candidate contract
+     * @param isHandGame whether the skat remains unseen
+     * @param bidConstraint minimum value required by the bid
+     * @param skatCards cards in the skat
+     * @return result for the contract, or {@code null} when it fails the bid constraint
+     */
     protected abstract GameSearchResult evaluateGameContract(CardList playingHand, CardList matadorHand, Player position, GameContract contract,
                                                               boolean isHandGame, int bidConstraint, CardList skatCards);
 
@@ -427,6 +494,12 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         return playable.get(random.nextInt(playable.size()));
     }
 
+    /**
+     * Runs transformer inference for the currently playable cards.
+     * @param playable legal cards
+     * @return model logits indexed by card
+     * @throws OrtException if ONNX inference fails
+     */
     protected float[] playCardWithTransformer(CardList playable) throws OrtException {
         Player me = knowledge.getPlayerPosition();
         Player left = me.getLeftNeighbor();
@@ -530,6 +603,11 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
 
     // ==================== Utility Methods ====================
 
+    /**
+     * Normalizes logits into probabilities using the softmax function.
+     * @param logits model output scores
+     * @return normalized probabilities
+     */
     protected float[] softmax(float[] logits) {
         float[] probs = new float[logits.length];
         float maxLogit = Float.NEGATIVE_INFINITY;
@@ -549,12 +627,24 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         return probs;
     }
 
+    /**
+     * Calculates the announced contract's value for a hand.
+     * @param contract announced contract
+     * @param hand cards used to count top cards
+     * @return game value
+     */
     protected int calculateGameValue(GameContract contract, CardList hand) {
         int baseValue = SkatConstants.getGameBaseValue(contract.gameType(), contract.hand(), contract.ouvert());
         int multiplier = getGameMultiplier(contract, hand);
         return baseValue * multiplier;
     }
 
+    /**
+     * Calculates the multiplier contributed by top cards and announcements.
+     * @param contract announced contract
+     * @param hand cards held by the declarer
+     * @return game multiplier
+     */
     protected int getGameMultiplier(GameContract contract, CardList hand) {
         GameType gameType = contract.gameType();
 
@@ -579,6 +669,9 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
 
     // ==================== Helper Classes ====================
 
+    /**
+     * Candidate discard and the estimated outcome of the resulting game.
+     */
     protected static class DiscardSearchResult {
         final CardList discardPair;
         final GameContract gameContract;
@@ -595,6 +688,9 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         }
     }
 
+    /**
+     * Estimated outcome for a candidate game contract.
+     */
     protected static class GameSearchResult {
         final GameContract gameContract;
         final float winProbability;
@@ -609,6 +705,9 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         }
     }
 
+    /**
+     * Playable card paired with its model probability.
+     */
     protected static class CardCandidate {
         final Card card;
         final float prob;

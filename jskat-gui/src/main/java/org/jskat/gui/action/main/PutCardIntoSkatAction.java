@@ -11,6 +11,8 @@ import org.jskat.util.Card;
 public class PutCardIntoSkatAction extends AbstractJSkatAction {
 
     /**
+     * Creates the put card into skat action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public PutCardIntoSkatAction() {

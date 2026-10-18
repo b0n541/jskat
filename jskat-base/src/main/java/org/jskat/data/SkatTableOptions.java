@@ -6,6 +6,11 @@ import java.util.Observable;
  * Skat table options
  */
 public class SkatTableOptions extends Observable {
+    /**
+     * Creates an instance of this type.
+     */
+    public SkatTableOptions() {
+    }
 
     /**
      * Holds the different rule sets
@@ -525,6 +530,10 @@ public class SkatTableOptions extends Observable {
         maxPlayerCount = newMaxPlayerCount;
     }
 
+    /**
+     * Sets bock event multiple of hundred score.
+     * @param isBockEventMultipleOfHundredScore is bock event multiple of hundred score value.
+     */
     public void setBockEventMultipleOfHundredScore(
             final Boolean isBockEventMultipleOfHundredScore) {
         bockEventMultipleOfHundredScore = isBockEventMultipleOfHundredScore;

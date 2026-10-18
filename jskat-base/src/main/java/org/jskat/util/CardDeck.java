@@ -9,10 +9,19 @@ public class CardDeck extends CardList {
 
     private final int MAX_CARDS = 32;
 
+    /**
+     * Cards grouped by suit.
+     */
     public final static Map<Suit, List<Card>> SUIT_CARDS;
+    /**
+     * Cards grouped by rank.
+     */
     public final static Map<Rank, List<Card>> RANK_CARDS;
 
     static {
+        /**
+         * S u i t  c a r d s value.
+         */
         SUIT_CARDS = Map.of(
                 Suit.CLUBS, List.of(Card.CJ, Card.CA, Card.CT, Card.CK, Card.CQ, Card.C9, Card.C8, Card.C7),
                 Suit.SPADES, List.of(Card.SJ, Card.SA, Card.ST, Card.SK, Card.SQ, Card.S9, Card.S8, Card.S7),

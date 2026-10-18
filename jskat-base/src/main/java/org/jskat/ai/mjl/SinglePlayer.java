@@ -9,12 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Implements the single player strategy for Skat.
  * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class SinglePlayer extends AbstractCardPlayer {
 
-	/** log */
+	/**
+	 * log
+	 */
 	private static Logger log = LoggerFactory.getLogger(SinglePlayer.class);
 	private final SkatRule rules;
 

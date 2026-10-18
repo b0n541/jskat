@@ -10,6 +10,8 @@ import org.jskat.gui.action.AbstractJSkatAction;
 public class ObserveTableAction extends AbstractJSkatAction {
 
     /**
+     * Creates the observe table action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ObserveTableAction() {

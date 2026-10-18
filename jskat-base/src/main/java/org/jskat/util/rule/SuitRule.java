@@ -6,6 +6,11 @@ import org.jskat.util.*;
  * Implementation of skat rules for Suit games
  */
 public class SuitRule extends SuitGrandRule {
+    /**
+     * Creates an instance of this type.
+     */
+    public SuitRule() {
+    }
 
     /**
      * {@inheritDoc}

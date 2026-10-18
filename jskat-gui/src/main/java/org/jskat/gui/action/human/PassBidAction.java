@@ -10,6 +10,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class PassBidAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the pass bid action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public PassBidAction() {

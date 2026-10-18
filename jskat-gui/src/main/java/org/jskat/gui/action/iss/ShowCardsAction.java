@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class ShowCardsAction extends AbstractJSkatAction {
 
     /**
+     * Creates the show cards action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ShowCardsAction() {

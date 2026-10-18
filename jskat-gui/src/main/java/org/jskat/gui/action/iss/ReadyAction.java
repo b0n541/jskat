@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository;
 public class ReadyAction extends AbstractJSkatAction {
 
     /**
+     * Creates the ready action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ReadyAction() {

@@ -42,6 +42,9 @@ public class JSkatMaster {
 
     private static final Logger log = LoggerFactory.getLogger(JSkatMaster.class);
 
+    /**
+     * Shared controller for the running JSkat application.
+     */
     public final static JSkatMaster INSTANCE = new JSkatMaster();
 
     private final JSkatOptions options;
@@ -114,6 +117,10 @@ public class JSkatMaster {
         }
     }
 
+    /**
+     * Create table.
+     * @param tableName table name value.
+     */
     public void createTable(final String tableName) {
         if (data.isFreeTableName(tableName)) {
             createLocalTable(tableName, view.getHumanPlayerForGUI());
@@ -179,7 +186,16 @@ public class JSkatMaster {
         startSeries(allPlayer, playerNames, numberOfRounds, unlimited, onlyPlayRamsch, sleeps, null);
     }
 
-    /** Starts a series using the model set established by the startup lifecycle. */
+    /**
+     * Starts a series using the model set established by the startup lifecycle.
+     * @param allPlayer player types for the series
+     * @param playerNames names assigned to the players
+     * @param numberOfRounds number of games to play
+     * @param unlimited whether to play without a round limit
+     * @param onlyPlayRamsch whether to play Ramsch games only
+     * @param sleeps delay between games in milliseconds
+     * @param resolvedModels resolved model assets for ML players
+     */
     public void startSeries(final List<String> allPlayer, final List<String> playerNames, final int numberOfRounds,
                             final boolean unlimited,
                             final boolean onlyPlayRamsch, final int sleeps,
@@ -219,6 +235,11 @@ public class JSkatMaster {
         table.startSkatSeries(numberOfRounds, unlimited, onlyPlayRamsch, sleeps);
     }
 
+    /**
+     * Create player.
+     * @param player player value.
+     * @return create player result.
+     */
     public static JSkatPlayer createPlayer(final String player) {
         return MLPlayerFactory.create(player, null).player();
     }

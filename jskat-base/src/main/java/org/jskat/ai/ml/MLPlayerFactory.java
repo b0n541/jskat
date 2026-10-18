@@ -2,12 +2,20 @@ package org.jskat.ai.ml;
 
 import org.jskat.player.JSkatPlayer;
 
-/** Sole player creation seam for ML types and ordinary reflective player types. */
+/**
+ * Sole player creation seam for ML types and ordinary reflective player types.
+ */
 public final class MLPlayerFactory {
 
     private MLPlayerFactory() {
     }
 
+    /**
+     * Create.
+     * @param playerType player type value.
+     * @param models models value.
+     * @return create result.
+     */
     public static PlayerCreationResult create(final String playerType, final ResolvedModelSet models) {
         if (MLPlayer.class.getName().equals(playerType)) {
             if (models == null) {

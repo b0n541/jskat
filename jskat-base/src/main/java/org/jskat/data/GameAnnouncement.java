@@ -13,7 +13,13 @@ import java.util.Objects;
  */
 public record GameAnnouncement(GameContract contract, CardList discardedCards) {
 
+    /**
+     * Validates and stores the declared game contract.
+     */
     public GameAnnouncement {
+        /**
+         * Provides this API member.
+         */
         Objects.requireNonNull(contract);
         Objects.requireNonNull(discardedCards);
 
@@ -32,6 +38,10 @@ public record GameAnnouncement(GameContract contract, CardList discardedCards) {
         }
     }
 
+    /**
+     * Performs game announcement.
+     * @param contract contract value.
+     */
     public GameAnnouncement(final GameContract contract) {
         this(contract, CardList.empty());
     }

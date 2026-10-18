@@ -19,11 +19,22 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-/** JavaFX-free facade for local model inspection, release discovery, and installation. */
+/**
+ * JavaFX-free facade for local model inspection, release discovery, and installation.
+ */
 public final class ModelManager {
 
+    /**
+     * Current model manifest version supported by the application.
+     */
     public static final String SUPPORTED_VERSION = "1.4.0";
+    /**
+     * S u p p o r t e d  v e r s i o n s value.
+     */
     public static final List<String> SUPPORTED_VERSIONS = List.of(SUPPORTED_VERSION);
+    /**
+     * R e q u i r e d  m o d e l  f i l e s value.
+     */
     public static final List<String> REQUIRED_MODEL_FILES = List.of(
             "bidding_dense.onnx",
             "bidding_dense.onnx.data",
@@ -39,21 +50,36 @@ public final class ModelManager {
     private final Path storeDirectory;
     private final ModelReleaseService releaseService;
 
+    /**
+     * Performs model manager.
+     */
     public ModelManager() {
         this(Path.of(System.getProperty("user.home"), ".jskat", "models"),
                 new GitHubModelReleaseService());
     }
 
+    /**
+     * Performs model manager.
+     * @param storeDirectory store directory value.
+     * @param releaseService release service value.
+     */
     public ModelManager(final Path storeDirectory, final ModelReleaseService releaseService) {
         this.storeDirectory = storeDirectory.toAbsolutePath().normalize();
         this.releaseService = releaseService;
     }
 
+    /**
+     * Performs store directory.
+     * @return store directory result.
+     */
     public Path storeDirectory() {
         return storeDirectory;
     }
 
-    /** Inspects only the local Active marker and files. It never creates directories or contacts the network. */
+    /**
+     * Inspects only the local Active marker and files. It never creates directories or contacts the network.
+     * @return current local model availability
+     */
     public ModelInspection inspectLocalAvailability() {
         final Path activeMarker = storeDirectory.resolve("active");
         if (!Files.isRegularFile(activeMarker)) {
@@ -116,7 +142,10 @@ public final class ModelManager {
         return ModelInspection.available(new ResolvedModelSet(version, paths));
     }
 
-    /** Checks the published stable release without changing local model state. */
+    /**
+     * Checks the published stable release without changing local model state.
+     * @return update availability and release information
+     */
     public ModelUpdateResult checkForUpdates() {
         final ModelInspection local = inspectLocalAvailability();
         final ModelReleaseService.RemoteRelease release;
@@ -157,6 +186,13 @@ public final class ModelManager {
         }
     }
 
+    /**
+     * Performs install.
+     * @param candidate candidate value.
+     * @param progress progress value.
+     * @param cancellation cancellation value.
+     * @return install result.
+     */
     public ModelInstallResult install(final ModelReleaseCandidate candidate,
                                       final Consumer<ModelDownloadProgress> progress,
                                       final ModelCancellation cancellation) {
@@ -226,6 +262,12 @@ public final class ModelManager {
         }
     }
 
+    /**
+     * Performs install.
+     * @param candidate candidate value.
+     * @param progress progress value.
+     * @return install result.
+     */
     public ModelInstallResult install(final ModelReleaseCandidate candidate,
                                       final Consumer<ModelDownloadProgress> progress) {
         return install(candidate, progress, ModelCancellation.never());

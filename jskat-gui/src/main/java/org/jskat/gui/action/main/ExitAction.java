@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class ExitAction extends AbstractJSkatAction {
 
     /**
+     * Creates the exit action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ExitAction() {

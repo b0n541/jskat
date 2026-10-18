@@ -32,6 +32,7 @@ public class MLPlayerPro extends AbstractMLPlayer {
 
     /**
      * Creates an ML Player Pro from the validated artifacts selected by the model manager.
+      * @param models models value.
      */
     public MLPlayerPro(final ResolvedModelSet models) {
         setPlayerName("MLPlayerPro");

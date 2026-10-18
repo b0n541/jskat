@@ -10,6 +10,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class PickUpSkatAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the pick up skat action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public PickUpSkatAction() {

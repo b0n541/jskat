@@ -7,6 +7,7 @@ import org.jskat.util.GameType;
 import org.jskat.util.Suit;
 
 /**
+ * Implements the trick info strategy for Skat.
  * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
@@ -160,12 +161,20 @@ public class TrickInfo {
 		return gameInfo.getTrump();
 	}
 
-	/** cards played in the current trick */
+	/**
+	 * cards played in the current trick
+	 */
 	private CardList trick;
-	/** id of the forehand player in this trick */
+	/**
+	 * id of the forehand player in this trick
+	 */
 	private int forehandPlayer;
-	/** position of the single player in this trick */
+	/**
+	 * position of the single player in this trick
+	 */
 	private int singlePlayerPos;
-	/** game info for the current trick */
+	/**
+	 * game info for the current trick
+	 */
 	private GameInfo gameInfo;
 }

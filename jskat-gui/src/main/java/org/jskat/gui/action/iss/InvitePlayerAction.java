@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository;
 public class InvitePlayerAction extends AbstractJSkatAction {
 
     /**
+     * Creates the invite player action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public InvitePlayerAction() {

@@ -25,6 +25,12 @@ import org.jskat.util.JSkatResourceBundle;
 public final class JSkatMenuFactory {
 
     /**
+     * Prevents instances of this menu factory utility class.
+     */
+    private JSkatMenuFactory() {
+    }
+
+    /**
      * Builds the menu.
      *
      * @return Menu for JSkat

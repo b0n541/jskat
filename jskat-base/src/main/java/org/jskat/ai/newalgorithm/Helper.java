@@ -10,21 +10,44 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Implements the helper strategy for Skat.
  * @author Daniel Loreck (daniel.loreck@gmail.com)
  * 
  */
 public class Helper {
+    /**
+     * Creates an instance of this type.
+     */
+    public Helper() {
+    }
 
 	private static Logger oLog = LoggerFactory.getLogger(Helper.class);
 
+	/**
+	 * Returns or indicates highest suit trump.
+	 * @param pCards p cards value.
+	 * @param pSuit p suit value.
+	 * @return get highest suit trump result.
+	 */
 	public static Card getHighestSuitTrump(CardList pCards, Suit pSuit) {
 		return pCards.get(0);
 	}
 
+	/**
+	 * Returns or indicates highest jack.
+	 * @param pCards p cards value.
+	 * @return get highest jack result.
+	 */
 	public static Card getHighestJack(CardList pCards) {
 		return pCards.get(0);
 	}
 
+	/**
+	 * Returns or indicates highest suit trump binary.
+	 * @param pCards p cards value.
+	 * @param pSuit p suit value.
+	 * @return get highest suit trump binary result.
+	 */
 	public static int getHighestSuitTrumpBinary(CardList pCards, Suit pSuit) {
 		int tJackBinary = getHighestJackBinary(pCards);
 		if (tJackBinary > 0) {
@@ -39,6 +62,11 @@ public class Helper {
 		return 0; // NO Trump
 	}
 
+	/**
+	 * Returns or indicates highest jack binary.
+	 * @param pCards p cards value.
+	 * @return get highest jack binary result.
+	 */
 	public static int getHighestJackBinary(CardList pCards) {
 		Card tHighestTrump = pCards.get(0);
 		if (tHighestTrump.getRank() == Rank.JACK) {
@@ -57,6 +85,12 @@ public class Helper {
 		return 0; // NO Jack
 	}
 
+	/**
+	 * Returns or indicates suit cards to binary.
+	 * @param pCards p cards value.
+	 * @param pSuit p suit value.
+	 * @return get suit cards to binary result.
+	 */
 	public static int getSuitCardsToBinary(CardList pCards, Suit pSuit) {
 		int tBinary = 0;
 		if (pCards.getSuitCount(pSuit, false) > 0) {
@@ -68,10 +102,21 @@ public class Helper {
 		return tBinary;
 	}
 
+	/**
+	 * Returns or indicates opponents trump count.
+	 * @param pCards p cards value.
+	 * @param pSuit p suit value.
+	 * @return get opponents trump count result.
+	 */
 	public static int getOpponentsTrumpCount(CardList pCards, Suit pSuit) {
 		return 11 - pCards.getSuitCount(pSuit, false);
 	}
 
+	/**
+	 * Returns or indicates grand binary.
+	 * @param pCards p cards value.
+	 * @return get grand binary result.
+	 */
 	public static int getGrandBinary(CardList pCards) {
 		int tBinary = 0;
 		if (pCards.contains(Card.CJ)) {
@@ -89,6 +134,13 @@ public class Helper {
 		return tBinary;
 	}
 
+	/**
+	 * Returns or indicates highest trump card.
+	 * @param pPossibleHighestCard p possible highest card value.
+	 * @param pGameType p game type value.
+	 * @param pPlayedCards p played cards value.
+	 * @return is highest trump card result.
+	 */
 	public static boolean isHighestTrumpCard(Card pPossibleHighestCard,
 			GameType pGameType, CardList pPlayedCards) {
 		if (null == pPlayedCards) {
@@ -103,6 +155,14 @@ public class Helper {
 		return false;
 	}
 
+	/**
+	 * Returns or indicates highest suit card.
+	 * @param pPossibleHighestCard p possible highest card value.
+	 * @param pGameType p game type value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @return is highest suit card result.
+	 */
 	public static boolean isHighestSuitCard(Card pPossibleHighestCard,
 			GameType pGameType, CardList pPlayedCards, CardList pTrickCards) {
 		if (pPossibleHighestCard.getSuit() == pGameType.getTrumpSuit()) {
@@ -113,6 +173,13 @@ public class Helper {
 				pTrickCards);
 	}
 
+	/**
+	 * Returns or indicates highest suit card.
+	 * @param pPossibleHighestCard p possible highest card value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @return is highest suit card result.
+	 */
 	public static boolean isHighestSuitCard(Card pPossibleHighestCard,
 			CardList pPlayedCards, CardList pTrickCards) {
 		Suit currentSuit = null;
@@ -137,12 +204,24 @@ public class Helper {
 		return false;
 	}
 
+	/**
+	 * Returns or indicates trump cards to binary.
+	 * @param pCards p cards value.
+	 * @param pSuit p suit value.
+	 * @return get trump cards to binary result.
+	 */
 	public static int getTrumpCardsToBinary(CardList pCards, Suit pSuit) {
 		int tBinary = getGrandBinary(pCards);
 		tBinary += getSuitCardsToBinary(pCards, pSuit);
 		return tBinary;
 	}
 
+	/**
+	 * Returns or indicates null suit cards to binary.
+	 * @param pCards p cards value.
+	 * @param pSuit p suit value.
+	 * @return get null suit cards to binary result.
+	 */
 	public static int getNullSuitCardsToBinary(CardList pCards, Suit pSuit) {
 		int counter = 0;
 		if (pCards.contains(Card.getCard(pSuit, Rank.SEVEN))) {
@@ -172,6 +251,13 @@ public class Helper {
 		return counter;
 	}
 
+	/**
+	 * Returns or indicates highest value card.
+	 * @param pCards p cards value.
+	 * @param pSuit p suit value.
+	 * @param includeJacks include jacks value.
+	 * @return get highest value card result.
+	 */
 	public static Card getHighestValueCard(CardList pCards, Suit pSuit,
 			boolean includeJacks) {
 		if ((!includeJacks && pCards.getSuitCount(pSuit, false) == 0)
@@ -215,6 +301,12 @@ public class Helper {
 		return null;
 	}
 
+	/**
+	 * Returns or indicates lowest value card.
+	 * @param pCards p cards value.
+	 * @param pSuit p suit value.
+	 * @return get lowest value card result.
+	 */
 	public static Card getLowestValueCard(CardList pCards, Suit pSuit) {
 		if (pCards.getSuitCount(pSuit, false) == 0) {
 			return null;
@@ -243,6 +335,13 @@ public class Helper {
 		return null;
 	}
 
+	/**
+	 * Returns or indicates lowest trump value card.
+	 * @param pCards p cards value.
+	 * @param pSuit p suit value.
+	 * @param includeJacks include jacks value.
+	 * @return get lowest trump value card result.
+	 */
 	public static Card getLowestTrumpValueCard(CardList pCards, Suit pSuit,
 			boolean includeJacks) {
 		if ((!includeJacks && pCards.getSuitCount(pSuit, false) == 0)
@@ -286,6 +385,11 @@ public class Helper {
 		return null;
 	}
 
+	/**
+	 * Returns or indicates grand multiplier.
+	 * @param pCards p cards value.
+	 * @return get grand multiplier result.
+	 */
 	public static int getGrandMultiplier(CardList pCards) {
 		int tMultiplier = 2;
 
@@ -313,6 +417,12 @@ public class Helper {
 		return tMultiplier;
 	}
 
+	/**
+	 * Returns or indicates suit multiplier.
+	 * @param pCards p cards value.
+	 * @param pSuit p suit value.
+	 * @return get suit multiplier result.
+	 */
 	public static int getSuitMultiplier(CardList pCards, Suit pSuit) {
 		int tMultiplier = 2;
 		int tCardsBinary = getTrumpCardsToBinary(pCards, pSuit);

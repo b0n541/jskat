@@ -16,6 +16,11 @@ import java.util.StringTokenizer;
  * Checks the version of JSkat
  */
 public class VersionChecker {
+    /**
+     * Creates an instance of this type.
+     */
+    public VersionChecker() {
+    }
 
     /**
      * Gets the latest version of JSkat from JSkat website

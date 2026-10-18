@@ -256,6 +256,7 @@ public class ImmutablePlayerKnowledge {
     }
 
     /**
+ * Returns or indicates game contract.
      * @return the game
      */
     public final GameContract getGameContract() {
@@ -295,6 +296,7 @@ public class ImmutablePlayerKnowledge {
     }
 
     /**
+ * Returns or indicates own cards.
      * @return the ownCards
      */
     public final CardList getOwnCards() {
@@ -363,6 +365,7 @@ public class ImmutablePlayerKnowledge {
     }
 
     /**
+     * Returns the declarer's cards exposed for a single-player game.
      * @return the singlePlayerCards
      */
     @Deprecated
@@ -370,6 +373,10 @@ public class ImmutablePlayerKnowledge {
         return getDeclarerPlayerCards();
     }
 
+    /**
+     * Returns or indicates declarer player cards.
+     * @return get declarer player cards result.
+     */
     public final CardList getDeclarerPlayerCards() {
         final CardList result = new CardList();
         result.addAll(singlePlayerCards);
@@ -377,6 +384,7 @@ public class ImmutablePlayerKnowledge {
     }
 
     /**
+ * Returns or indicates skat.
      * @return the skat
      */
     public final CardList getSkat() {
@@ -527,6 +535,7 @@ public class ImmutablePlayerKnowledge {
     }
 
     /**
+ * Returns or indicates hand game.
      * @return the handGame
      */
     public final boolean isHandGame() {
@@ -534,6 +543,7 @@ public class ImmutablePlayerKnowledge {
     }
 
     /**
+ * Returns or indicates ouvert game.
      * @return the ouvertGame
      */
     public final boolean isOuvertGame() {
@@ -551,6 +561,7 @@ public class ImmutablePlayerKnowledge {
     }
 
     /**
+ * Returns or indicates schneider announced.
      * @return the schneiderAnnounced
      */
     public final boolean isSchneiderAnnounced() {
@@ -558,12 +569,17 @@ public class ImmutablePlayerKnowledge {
     }
 
     /**
+ * Returns or indicates schwarz announced.
      * @return the schwarzAnnounced
      */
     public final boolean isSchwarzAnnounced() {
         return schwarzAnnounced;
     }
 
+    /**
+     * Returns or indicates player party members.
+     * @return get player party members result.
+     */
     public Set<Player> getPlayerPartyMembers() {
 
         final Set<Player> result = new HashSet<>();
@@ -578,6 +594,10 @@ public class ImmutablePlayerKnowledge {
         return result;
     }
 
+    /**
+     * Returns or indicates player party made cards.
+     * @return get player party made cards result.
+     */
     public CardList getPlayerPartyMadeCards() {
 
         final CardList result = new CardList();
@@ -592,6 +612,10 @@ public class ImmutablePlayerKnowledge {
         return result;
     }
 
+    /**
+     * Returns or indicates opponent party members.
+     * @return get opponent party members result.
+     */
     public Set<Player> getOpponentPartyMembers() {
 
         final List<Player> result = Player.getOrderedList();
@@ -599,6 +623,10 @@ public class ImmutablePlayerKnowledge {
         return Set.copyOf(result);
     }
 
+    /**
+     * Returns or indicates opponent party made cards.
+     * @return get opponent party made cards result.
+     */
     public CardList getOpponentPartyMadeCards() {
 
         final CardList result = new CardList();

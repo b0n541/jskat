@@ -7,18 +7,42 @@ import org.jskat.util.*;
 import java.util.Random;
 
 /**
+ * Shared card selection logic for the algorithmic AI implementations.
  * @author Daniel Loreck <br>
  */
 public abstract class AbstractAlgorithmAI {
+    /**
+     * AI player whose knowledge and position drive these decisions.
+     */
     protected final AlgorithmAI myPlayer;
+    /**
+     * Snapshot of the current player's known cards and game state.
+     */
     protected final ImmutablePlayerKnowledge knowledge;
 
+    /**
+     * Random source used by non-deterministic fallback choices.
+     */
     protected final static Random random = new Random();
 
+    /**
+     * Current game situation and opponent knowledge.
+     */
     protected Situation oSituation;
+    /**
+     * Cards played in completed tricks.
+     */
     protected CardList oPlayedCards;
+    /**
+     * Cards known not to be held by either opponent.
+     */
     protected CardList oNotOpponentCards;
 
+    /**
+     * Creates decision state for an algorithmic player.
+     * @param p player using this strategy
+     * @param pGameType current game type
+     */
     public AbstractAlgorithmAI(final AlgorithmAI p, GameType pGameType) {
         myPlayer = p;
         knowledge = p.getKnowledge();
@@ -29,6 +53,10 @@ public abstract class AbstractAlgorithmAI {
         oNotOpponentCards = new CardList();
     }
 
+    /**
+     * Chooses a legal card for the current trick.
+     * @return card selected for play
+     */
     public Card playCard() {
         // remove last tricks cards from the list of all opponent cards
         int currentTrick;
@@ -63,16 +91,41 @@ public abstract class AbstractAlgorithmAI {
         return playRearhandCard();
     }
 
+    /**
+     * Selects a lead card when starting a trick.
+     * @return card to lead
+     */
     protected abstract Card startGame();
 
+    /**
+     * Selects a card when playing first in a trick.
+     * @return card to play
+     */
     protected abstract Card playForehandCard();
 
+    /**
+     * Selects a card when playing second in a trick.
+     * @return card to play
+     */
     protected abstract Card playMiddlehandCard();
 
+    /**
+     * Selects a card when playing third in a trick.
+     * @return card to play
+     */
     protected abstract Card playRearhandCard();
 
+    /**
+     * Selects two cards to discard after taking the skat.
+     * @param bidEvaluator evaluates the hand for bidding
+     * @return cards to discard
+     */
     public abstract CardList discardSkat(BidEvaluator bidEvaluator);
 
+    /**
+     * Adds a completed trick to the known played cards and updates void suits.
+     * @param pTrick completed trick
+     */
     protected void addTrickToPlayedCards(Trick pTrick) {
         Suit tTrickSuit = pTrick.getFirstCard().getSuit();
 
@@ -167,6 +220,13 @@ public abstract class AbstractAlgorithmAI {
     // return false;
     // }
 
+    /**
+     * Selects a random card from the allowed cards.
+     * @param cards legal cards
+     * @param initialCard first card played to the trick, if any
+     * @param gameType current game type
+     * @return selected card
+     */
     protected static Card getRandomAllowedCard(final CardList cards,
                                                final Card initialCard, final GameType gameType) {
         Card result = null;
@@ -181,10 +241,21 @@ public abstract class AbstractAlgorithmAI {
         return cards.get(0);
     }
 
+    /**
+     * Selects a random card from a hand.
+     * @param pCards available cards
+     * @return selected card
+     */
     protected static Card playRandomCard(CardList pCards) {
         return pCards.get((int) (Math.random() * pCards.size()));
     }
 
+    /**
+     * Selects the lowest-value trump card in a hand.
+     * @param pCards available cards
+     * @param pTrumpSuit trump suit
+     * @return lowest-value trump card, if present
+     */
     protected static Card getLowValueTrumpCard(CardList pCards, Suit pTrumpSuit) {
         for (int i = pCards.getLastIndexOfSuit(pTrumpSuit); i >= 0; i--) {
             if (pCards.get(i).getPoints() < 10) {
@@ -194,6 +265,11 @@ public abstract class AbstractAlgorithmAI {
         return pCards.get(pCards.getLastIndexOfSuit(pTrumpSuit));
     }
 
+    /**
+     * Selects the lowest jack that can win the current trick.
+     * @param pCards available cards
+     * @return selected jack, if present
+     */
     protected static Card playLowestWinningJack(CardList pCards) {
         if (pCards.contains(Card.SJ)) {
             if (pCards.contains(Card.HJ)) {
@@ -207,11 +283,23 @@ public abstract class AbstractAlgorithmAI {
         return pCards.get(pCards.indexOf(Card.CJ));
     }
 
+    /**
+     * Selects a random jack from a hand.
+     * @param pCards available cards
+     * @return selected jack, if present
+     */
     protected static Card playRandomJack(CardList pCards) {
         int tRandom = (int) (Math.random() * Helper.countJacks(pCards));
         return pCards.get(tRandom);
     }
 
+    /**
+     * Selects the lowest card that beats the cards already played.
+     * @param pCards available cards
+     * @param pGameType current game type
+     * @param tCardToBeat card this choice must beat
+     * @return lowest beating card, if present
+     */
     protected static Card getLowestBeatingCard(CardList pCards,
                                                GameType pGameType, Card tCardToBeat) {
         int counter = -1;
@@ -226,6 +314,12 @@ public abstract class AbstractAlgorithmAI {
         return pCards.get(counter);
     }
 
+    /**
+     * Returns cards that can still achieve the maximum trick value.
+     * @param pCards candidate cards
+     * @param pMaxCardValue maximum card value to include
+     * @return candidates with the maximum possible value
+     */
     protected static CardList getPossibleMaxValueCards(CardList pCards,
                                                        int pMaxCardValue) {
         CardList possibleCards = new CardList();

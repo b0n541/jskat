@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class NextReplayMoveAction extends AbstractJSkatAction {
 
     /**
+     * Creates the next replay move action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public NextReplayMoveAction() {

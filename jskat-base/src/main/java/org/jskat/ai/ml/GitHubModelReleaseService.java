@@ -15,7 +15,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** GitHub implementation of the model-release service boundary. */
+/**
+ * GitHub implementation of the model-release service boundary.
+ */
 public final class GitHubModelReleaseService implements ModelReleaseService {
 
     private static final URI LATEST_RELEASE = URI.create(
@@ -24,6 +26,9 @@ public final class GitHubModelReleaseService implements ModelReleaseService {
 
     private final HttpClient client;
 
+    /**
+     * Performs git hub model release service.
+     */
     public GitHubModelReleaseService() {
         this(HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build());
     }

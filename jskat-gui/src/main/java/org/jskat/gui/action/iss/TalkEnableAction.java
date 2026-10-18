@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository;
 public class TalkEnableAction extends AbstractJSkatAction {
 
     /**
+     * Creates the talk enable action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public TalkEnableAction() {

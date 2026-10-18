@@ -118,7 +118,9 @@ public class CardMemory {
 		return count;
 	}
 
-	/** number of tricks that have been played so far */
+	/**
+	 * number of tricks that have been played so far
+	 */
 	private int tricksPlayed;
 	/**
 	 * type of the game
@@ -132,7 +134,9 @@ public class CardMemory {
 	 * @see org.jskat.util.Suit
 	 */
 	private Suit trump;
-	/** a vector of all the cards that have been played in this game so far */
+	/**
+	 * a vector of all the cards that have been played in this game so far
+	 */
 	private final CardList allCardsPlayed;
 	/**
 	 * reflects all the cards that have been played by each player in this game

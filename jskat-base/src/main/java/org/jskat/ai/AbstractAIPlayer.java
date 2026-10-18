@@ -8,6 +8,12 @@ import org.jskat.player.AbstractJSkatPlayer;
  */
 public abstract class AbstractAIPlayer extends AbstractJSkatPlayer {
 
+    /**
+     * Creates an AI player with the shared player state and behavior.
+     */
+    protected AbstractAIPlayer() {
+    }
+
     @Override
     public final boolean isAIPlayer() {
         return true;

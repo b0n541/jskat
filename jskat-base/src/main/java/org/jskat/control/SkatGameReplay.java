@@ -25,16 +25,27 @@ public class SkatGameReplay {
     private final List<SkatGameEvent> gameMoves = new ArrayList<>();
     private int currentMove = 0;
 
+    /**
+     * Performs skat game replay.
+     * @param tableName table name value.
+     * @param gameMoves game moves value.
+     */
     public SkatGameReplay(String tableName, List<SkatGameEvent> gameMoves) {
         this.tableName = tableName;
         this.gameMoves.addAll(gameMoves);
         resetReplay();
     }
 
+    /**
+     * To start.
+     */
     public void toStart() {
         resetReplay();
     }
 
+    /**
+     * One move backward.
+     */
     public void oneMoveBackward() {
         if (currentMove > 1) {
             currentMove--;
@@ -42,12 +53,18 @@ public class SkatGameReplay {
         }
     }
 
+    /**
+     * One move forward.
+     */
     public void oneMoveForward() {
         if (hasMoreMoves()) {
             oneStepForward();
         }
     }
 
+    /**
+     * To end.
+     */
     public void toEnd() {
         while (hasMoreMoves()) {
             oneStepForward();

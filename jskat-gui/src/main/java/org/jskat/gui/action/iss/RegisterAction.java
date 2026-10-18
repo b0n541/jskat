@@ -11,6 +11,8 @@ import org.jskat.gui.action.AbstractJSkatAction;
 public class RegisterAction extends AbstractJSkatAction {
 
     /**
+     * Creates the register action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public RegisterAction() {

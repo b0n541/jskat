@@ -12,6 +12,12 @@ import org.jskat.player.JSkatPlayer;
  */
 public abstract class AbstractHumanJSkatAction extends AbstractJSkatAction {
 
+    /**
+     * Creates an action routed to the human player.
+     */
+    protected AbstractHumanJSkatAction() {
+    }
+
     @Override
     public void actionPerformed(final JSkatActionEvent e) {
         JSkatMaster.INSTANCE.triggerHuman(new JSkatActionEvent(e

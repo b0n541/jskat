@@ -94,11 +94,19 @@ public class SkatSeriesData {
         return this.games.size() - 1;
     }
 
+    /**
+     * Sets table name.
+     * @param newTableName new table name value.
+     */
     public void setTableName(String newTableName) {
 
         this.tableName = newTableName;
     }
 
+    /**
+     * Returns or indicates table name.
+     * @return get table name result.
+     */
     public String getTableName() {
 
         return this.tableName;

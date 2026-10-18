@@ -69,6 +69,8 @@ public interface JSkatPlayer {
     void takeCards(CardList cards);
 
     /**
+     * Indicates whether the player chooses a grand hand in a BockRamsch game.
+     *
      * @return <code>true</code>, if the player wants to play a grand hand in a
      * BockRamsch game
      */

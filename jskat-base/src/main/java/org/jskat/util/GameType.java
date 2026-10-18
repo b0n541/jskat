@@ -99,6 +99,9 @@ public enum GameType {
             .filter(gameType -> NULL != gameType)
             .collect(Collectors.toUnmodifiableSet());
 
+    /**
+     * Game types representing Ramsch or a passed-in game.
+     */
     public static final Set<GameType> RAMSCH_PASSED_IN = Set.of(RAMSCH, PASSED_IN);
 
     /**

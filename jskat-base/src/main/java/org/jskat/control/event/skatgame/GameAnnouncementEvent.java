@@ -11,8 +11,16 @@ import java.util.Objects;
  */
 public final class GameAnnouncementEvent extends AbstractPlayerMoveEvent {
 
+    /**
+     * Game announced by the player.
+     */
     public final GameAnnouncement announcement;
 
+    /**
+     * Performs game announcement event.
+     * @param player player value.
+     * @param announcement announcement value.
+     */
     public GameAnnouncementEvent(final Player player, final GameAnnouncement announcement) {
         super(player);
         this.announcement = announcement;

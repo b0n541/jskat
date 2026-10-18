@@ -25,6 +25,7 @@ public class MLPlayer extends AbstractMLPlayer {
 
     /**
      * Creates an ML Player from the validated artifacts selected by the model manager.
+      * @param models models value.
      */
     public MLPlayer(final ResolvedModelSet models) {
         setPlayerName("MLPlayer");

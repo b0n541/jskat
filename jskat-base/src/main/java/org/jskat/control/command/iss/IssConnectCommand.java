@@ -7,8 +7,15 @@ import org.jskat.data.iss.LoginCredentials;
  */
 public class IssConnectCommand {
 
+    /**
+     * Credentials used to establish the connection.
+     */
     public final LoginCredentials loginCredentials;
 
+    /**
+     * Performs iss connect command.
+     * @param loginCredentials login credentials value.
+     */
     public IssConnectCommand(final LoginCredentials loginCredentials) {
         this.loginCredentials = loginCredentials;
     }

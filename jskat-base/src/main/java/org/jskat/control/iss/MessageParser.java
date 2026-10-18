@@ -25,6 +25,11 @@ import java.util.regex.Pattern;
  * Parses ISS messages
  */
 public class MessageParser {
+    /**
+     * Creates an instance of this type.
+     */
+    public MessageParser() {
+    }
 
     private static final Logger log = LoggerFactory.getLogger(MessageParser.class);
 

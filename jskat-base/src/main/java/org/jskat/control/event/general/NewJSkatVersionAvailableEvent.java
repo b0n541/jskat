@@ -5,8 +5,15 @@ package org.jskat.control.event.general;
  */
 public class NewJSkatVersionAvailableEvent {
 
+    /**
+     * Newly available application version.
+     */
     public final String newVersion;
 
+    /**
+     * Performs new j skat version available event.
+     * @param newVersion new version value.
+     */
     public NewJSkatVersionAvailableEvent(String newVersion) {
         this.newVersion = newVersion;
     }

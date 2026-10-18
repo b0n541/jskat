@@ -10,6 +10,8 @@ import org.jskat.gui.action.AbstractJSkatAction;
 public class OpenHomepageAction extends AbstractJSkatAction {
 
     /**
+     * Creates the open homepage action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public OpenHomepageAction() {

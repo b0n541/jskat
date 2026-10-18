@@ -5,4 +5,9 @@ package org.jskat.control.command.table;
  * started.
  */
 public class ReadyForNextGameCommand {
+    /**
+     * Creates an instance of this type.
+     */
+    public ReadyForNextGameCommand() {
+    }
 }

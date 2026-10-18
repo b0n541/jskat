@@ -10,6 +10,8 @@ public class PlayCardAction extends AbstractHumanJSkatAction {
 
 
     /**
+     * Creates the play card action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public PlayCardAction() {

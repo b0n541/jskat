@@ -65,6 +65,10 @@ public enum Player {
         }
     };
 
+    /**
+     * Returns or indicates ordered list.
+     * @return get ordered list result.
+     */
     public static List<Player> getOrderedList() {
         List<Player> result = new ArrayList<Player>();
         result.add(FOREHAND);

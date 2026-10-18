@@ -11,6 +11,8 @@ import org.jskat.util.Card;
 public class TakeCardFromSkatAction extends AbstractJSkatAction {
 
     /**
+     * Creates the take card from skat action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public TakeCardFromSkatAction() {

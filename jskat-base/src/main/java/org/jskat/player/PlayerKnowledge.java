@@ -9,8 +9,14 @@ import org.jskat.util.rule.SkatRuleFactory;
 
 import java.util.EnumSet;
 
+/**
+ * Defines the player knowledge type.
+ */
 public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
+    /**
+     * Performs player knowledge.
+     */
     public PlayerKnowledge() {
         initializeVariables();
     }
@@ -73,10 +79,18 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
         resetCurrentGameData();
     }
 
+    /**
+     * Remove own card.
+     * @param card card value.
+     */
     public void removeOwnCard(final Card card) {
         ownCards.remove(card);
     }
 
+    /**
+     * Remove own cards.
+     * @param cards cards value.
+     */
     public void removeOwnCards(final CardList cards) {
         for (final Card card : cards) {
             removeOwnCard(card);
@@ -186,6 +200,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
     }
 
     /**
+ * Sets hand game.
      * @param handGame the handGame to set
      */
     public void setHandGame(final boolean handGame) {
@@ -219,6 +234,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
     }
 
     /**
+ * Sets ouvert game.
      * @param ouvertGame the ouvertGame to set
      */
     public void setOuvertGame(final boolean ouvertGame) {
@@ -236,6 +252,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
     }
 
     /**
+ * Sets schneider announced.
      * @param schneiderAnnounced the schneiderAnnounced to set
      */
     public void setSchneiderAnnounced(final boolean schneiderAnnounced) {
@@ -243,6 +260,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
     }
 
     /**
+ * Sets schwarz announced.
      * @param schwarzAnnounced the schwarzAnnounced to set
      */
     public void setSchwarzAnnounced(final boolean schwarzAnnounced) {
@@ -250,6 +268,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
     }
 
     /**
+ * Sets single player cards.
      * @param singlePlayerCards the singlePlayerCards to set
      */
     public void setSinglePlayerCards(final CardList singlePlayerCards) {
@@ -260,6 +279,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
     }
 
     /**
+ * Sets skat.
      * @param newSkat the skat to set
      */
     public void setSkat(final CardList newSkat) {

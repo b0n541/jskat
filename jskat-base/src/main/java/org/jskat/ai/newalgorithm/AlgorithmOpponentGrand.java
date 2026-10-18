@@ -11,6 +11,9 @@ import org.jskat.util.Suit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Defines the algorithm opponent grand type.
+ */
 public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 
 	private static final Logger log = LoggerFactory.getLogger(AlgorithmOpponentGrand.class);
@@ -68,9 +71,22 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 	public CardList discardSkat(final BidEvaluator bidEvaluator) {
 		throw new IllegalMethodException(
 				"AlgorithmOpponentGrand has nothing to discard!");
+	/**
+	 * Provides this API member.
+	 */
 	}
 
 	// static methods for creating JUnit-tests and test cardplaybehavior
+	/**
+	 * Play start game card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @param pDeclarer p declarer value.
+	 * @return play start game card result.
+	 */
 	public static Card playStartGameCard(final CardList pCards, final CardList pTrickCards,
 			final CardList pPlayedCards, final CardList pNotOpponentCards,
 			final Situation pSituation, final Player pDeclarer) {
@@ -78,6 +94,16 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 				pNotOpponentCards, pSituation, pDeclarer);
 	}
 
+	/**
+	 * Play forehand card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @param pDeclarer p declarer value.
+	 * @return play forehand card result.
+	 */
 	public static Card playForehandCard(final CardList pCards, final CardList pTrickCards,
 			final CardList pPlayedCards, final CardList pNotOpponentCards,
 			final Situation pSituation, final Player pDeclarer) {
@@ -115,6 +141,9 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 			}
 		}
 
+		/**
+		 * Provides this API member.
+		 */
 		if (!possibleCards.isEmpty()) {
 			return playRandomCard(possibleCards);
 		}
@@ -135,6 +164,16 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 		return getRandomAllowedCard(pCards, null, pSituation.getGameType());
 	}
 
+	/**
+	 * Play middlehand card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @param pDeclarer p declarer value.
+	 * @return play middlehand card result.
+	 */
 	public static Card playMiddlehandCard(final CardList pCards,
 			final CardList pTrickCards, final CardList pPlayedCards,
 			final CardList pNotOpponentCards, final Situation pSituation, final Player pDeclarer) {
@@ -312,6 +351,9 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 				// Solo-Spieler ist blank auf der Farbe
 				if (pSituation.isLeftPlayerBlankOnColor(tSuit)) {
 					// Solo-Spieler hat keinen Buben mehr -> Buttern
+					/**
+					 * Provides this API member.
+					 */
 					if (Helper.countJacks(pPlayedCards)
 							+ Helper.countJacks(pCards) == 4
 							|| !pSituation.leftPlayerHasTrump()) {
@@ -344,6 +386,17 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 				pSituation.getGameType());
 	}
 
+	/**
+	 * Play rearhand card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @param pPlayerPosition p player position value.
+	 * @param pDeclarer p declarer value.
+	 * @return play rearhand card result.
+	 */
 	public static Card playRearhandCard(final CardList pCards, final CardList pTrickCards,
 			final CardList pPlayedCards, final CardList pNotOpponentCards,
 			final Situation pSituation, final Player pPlayerPosition, final Player pDeclarer) {
@@ -392,6 +445,13 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 						pPlayedCards, pTrickCards);
 			}
 			// Mitspieler gehÃƒÂ¶rt der Stich -> Buttern
+			/**
+			 * Returns or indicates high value card.
+			 * @param pCards p cards value.
+			 * @param pSituation p situation value.
+			 * @param tForehandCard t forehand card value.
+			 * @return get high value card result.
+			 */
 			return getHighValueCard(pCards, pSituation, tForehandCard);
 		}
 		// Farbe gespielt
@@ -431,11 +491,25 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 						pPlayedCards, pTrickCards);
 			}
 			// Mitspieler hat den Stich -> Buttern
+			/**
+			 * Returns or indicates high value card.
+			 * @param pCards p cards value.
+			 * @param pSituation p situation value.
+			 * @param tForehandCard t forehand card value.
+			 * @return get high value card result.
+			 */
 			return getHighValueCard(pCards, pSituation, tForehandCard);
 		}
 	}
 
 	// Buttern
+	/**
+	 * Returns or indicates high value card.
+	 * @param pCards p cards value.
+	 * @param pSituation p situation value.
+	 * @param pInitialCard p initial card value.
+	 * @return get high value card result.
+	 */
 	public static Card getHighValueCard(final CardList pCards, final Situation pSituation,
 			final Card pInitialCard) {
 		final CardList possibleCards = new CardList();
@@ -472,6 +546,15 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 	}
 
 	// Lusche Werfen
+	/**
+	 * Returns or indicates low value card.
+	 * @param pCards p cards value.
+	 * @param pSituation p situation value.
+	 * @param pInitialCard p initial card value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @return get low value card result.
+	 */
 	public static Card getLowValueCard(final CardList pCards, final Situation pSituation,
 			final Card pInitialCard, final CardList pPlayedCards, final CardList pTrickCards) {
 		final CardList possibleCards = new CardList();

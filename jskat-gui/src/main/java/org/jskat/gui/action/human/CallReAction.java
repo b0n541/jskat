@@ -10,6 +10,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class CallReAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the call re action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public CallReAction() {

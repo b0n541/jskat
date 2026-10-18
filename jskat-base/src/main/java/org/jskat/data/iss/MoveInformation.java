@@ -14,6 +14,11 @@ import java.util.Map;
  */
 // TODO: refactor to Java records
 public class MoveInformation {
+    /**
+     * Creates an instance of this type.
+     */
+    public MoveInformation() {
+    }
     private MovePlayer movePlayer;
     private final Map<Player, Double> playerTimes = new HashMap<>();
     private MoveType type;
@@ -322,10 +327,18 @@ public class MoveInformation {
         return leavingPlayer;
     }
 
+    /**
+     * Sets revealed cards.
+     * @param cards cards value.
+     */
     public void setRevealedCards(final CardList cards) {
         revealedCards.addAll(cards);
     }
 
+    /**
+     * Returns or indicates revealed cards.
+     * @return get revealed cards result.
+     */
     public CardList getRevealedCards() {
         return revealedCards.getImmutableCopy();
     }

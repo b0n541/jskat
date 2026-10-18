@@ -10,8 +10,16 @@ import java.util.Objects;
  */
 public final class PassBidEvent extends AbstractPlayerMoveEvent {
 
+    /**
+     * Bid value offered by the next bidder.
+     */
     public final int nextBidValue;
 
+    /**
+     * Performs pass bid event.
+     * @param player player value.
+     * @param nextBidValue next bid value value.
+     */
     public PassBidEvent(Player player, int nextBidValue) {
         super(player);
         this.nextBidValue = nextBidValue;

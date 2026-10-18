@@ -9,6 +9,8 @@ import org.jskat.gui.action.AbstractJSkatAction;
 public class PlayHandGameAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the play hand game action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public PlayHandGameAction() {

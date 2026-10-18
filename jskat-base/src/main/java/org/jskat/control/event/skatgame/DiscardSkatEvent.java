@@ -11,8 +11,16 @@ import java.util.Objects;
  */
 public final class DiscardSkatEvent extends AbstractPlayerMoveEvent {
 
+    /**
+     * Cards discarded by the declarer.
+     */
     public final CardList discardedSkat = new CardList();
 
+    /**
+     * Creates an event describing the discarded cards.
+     * @param player player who discarded the cards
+     * @param discardedSkat cards moved into the skat
+     */
     public DiscardSkatEvent(Player player, CardList discardedSkat) {
         super(player);
         this.discardedSkat.addAll(discardedSkat);

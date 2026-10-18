@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class HelpAction extends AbstractJSkatAction {
 
     /**
+     * Creates the help action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public HelpAction() {

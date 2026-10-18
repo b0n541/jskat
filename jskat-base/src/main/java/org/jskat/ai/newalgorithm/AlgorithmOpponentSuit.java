@@ -14,6 +14,9 @@ import org.jskat.util.Suit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Defines the algorithm opponent suit type.
+ */
 public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 
 	private static final Logger log = LoggerFactory.getLogger(AlgorithmOpponentSuit.class);
@@ -75,9 +78,23 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 	public CardList discardSkat(final BidEvaluator bidEvaluator) {
 		throw new IllegalMethodException(
 				"AlgorithmOpponentSuit has nothing to discard!");
+	/**
+	 * Provides this API member.
+	 */
 	}
 
 	// static methods for creating JUnit-tests and test cardplaybehavior
+	/**
+	 * Play start game card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @param pPlayerPosition p player position value.
+	 * @param pDeclarer p declarer value.
+	 * @return play start game card result.
+	 */
 	public static Card playStartGameCard(final CardList pCards, final CardList pTrickCards,
 			final CardList pPlayedCards, final CardList pNotOpponentCards,
 			final Situation pSituation, final Player pPlayerPosition, final Player pDeclarer) {
@@ -105,6 +122,9 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 			}
 		}
 
+		/**
+		 * Provides this API member.
+		 */
 		if (!tPossibleHighCard.isEmpty()) {
 			return playRandomCard(tPossibleHighCard);
 		}
@@ -116,6 +136,17 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 				pNotOpponentCards, pSituation, pPlayerPosition, pDeclarer);
 	}
 
+	/**
+	 * Play forehand card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @param pPlayerPosition p player position value.
+	 * @param pDeclarer p declarer value.
+	 * @return play forehand card result.
+	 */
 	public static Card playForehandCard(final CardList pCards, final CardList pTrickCards,
 			final CardList pPlayedCards, final CardList pNotOpponentCards,
 			final Situation pSituation, final Player pPlayerPosition, final Player pDeclarer) {
@@ -157,6 +188,11 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 					return possibleHighCard;
 				}
 				if (possibleLowCard.getPoints() <= 4) {
+					/**
+					 * Performs if.
+					 * @param lSuit l suit value.
+					 * @return if result.
+					 */
 					possibleCards.add(possibleLowCard);
 				}
 			}
@@ -182,6 +218,17 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 		return getRandomAllowedCard(pCards, null, pSituation.getGameType());
 	}
 
+	/**
+	 * Play middlehand card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @param pPlayerPosition p player position value.
+	 * @param pDeclarer p declarer value.
+	 * @return play middlehand card result.
+	 */
 	public static Card playMiddlehandCard(final CardList pCards,
 			final CardList pTrickCards, final CardList pPlayedCards,
 			final CardList pNotOpponentCards, final Situation pSituation,
@@ -486,6 +533,9 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 						&& tForehandCard.getPoints() >= 10
 						&& pCards.get(0).getSuit() == pSituation.getTrumpSuit()
 						&& Helper.isHighestTrumpCard(pCards.get(0),
+								/**
+								 * Provides this API member.
+								 */
 								pSituation.getGameType(), pPlayedCards)) {
 					return pCards.get(0);
 				}
@@ -520,6 +570,17 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 				pSituation.getGameType());
 	}
 
+	/**
+	 * Play rearhand card.
+	 * @param pCards p cards value.
+	 * @param pTrickCards p trick cards value.
+	 * @param pPlayedCards p played cards value.
+	 * @param pNotOpponentCards p not opponent cards value.
+	 * @param pSituation p situation value.
+	 * @param pPlayerPosition p player position value.
+	 * @param pDeclarer p declarer value.
+	 * @return play rearhand card result.
+	 */
 	public static Card playRearhandCard(final CardList pCards, final CardList pTrickCards,
 			final CardList pPlayedCards, final CardList pNotOpponentCards,
 			final Situation pSituation, final Player pPlayerPosition, final Player pDeclarer) {
@@ -881,6 +942,9 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 					// Wenn die hoehere Karte die hoechste ist
 					if (Helper
 							.isHighestSuitCard(possibleHighCard,
+									/**
+									 * Provides this API member.
+									 */
 									pSituation.getGameType(), pPlayedCards,
 									pTrickCards)) {
 						final CardList after = new CardList(pPlayedCards);
@@ -928,6 +992,13 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 				pSituation.getGameType());
 	}
 
+	/**
+	 * Returns or indicates possible max value cards.
+	 * @param pCards p cards value.
+	 * @param pMaxCardValue p max card value value.
+	 * @param pTrumpSuit p trump suit value.
+	 * @return get possible max value cards result.
+	 */
 	protected static CardList getPossibleMaxValueCards(final CardList pCards,
 			final int pMaxCardValue, final Suit pTrumpSuit) {
 		final CardList possibleCards = new CardList();

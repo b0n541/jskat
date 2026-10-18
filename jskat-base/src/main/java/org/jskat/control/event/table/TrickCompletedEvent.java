@@ -7,8 +7,15 @@ import org.jskat.data.Trick;
  */
 public class TrickCompletedEvent {
 
+    /**
+     * Trick that has just completed.
+     */
     public final Trick trick;
 
+    /**
+     * Performs trick completed event.
+     * @param trick trick value.
+     */
     public TrickCompletedEvent(Trick trick) {
         this.trick = trick;
     }

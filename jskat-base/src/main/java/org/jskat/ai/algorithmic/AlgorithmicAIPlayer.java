@@ -10,10 +10,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Implements the algorithmic a i player strategy for Skat.
  * @author Markus J. Luzius <br>
  * created: 13.05.2011 17:33:05
  */
 public class AlgorithmicAIPlayer extends AbstractAIPlayer {
+    /**
+     * Creates an instance of this type.
+     */
+    public AlgorithmicAIPlayer() {
+    }
 
     private static final Logger log = LoggerFactory.getLogger(AlgorithmicAIPlayer.class);
 
@@ -21,9 +27,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
     BidEvaluator bidEvaluator = null;
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.IJSkatPlayer#preparateForNewGame()
      */
     @Override
     public void prepareForNewGame() {
@@ -32,9 +36,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.IJSkatPlayer#finalizeGame()
      */
     @Override
     public void finalizeGame() {
@@ -42,9 +44,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.IJSkatPlayer#bidMore(int)
      */
     @Override
     public int bidMore(final int nextBidValue) {
@@ -58,9 +58,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.IJSkatPlayer#holdBid(int)
      */
     @Override
     public boolean holdBid(final int currBidValue) {
@@ -71,9 +69,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.IJSkatPlayer#pickUpSkat()
      */
     @Override
     public boolean pickUpSkat() {
@@ -84,9 +80,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.IJSkatPlayer#announceGame()
      */
     @Override
     public GameContract announceGame() {
@@ -98,9 +92,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.IJSkatPlayer#playCard()
      */
     @Override
     public Card playCard() {
@@ -155,9 +147,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.AbstractJSkatPlayer#startGame()
      */
     @Override
     public void startGame() {
@@ -180,6 +170,10 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
         }
     }
 
+    /**
+     * Returns or indicates knowledge.
+     * @return get knowledge result.
+     */
     protected ImmutablePlayerKnowledge getKnowledge() {
         return knowledge;
     }

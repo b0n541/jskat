@@ -10,6 +10,11 @@ import org.slf4j.LoggerFactory;
  * and grand games.
  */
 public abstract class SuitGrandRule extends SuitGrandRamschRule {
+    /**
+     * Creates an instance of this type.
+     */
+    protected SuitGrandRule() {
+    }
 
     private static final Logger log = LoggerFactory.getLogger(SuitGrandRule.class);
 
@@ -129,6 +134,12 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
         return getMatadors(gameData.getDealtDeclarerCardsAndSkat(), gameData.getGameType());
     }
 
+    /**
+     * Returns or indicates matadors.
+     * @param cards cards value.
+     * @param gameType game type value.
+     * @return get matadors result.
+     */
     public abstract int getMatadors(CardList cards, GameType gameType);
 
     /**

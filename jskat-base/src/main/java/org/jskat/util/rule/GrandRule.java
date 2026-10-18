@@ -8,6 +8,11 @@ import org.jskat.util.GameType;
  * Implementation of skat rules for Grand games
  */
 public class GrandRule extends SuitGrandRule {
+    /**
+     * Creates an instance of this type.
+     */
+    public GrandRule() {
+    }
 
     /**
      * {@inheritDoc}

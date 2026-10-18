@@ -12,6 +12,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class ShowLoginPanelAction extends AbstractJSkatAction {
 
     /**
+     * Creates the show login panel action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ShowLoginPanelAction() {

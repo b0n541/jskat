@@ -7,6 +7,11 @@ import org.jskat.util.*;
  * Implementation of skat rules for Null games
  */
 public class NullRule extends AbstractSkatRule {
+    /**
+     * Creates an instance of this type.
+     */
+    public NullRule() {
+    }
 
     /**
      * {@inheritDoc}

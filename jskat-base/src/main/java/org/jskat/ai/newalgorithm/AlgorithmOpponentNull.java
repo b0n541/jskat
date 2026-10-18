@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
+/**
+ * Defines the algorithm opponent null type.
+ */
 public class AlgorithmOpponentNull extends AbstractAlgorithmAI {
 
     private static final Logger log = LoggerFactory.getLogger(AlgorithmOpponentNull.class);
@@ -63,9 +66,22 @@ public class AlgorithmOpponentNull extends AbstractAlgorithmAI {
     public CardList discardSkat(final BidEvaluator bidEvaluator) {
         throw new IllegalMethodException(
                 "AlgorithmOpponentNull has nothing to discard!");
+    /**
+     * Provides this API member.
+     */
     }
 
     // static methods for creating JUnit-tests and test cardplaybehavior
+    /**
+     * Play start game card.
+     * @param pCards p cards value.
+     * @param pTrickCards p trick cards value.
+     * @param pPlayedCards p played cards value.
+     * @param pNotOpponentCards p not opponent cards value.
+     * @param pSituation p situation value.
+     * @param pDeclarer p declarer value.
+     * @return play start game card result.
+     */
     public static Card playStartGameCard(final CardList pCards, final CardList pTrickCards,
                                          final CardList pPlayedCards, final CardList pNotOpponentCards,
                                          final Situation pSituation, final Player pDeclarer) {
@@ -76,8 +92,21 @@ public class AlgorithmOpponentNull extends AbstractAlgorithmAI {
         final CardList tPossibleLowCard = new CardList();
 
         return getRandomAllowedCard(pCards, null, pSituation.getGameType());
+    /**
+     * Provides this API member.
+     */
     }
 
+    /**
+     * Play forehand card.
+     * @param pCards p cards value.
+     * @param pTrickCards p trick cards value.
+     * @param pPlayedCards p played cards value.
+     * @param pNotOpponentCards p not opponent cards value.
+     * @param pSituation p situation value.
+     * @param pDeclarer p declarer value.
+     * @return play forehand card result.
+     */
     public static Card playForehandCard(final CardList pCards, final CardList pTrickCards,
                                         final CardList pPlayedCards, final CardList pNotOpponentCards,
                                         final Situation pSituation, final Player pDeclarer) {
@@ -86,9 +115,25 @@ public class AlgorithmOpponentNull extends AbstractAlgorithmAI {
 
         final CardList possibleCards = new CardList();
 
+        /**
+         * Returns or indicates random allowed card.
+         * @param pCards p cards value.
+         * @param null null value.
+         * @return get random allowed card result.
+         */
         return getRandomAllowedCard(pCards, null, pSituation.getGameType());
     }
 
+    /**
+     * Play middlehand card.
+     * @param pCards p cards value.
+     * @param pTrickCards p trick cards value.
+     * @param pPlayedCards p played cards value.
+     * @param pNotOpponentCards p not opponent cards value.
+     * @param pSituation p situation value.
+     * @param pDeclarer p declarer value.
+     * @return play middlehand card result.
+     */
     public static Card playMiddlehandCard(final CardList pCards,
                                           final CardList pTrickCards, final CardList pPlayedCards,
                                           final CardList pNotOpponentCards, final Situation pSituation, final Player pDeclarer) {
@@ -108,6 +153,16 @@ public class AlgorithmOpponentNull extends AbstractAlgorithmAI {
                 pSituation.getGameType());
     }
 
+    /**
+     * Play rearhand card.
+     * @param pCards p cards value.
+     * @param pTrickCards p trick cards value.
+     * @param pPlayedCards p played cards value.
+     * @param pNotOpponentCards p not opponent cards value.
+     * @param pSituation p situation value.
+     * @param pDeclarer p declarer value.
+     * @return play rearhand card result.
+     */
     public static Card playRearhandCard(final CardList pCards, final CardList pTrickCards,
                                         final CardList pPlayedCards, final CardList pNotOpponentCards,
                                         final Situation pSituation, final Player pDeclarer) {

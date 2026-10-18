@@ -17,6 +17,9 @@ import java.util.Map;
  */
 public class JSkatApplicationData {
 
+    /**
+     * Shared application data store.
+     */
     public final static JSkatApplicationData INSTANCE = new JSkatApplicationData();
 
     private final JSkatOptions options;
@@ -41,6 +44,10 @@ public class JSkatApplicationData {
         JSkatEventBus.INSTANCE.register(this);
     }
 
+    /**
+     * Updates application table state after a table is created.
+     * @param event table creation event
+     */
     @Subscribe
     synchronized public void adjustTableDataOn(final TableCreatedEvent event) {
         final SkatTable table = new SkatTable(event.tableName(), JSkatOptions.instance().getSkatTableOptions());
@@ -186,6 +193,10 @@ public class JSkatApplicationData {
 
     /**
      * Adds an available player on ISS
+      * @param playerName player name value.
+      * @param language language value.
+      * @param gamesPlayed games played value.
+      * @param strength strength value.
      */
     synchronized public void updateAvailableISSPlayer(
             final String playerName,

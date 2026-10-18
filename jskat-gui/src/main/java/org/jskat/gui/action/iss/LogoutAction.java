@@ -10,6 +10,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
  */
 public class LogoutAction extends AbstractJSkatAction {
     /**
+     * Creates the logout action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public LogoutAction() {

@@ -15,10 +15,17 @@ public class ONNXModelWrapper extends AbstractONNXWrapper {
 
     private final ModelType modelType;
 
+    /**
+     * Defines the model type type.
+     */
     public enum ModelType {
-        /** Bidding dense: 35 inputs -> pickup_probs[63], hand_probs[63] */
+        /**
+         * Bidding dense: 35 inputs -> pickup_probs[63], hand_probs[63]
+         */
         BIDDING_DENSE,
-        /** Game evaluation dense: 75 inputs -> win_prob[1] */
+        /**
+         * Game evaluation dense: 75 inputs -> win_prob[1]
+         */
         GAME_EVAL_DENSE
     }
 
@@ -110,9 +117,20 @@ public class ONNXModelWrapper extends AbstractONNXWrapper {
      * Result container for bidding predictions.
      */
     public static class BiddingResult {
+        /**
+         * Predicted success probabilities for picking up the skat.
+         */
         public final float[] pickupProbs;  // Length 63
+        /**
+         * Predicted success probabilities for playing hand.
+         */
         public final float[] handProbs;    // Length 63
 
+        /**
+         * Performs bidding result.
+         * @param pickupProbs pickup probs value.
+         * @param handProbs hand probs value.
+         */
         public BiddingResult(float[] pickupProbs, float[] handProbs) {
             this.pickupProbs = pickupProbs;
             this.handProbs = handProbs;

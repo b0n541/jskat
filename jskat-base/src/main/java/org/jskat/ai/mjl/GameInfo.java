@@ -5,6 +5,7 @@ import org.jskat.util.GameType;
 import org.jskat.util.Suit;
 
 /**
+ * Implements the game info strategy for Skat.
  * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
@@ -101,6 +102,8 @@ public class GameInfo {
 	 * @see org.jskat.util.Suit
 	 */
 	private Suit trump;
-	/** id of the single player */
+	/**
+	 * id of the single player
+	 */
 	private int singlePlayer;
 }

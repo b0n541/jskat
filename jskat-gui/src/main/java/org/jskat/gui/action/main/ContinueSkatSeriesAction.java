@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class ContinueSkatSeriesAction extends AbstractJSkatAction {
 
     /**
+     * Creates the continue skat series action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ContinueSkatSeriesAction() {

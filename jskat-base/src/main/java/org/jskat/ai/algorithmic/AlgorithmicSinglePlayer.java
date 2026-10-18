@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Implements the algorithmic single player strategy for Skat.
  * @author Markus J. Luzius <br>
  *         created: 15.06.2011 19:13:50
  *
@@ -33,10 +34,7 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 	}
 
 	/*
-	 * (non-Javadoc)
 	 *
-	 * @see org.jskat.ai.algorithmic.IAlgorithmicAIPlayer#discardSkat(org.jskat.ai
-	 * .algorithmic.BidEvaluator)
 	 */
 	@Override
 	public CardList discardSkat(final BidEvaluator bid) {
@@ -49,9 +47,7 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 	}
 
 	/*
-	 * (non-Javadoc)
 	 *
-	 * @see org.jskat.ai.IJSkatPlayer#playCard()
 	 */
 	@Override
 	public Card playCard() {

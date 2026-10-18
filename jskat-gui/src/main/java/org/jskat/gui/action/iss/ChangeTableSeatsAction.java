@@ -10,6 +10,8 @@ import org.jskat.gui.action.AbstractJSkatAction;
 public class ChangeTableSeatsAction extends AbstractJSkatAction {
 
     /**
+     * Creates the change table seats action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ChangeTableSeatsAction() {

@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class ReplayGameAction extends AbstractJSkatAction {
 
     /**
+     * Creates the replay game action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ReplayGameAction() {

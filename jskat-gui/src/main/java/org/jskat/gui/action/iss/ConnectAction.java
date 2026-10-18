@@ -13,6 +13,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class ConnectAction extends AbstractJSkatAction {
 
     /**
+     * Creates the connect action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ConnectAction() {

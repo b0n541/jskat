@@ -10,6 +10,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class HoldBidAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the hold bid action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public HoldBidAction() {

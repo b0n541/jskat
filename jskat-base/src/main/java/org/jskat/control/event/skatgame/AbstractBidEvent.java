@@ -5,10 +5,23 @@ import org.jskat.util.Player;
 
 import java.util.Objects;
 
+/**
+ * Base event for a bid announced by a player.
+ *
+ * @see AbstractPlayerMoveEvent
+ */
 public abstract class AbstractBidEvent extends AbstractPlayerMoveEvent {
 
+    /**
+     * Bid value announced by the player.
+     */
     public final Integer bid;
 
+    /**
+     * Creates a bid event.
+     * @param player player who announced the bid
+     * @param bid announced bid value
+     */
     public AbstractBidEvent(Player player, Integer bid) {
         super(player);
         this.bid = bid;

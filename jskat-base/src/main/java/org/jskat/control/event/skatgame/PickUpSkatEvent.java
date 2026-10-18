@@ -11,12 +11,24 @@ import java.util.Objects;
  */
 public final class PickUpSkatEvent extends AbstractPlayerMoveEvent {
 
+    /**
+     * Cards taken from the skat.
+     */
     public final CardList pickedUpSkat;
 
+    /**
+     * Performs pick up skat event.
+     * @param player player value.
+     */
     public PickUpSkatEvent(Player player) {
         this(player, new CardList());
     }
 
+    /**
+     * Performs pick up skat event.
+     * @param player player value.
+     * @param pickedUpSkat picked up skat value.
+     */
     public PickUpSkatEvent(Player player, CardList pickedUpSkat) {
         super(player);
         this.pickedUpSkat = pickedUpSkat.getImmutableCopy();

@@ -18,7 +18,13 @@ public abstract class AbstractONNXWrapper implements AutoCloseable {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractONNXWrapper.class);
 
+    /**
+     * ONNX runtime environment shared by the loaded session.
+     */
     protected final OrtEnvironment env;
+    /**
+     * Loaded model inference session.
+     */
     protected final OrtSession session;
 
     /**

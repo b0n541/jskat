@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Implements the algorithm ramsch strategy for Skat.
  * @author Daniel Loreck
  */
 public class AlgorithmRamsch extends AbstractAlgorithmAI {
@@ -184,10 +185,7 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
     }
 
     /*
-     * (non-Javadoc)
      *
-     * @see org.jskat.ai.algorithmic.IAlgorithmicAIPlayer#discardSkat(org.jskat.ai
-     * .algorithmic.BidEvaluator)
      */
     @Override
     public CardList discardSkat(final BidEvaluator bidEvaluator) {

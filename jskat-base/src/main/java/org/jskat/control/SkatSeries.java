@@ -62,17 +62,29 @@ public class SkatSeries {
         players = new HashMap<>();
     }
 
+    /**
+     * Starts replaying the current game's recorded moves.
+     * @param command replay command
+     */
     @Subscribe
     public void startReplayGameOn(final ReplayGameCommand command) {
         JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayStartedEvent());
         currReplayGame = new SkatGameReplay(data.getTableName(), currSkatGame.getGameMoves());
     }
 
+    /**
+     * Advances the current replay by one move.
+     * @param command replay navigation command
+     */
     @Subscribe
     public void replayNextMoveOn(final NextReplayMoveCommand command) {
         currReplayGame.oneMoveForward();
     }
 
+    /**
+     * Marks the series as ready to continue after replay.
+     * @param command next-game command
+     */
     @Subscribe
     public void readyForNextGameOn(final ReadyForNextGameCommand command) {
 
@@ -80,6 +92,10 @@ public class SkatSeries {
         readyForNextGame = true;
     }
 
+    /**
+     * Continues a paused series.
+     * @param command continue-series command
+     */
     @Subscribe
     public void continueSkatSeriesOn(final ContinueSkatSeriesCommand command) {
         JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayFinishedEvent());
@@ -149,6 +165,9 @@ public class SkatSeries {
         data.setState(SeriesState.RUNNING);
     }
 
+    /**
+     * Run.
+     */
     public void run() {
 
         int roundsPlayed = 0;

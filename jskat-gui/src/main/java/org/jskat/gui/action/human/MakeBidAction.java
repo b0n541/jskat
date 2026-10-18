@@ -10,6 +10,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class MakeBidAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the make bid action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public MakeBidAction() {

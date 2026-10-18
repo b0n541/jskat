@@ -6,6 +6,11 @@ import org.jskat.util.GameType;
  * Builds a SkatRules object according to the given game type
  */
 public class SkatRuleFactory {
+    /**
+     * Creates an instance of this type.
+     */
+    public SkatRuleFactory() {
+    }
 
     /**
      * Returns the right SkatRules object according to the game type

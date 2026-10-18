@@ -10,6 +10,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class SchiebenAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the schieben action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public SchiebenAction() {

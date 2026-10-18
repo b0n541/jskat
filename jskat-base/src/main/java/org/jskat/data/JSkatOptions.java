@@ -35,6 +35,9 @@ public final class JSkatOptions {
         GERMAN
     }
 
+    /**
+     * Defines the option type.
+     */
     public enum Option {
         /**
          * Language for the GUI
@@ -177,9 +180,18 @@ public final class JSkatOptions {
          */
         MAIN_FRAME_HEIGHT(Integer.class);
 
+        /**
+         * Java type stored for this option.
+         */
         public final Class clazz;
+        /**
+         * Parent option, when this option belongs to a group.
+         */
         public final Option parent = null;
 
+        /**
+         * Provides this API member.
+         */
         Option(final Class clazz) {
             this.clazz = clazz;
         }
@@ -341,22 +353,42 @@ public final class JSkatOptions {
         return getString(Option.SAVE_PATH);
     }
 
+    /**
+     * Sets save path.
+     * @param savePath save path value.
+     */
     public void setSavePath(final String savePath) {
         setOption(Option.SAVE_PATH, savePath);
     }
 
+    /**
+     * Returns or indicates wait time after trick.
+     * @return get wait time after trick result.
+     */
     public Integer getWaitTimeAfterTrick() {
         return getInteger(Option.WAIT_TIME_AFTER_TRICK);
     }
 
+    /**
+     * Sets main frame width.
+     * @param width width value.
+     */
     public void setMainFrameWidth(final Integer width) {
         setOption(Option.MAIN_FRAME_WIDTH, width);
     }
 
+    /**
+     * Sets main frame height.
+     * @param height height value.
+     */
     public void setMainFrameHeight(final Integer height) {
         setOption(Option.MAIN_FRAME_HEIGHT, height);
     }
 
+    /**
+     * Returns or indicates main frame geometry.
+     * @return get main frame geometry result.
+     */
     public WindowGeometry getMainFrameGeometry() {
         return new WindowGeometry(
                 getInteger(Option.MAIN_FRAME_X_POSITION),
@@ -365,22 +397,42 @@ public final class JSkatOptions {
                 getInteger(Option.MAIN_FRAME_HEIGHT));
     }
 
+    /**
+     * Sets main frame x position.
+     * @param xPosition x position value.
+     */
     public void setMainFrameXPosition(final Integer xPosition) {
         setOption(Option.MAIN_FRAME_X_POSITION, xPosition);
     }
 
+    /**
+     * Sets main frame y position.
+     * @param yPosition y position value.
+     */
     public void setMainFrameYPosition(final Integer yPosition) {
         setOption(Option.MAIN_FRAME_Y_POSITION, yPosition);
     }
 
+    /**
+     * Sets wait time after trick.
+     * @param waitTime wait time value.
+     */
     public void setWaitTimeAfterTrick(final Integer waitTime) {
         setOption(Option.WAIT_TIME_AFTER_TRICK, waitTime);
     }
 
+    /**
+     * Returns or indicates hide toolbar.
+     * @return is hide toolbar result.
+     */
     public Boolean isHideToolbar() {
         return getBoolean(Option.HIDE_TOOLBAR);
     }
 
+    /**
+     * Sets hide toolbar.
+     * @param isHideToolbar is hide toolbar value.
+     */
     public void setHideToolbar(final Boolean isHideToolbar) {
         setOption(Option.HIDE_TOOLBAR, isHideToolbar);
     }
@@ -411,10 +463,19 @@ public final class JSkatOptions {
         return result;
     }
 
+    /**
+     * Returns or indicates bock event all players passed.
+     * @return is bock event all players passed result.
+     */
     public Boolean isBockEventAllPlayersPassed() {
         return isBockEventAllPlayersPassed(true);
     }
 
+    /**
+     * Returns or indicates bock event all players passed.
+     * @param checkParentOption check parent option value.
+     * @return is bock event all players passed result.
+     */
     public Boolean isBockEventAllPlayersPassed(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.BOCK_EVENT_NO_BID, checkParentOption, isPlayBock(checkParentOption));
     }
@@ -428,6 +489,11 @@ public final class JSkatOptions {
         return isBockEventContraReCalled(true);
     }
 
+    /**
+     * Returns or indicates bock event contra re called.
+     * @param checkParentOption check parent option value.
+     * @return is bock event contra re called result.
+     */
     public Boolean isBockEventContraReCalled(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.BOCK_EVENT_CONTRA_RE_CALLED, checkParentOption,
                 isPlayBock(checkParentOption));
@@ -442,6 +508,11 @@ public final class JSkatOptions {
         return isBockEventLostAfterContra(true);
     }
 
+    /**
+     * Returns or indicates bock event lost after contra.
+     * @param checkParentOption check parent option value.
+     * @return is bock event lost after contra result.
+     */
     public Boolean isBockEventLostAfterContra(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.BOCK_EVENT_LOST_AFTER_CONTRA, checkParentOption,
                 isPlayBock(checkParentOption));
@@ -456,6 +527,11 @@ public final class JSkatOptions {
         return isBockEventLostGrand(true);
     }
 
+    /**
+     * Returns or indicates bock event lost grand.
+     * @param checkParentOption check parent option value.
+     * @return is bock event lost grand result.
+     */
     public Boolean isBockEventLostGrand(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.BOCK_EVENT_LOST_GRAND, checkParentOption,
                 isPlayBock(checkParentOption));
@@ -470,6 +546,11 @@ public final class JSkatOptions {
         return isBockEventLostWith60(true);
     }
 
+    /**
+     * Returns or indicates bock event lost with60.
+     * @param checkParentOption check parent option value.
+     * @return is bock event lost with60 result.
+     */
     public Boolean isBockEventLostWith60(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.BOCK_EVENT_LOST_WITH_60, checkParentOption,
                 isPlayBock(checkParentOption));
@@ -516,10 +597,18 @@ public final class JSkatOptions {
                 isPlayContra(checkParentOption));
     }
 
+    /**
+     * Returns or indicates iss address.
+     * @return get iss address result.
+     */
     public String getIssAddress() {
         return getString(Option.ISS_ADDRESS);
     }
 
+    /**
+     * Returns or indicates iss port.
+     * @return get iss port result.
+     */
     public Integer getIssPort() {
         return getInteger(Option.ISS_PORT);
     }
@@ -613,6 +702,11 @@ public final class JSkatOptions {
         return getBoolean(Option.PLAY_REVOLUTION);
     }
 
+    /**
+     * Returns or indicates play revolution.
+     * @param checkParentOption check parent option value.
+     * @return is play revolution result.
+     */
     public Boolean isPlayRevolution(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.PLAY_REVOLUTION, checkParentOption, RuleSet.PUB.equals(getRules()));
     }
@@ -626,6 +720,11 @@ public final class JSkatOptions {
         return isRamschEventNoBid(true);
     }
 
+    /**
+     * Returns or indicates ramsch event no bid.
+     * @param checkParentOption check parent option value.
+     * @return is ramsch event no bid result.
+     */
     public Boolean isRamschEventNoBid(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.RAMSCH_EVENT_NO_BID, checkParentOption,
                 isPlayRamsch(checkParentOption));
@@ -640,6 +739,11 @@ public final class JSkatOptions {
         return isRamschEventRamschAfterBock(true);
     }
 
+    /**
+     * Returns or indicates ramsch event ramsch after bock.
+     * @param checkParentOption check parent option value.
+     * @return is ramsch event ramsch after bock result.
+     */
     public Boolean isRamschEventRamschAfterBock(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.RAMSCH_EVENT_RAMSCH_AFTER_BOCK, checkParentOption,
                 isPlayRamsch(checkParentOption));
@@ -663,6 +767,11 @@ public final class JSkatOptions {
         return isSchieberamsch(true);
     }
 
+    /**
+     * Returns or indicates schieberamsch.
+     * @param checkParentOption check parent option value.
+     * @return is schieberamsch result.
+     */
     public Boolean isSchieberamsch(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.SCHIEBERAMSCH, checkParentOption, isPlayRamsch(checkParentOption));
     }
@@ -676,15 +785,28 @@ public final class JSkatOptions {
         return isSchieberamschJacksInSkat(true);
     }
 
+    /**
+     * Returns or indicates schieberamsch jacks in skat.
+     * @param checkParentOption check parent option value.
+     * @return is schieberamsch jacks in skat result.
+     */
     public Boolean isSchieberamschJacksInSkat(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.SCHIEBERAMSCH_JACKS_IN_SKAT, checkParentOption,
                 isSchieberamsch(checkParentOption));
     }
 
+    /**
+     * Returns or indicates show tips at start up.
+     * @return is show tips at start up result.
+     */
     public Boolean isShowTipsAtStartUp() {
         return getBoolean(Option.SHOW_TIPS_AT_START_UP);
     }
 
+    /**
+     * Returns or indicates check for new version at start up.
+     * @return is check for new version at start up result.
+     */
     public Boolean isCheckForNewVersionAtStartUp() {
         return getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP);
     }
@@ -722,6 +844,10 @@ public final class JSkatOptions {
         };
     }
 
+    /**
+     * Sets bock event no bid.
+     * @param bockEventAllPlayersPassed bock event all players passed value.
+     */
     public void setBockEventNoBid(final Boolean bockEventAllPlayersPassed) {
         setOption(Option.BOCK_EVENT_NO_BID, bockEventAllPlayersPassed);
     }
@@ -799,6 +925,10 @@ public final class JSkatOptions {
         setOption(Option.CHEAT_DEBUG_MODE, isCheatDebugMode);
     }
 
+    /**
+     * Sets show tips at start up.
+     * @param isShowTipsAtStartUp is show tips at start up value.
+     */
     public void setShowTipsAtStartUp(final boolean isShowTipsAtStartUp) {
         setOption(Option.SHOW_TIPS_AT_START_UP, isShowTipsAtStartUp);
     }
@@ -1302,6 +1432,10 @@ public final class JSkatOptions {
         setDefaultProperties();
     }
 
+    /**
+     * Sets main frame geometry.
+     * @param geometry geometry value.
+     */
     public void setMainFrameGeometry(final WindowGeometry geometry) {
         setOption(Option.MAIN_FRAME_X_POSITION, geometry.x());
         setOption(Option.MAIN_FRAME_Y_POSITION, geometry.y());

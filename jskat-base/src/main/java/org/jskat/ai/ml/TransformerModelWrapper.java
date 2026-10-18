@@ -18,9 +18,21 @@ import java.util.Map;
 public class TransformerModelWrapper extends AbstractONNXWrapper {
 
     // Fixed sizes matching FastTransformerDataset
+    /**
+     * Maximum hand cards represented by the transformer input.
+     */
     public static final int MAX_HAND = 10;
+    /**
+     * Maximum visible declarer cards represented by the input.
+     */
     public static final int MAX_OUVERT = 10;
+    /**
+     * Maximum historical card plays represented by the input.
+     */
     public static final int MAX_HISTORY = 27;
+    /**
+     * Maximum cards in the current trick represented by the input.
+     */
     public static final int MAX_TRICK = 2;
 
     /**

@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class LoadSeriesAction extends AbstractJSkatAction {
 
     /**
+     * Creates the load series action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public LoadSeriesAction() {

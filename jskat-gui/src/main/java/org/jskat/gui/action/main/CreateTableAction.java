@@ -12,6 +12,8 @@ public class CreateTableAction extends AbstractJSkatAction {
 
 
     /**
+     * Creates the create table action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public CreateTableAction() {

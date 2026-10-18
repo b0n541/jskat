@@ -6,6 +6,11 @@ import java.util.List;
  * Skat constants
  */
 public final class SkatConstants {
+    /**
+     * Creates an instance of this type.
+     */
+    public SkatConstants() {
+    }
 
     /**
      * All possible bid values ordered from the lowest to the highest bid value

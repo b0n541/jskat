@@ -111,6 +111,10 @@ public class IssController {
         }
     }
 
+    /**
+     * Establishes a connection using the supplied credentials.
+     * @param command command containing the login credentials
+     */
     @Subscribe
     public void establishConnectionOn(final IssConnectCommand command) {
 
@@ -284,6 +288,10 @@ public class IssController {
         jskat.setActiveTable(JSkatViewType.ISS_TABLE, tableName);
     }
 
+    /**
+     * Remove table.
+     * @param tableName table name value.
+     */
     public void removeTable(final String tableName) {
         skatCardTransferHandlers.remove(tableName);
         eventBus.post(new RemoveTableCommand(JSkatViewType.ISS_TABLE, tableName));

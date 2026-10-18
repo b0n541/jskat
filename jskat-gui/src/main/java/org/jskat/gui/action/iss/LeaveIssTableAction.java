@@ -12,6 +12,8 @@ import org.jskat.gui.img.JSkatGraphicRepository;
 public class LeaveIssTableAction extends AbstractJSkatAction {
 
     /**
+     * Creates the leave iss table action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public LeaveIssTableAction() {

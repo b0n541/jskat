@@ -5,6 +5,10 @@ package org.jskat.control.event.table;
  */
 public class DuplicateTableNameInputEvent extends AbstractTableEvent {
 
+    /**
+     * Performs duplicate table name input event.
+     * @param tableName table name value.
+     */
     public DuplicateTableNameInputEvent(String tableName) {
         super(tableName);
     }

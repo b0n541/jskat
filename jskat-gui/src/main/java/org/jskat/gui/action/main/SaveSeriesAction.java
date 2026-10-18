@@ -12,6 +12,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class SaveSeriesAction extends AbstractJSkatAction {
 
     /**
+     * Creates the save series action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public SaveSeriesAction() {

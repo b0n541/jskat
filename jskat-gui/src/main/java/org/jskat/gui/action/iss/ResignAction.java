@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class ResignAction extends AbstractJSkatAction {
 
     /**
+     * Creates the resign action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ResignAction() {

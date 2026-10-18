@@ -84,8 +84,8 @@ public interface SkatRule {
 
     /**
      * Calculates the number of matadors (Jacks and trump cards in a row without gaps).
-     * <p>
-     * return Number of matadors
+     * @param gameData game data used to inspect the declarer's cards and contract
+     * @return number of matadors
      */
     int getMatadors(SkatGameData gameData);
 

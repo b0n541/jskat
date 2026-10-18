@@ -1,5 +1,8 @@
 package org.jskat.control.gui.img;
 
+/**
+ * Defines the card set type.
+ */
 public enum CardSet {
 
     /**
@@ -57,14 +60,26 @@ public enum CardSet {
         this.fileType = fileType;
     }
 
+    /**
+     * Returns or indicates card set name.
+     * @return get card set name result.
+     */
     public String getCardSetName() {
         return cardSetName;
     }
 
+    /**
+     * Returns or indicates card face.
+     * @return get card face result.
+     */
     public CardFace getCardFace() {
         return cardFace;
     }
 
+    /**
+     * Returns or indicates file type.
+     * @return get file type result.
+     */
     public String getFileType() {
         return fileType;
     }

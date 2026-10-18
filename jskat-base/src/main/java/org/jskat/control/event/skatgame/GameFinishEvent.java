@@ -11,9 +11,20 @@ import java.util.Objects;
  */
 public final class GameFinishEvent implements SkatGameEvent {
 
+    /**
+     * Name of the player who declared the game.
+     */
     public String declarerName;
+    /**
+     * Final summary of the completed game.
+     */
     public final GameSummary gameSummary;
 
+    /**
+     * Performs game finish event.
+     * @param declarerName declarer name value.
+     * @param gameSummary game summary value.
+     */
     public GameFinishEvent(final String declarerName, final GameSummary gameSummary) {
         this.declarerName = declarerName;
         this.gameSummary = gameSummary;

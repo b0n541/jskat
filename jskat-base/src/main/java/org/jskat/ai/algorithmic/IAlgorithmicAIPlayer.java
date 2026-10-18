@@ -4,6 +4,7 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 
 /**
+ * Implements the i algorithmic a i player strategy for Skat.
  * @author Markus J. Luzius <br>
  * created: 08.07.2011 17:22:49
  */

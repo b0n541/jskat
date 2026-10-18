@@ -16,6 +16,11 @@ import java.util.List;
  * is needed for simulating games without gui
  */
 public class NullView implements JSkatView {
+    /**
+     * Creates an instance of this type.
+     */
+    public NullView() {
+    }
     @Override
     public boolean usesAiActionDelay() {
         return false;

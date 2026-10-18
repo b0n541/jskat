@@ -7,10 +7,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Implements the skat processor strategy for Skat.
  * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class SkatProcessor {
+    /**
+     * Creates an instance of this type.
+     */
+    public SkatProcessor() {
+    }
 
 	private static Logger log = LoggerFactory.getLogger(SkatProcessor.class);
 

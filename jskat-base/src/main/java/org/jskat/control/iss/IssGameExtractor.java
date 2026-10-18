@@ -21,11 +21,20 @@ public class IssGameExtractor {
 
     private final String sourceFileName;
 
+    /**
+     * Performs main.
+     * @param args args value.
+     * @throws Exception if the operation fails.
+     */
     public static void main(final String[] args) throws Exception {
         final IssGameExtractor gameExtractor = new IssGameExtractor("/home/jan/Projects/jskat/iss/iss-games-04-2021.sgf");
         gameExtractor.filterGameDatabase(KERMIT_WON_GAMES, "kermit_won_games.csv");
     }
 
+    /**
+     * Performs iss game extractor.
+     * @param sourceFileName source file name value.
+     */
     public IssGameExtractor(final String sourceFileName) {
         this.sourceFileName = sourceFileName;
     }

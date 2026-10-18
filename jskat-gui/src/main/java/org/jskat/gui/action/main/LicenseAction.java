@@ -10,6 +10,8 @@ import org.jskat.gui.action.AbstractJSkatAction;
 public class LicenseAction extends AbstractJSkatAction {
 
     /**
+     * Creates the license action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public LicenseAction() {

@@ -7,6 +7,15 @@ import org.jskat.util.Player;
 /**
  * Event for game start.
  */
+/**
+ * Event containing the initial player and game details for a new game.
+ *
+ * @param gameNo number of the game within its series
+ * @param gameVariant variant being played
+ * @param leftPlayerPosition position of the player to the user's left
+ * @param rightPlayerPosition position of the player to the user's right
+ * @param userPosition position occupied by the local user
+ */
 public record GameStartedEvent(
         Integer gameNo,
         GameVariant gameVariant,

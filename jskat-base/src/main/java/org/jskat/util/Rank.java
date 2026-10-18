@@ -171,14 +171,26 @@ public enum Rank {
         return (int) Math.pow(2, ordinal());
     }
 
+    /**
+     * To null binary flag.
+     * @return to null binary flag result.
+     */
     public int toNullBinaryFlag() {
         return (int) Math.pow(2, getNullOrder());
     }
 
+    /**
+     * To suit binary flag.
+     * @return to suit binary flag result.
+     */
     public int toSuitBinaryFlag() {
         return (int) Math.pow(2, getSuitGrandOrder());
     }
 
+    /**
+     * To grand binary flag.
+     * @return to grand binary flag result.
+     */
     public int toGrandBinaryFlag() {
         return toSuitBinaryFlag();
     }

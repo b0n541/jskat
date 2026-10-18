@@ -21,6 +21,9 @@ public class JSkatGraphicRepository {
 
     private static final Logger log = LoggerFactory.getLogger(JSkatGraphicRepository.class);
 
+    /**
+     * Shared repository of application images.
+     */
     public final static JSkatGraphicRepository INSTANCE = new JSkatGraphicRepository();
 
     private static final JSkatOptions options = JSkatOptions.instance();
@@ -39,6 +42,9 @@ public class JSkatGraphicRepository {
         loadAllJSkatImages();
     }
 
+    /**
+     * Reloads card, icon, flag, and bid bubble images from the configured resources.
+     */
     public void reloadAllJSkatImages() {
         loadAllJSkatImages();
     }
@@ -107,6 +113,11 @@ public class JSkatGraphicRepository {
         }
     }
 
+    /**
+     * Returns the resource file name for a card face.
+     * @param card card to locate
+     * @return card image file name without extension
+     */
     public String getImageFileName(final Card card) {
 
         return card.getSuit().getShortString() + "-" + card.getRank().getShortString();
@@ -127,31 +138,61 @@ public class JSkatGraphicRepository {
         return new ImageView(icons.get(icon).get(size));
     }
 
+    /**
+     * Returns the image for a card using the configured card set.
+     * @param card card to display
+     * @return card face image
+     */
     public Image getCardImageFX(final Card card) {
         final CardSet set = options.getCardSet();
         return card == null ? cardBacks.get(set) : cards.get(set).get(card);
     }
 
+    /**
+     * Returns the flag image for a language.
+     * @param flag language flag
+     * @return flag image
+     */
     public Image getFlagImageFX(final Flag flag) {
         return flags.get(flag.ordinal());
     }
 
+    /**
+     * Returns the background image for a skat table.
+     * @return table background image
+     */
     public Image getSkatTableImageFX() {
         return loadGuiImage("skat_table.png");
     }
 
+    /**
+     * Returns the JSkat logo image.
+     * @return logo image
+     */
     public Image getJSkatLogoImageFX() {
         return loadGuiImage("jskat_logo.png");
     }
 
+    /**
+     * Returns the bid bubble image for the left opponent.
+     * @return left opponent bid bubble image
+     */
     public Image getLeftBidBubbleFX() {
         return bidBubbles.get(0);
     }
 
+    /**
+     * Returns the bid bubble image for the right opponent.
+     * @return right opponent bid bubble image
+     */
     public Image getRightBidBubbleFX() {
         return bidBubbles.get(1);
     }
 
+    /**
+     * Returns the bid bubble image for the local player.
+     * @return local player bid bubble image
+     */
     public Image getUserBidBubbleFX() {
         return bidBubbles.get(2);
     }
@@ -345,7 +386,30 @@ public class JSkatGraphicRepository {
      * Enumeration for flag symbols
      */
     public enum Flag {
-        GERMAN, ENGLISH, FRENCH, SPANISH, POLISH, CZECH;
+        /**
+         * German language flag.
+         */
+        GERMAN,
+        /**
+         * English language flag.
+         */
+        ENGLISH,
+        /**
+         * French language flag.
+         */
+        FRENCH,
+        /**
+         * Spanish language flag.
+         */
+        SPANISH,
+        /**
+         * Polish language flag.
+         */
+        POLISH,
+        /**
+         * Czech language flag.
+         */
+        CZECH;
 
         private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 

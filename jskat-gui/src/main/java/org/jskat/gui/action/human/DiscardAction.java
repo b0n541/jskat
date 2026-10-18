@@ -9,6 +9,8 @@ import org.jskat.gui.action.AbstractJSkatAction;
 public class DiscardAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the discard action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public DiscardAction() {

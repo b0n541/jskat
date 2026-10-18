@@ -10,6 +10,8 @@ import org.jskat.gui.action.AbstractJSkatAction;
 public class JoinIssTableAction extends AbstractJSkatAction {
 
     /**
+     * Creates the join iss table action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public JoinIssTableAction() {

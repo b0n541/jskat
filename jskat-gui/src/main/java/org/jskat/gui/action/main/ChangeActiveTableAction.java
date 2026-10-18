@@ -10,6 +10,8 @@ import org.jskat.gui.action.AbstractJSkatAction;
 public class ChangeActiveTableAction extends AbstractJSkatAction {
 
     /**
+     * Creates the change active table action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ChangeActiveTableAction() {

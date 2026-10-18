@@ -7,8 +7,16 @@ import org.jskat.util.Card;
  */
 public class SkatCardTakenEvent extends AbstractTableEvent {
 
+    /**
+     * Card taken from the skat.
+     */
     public final Card card;
 
+    /**
+     * Performs skat card taken event.
+     * @param tableName table name value.
+     * @param card card value.
+     */
     public SkatCardTakenEvent(String tableName, Card card) {
         super(tableName);
         this.card = card;

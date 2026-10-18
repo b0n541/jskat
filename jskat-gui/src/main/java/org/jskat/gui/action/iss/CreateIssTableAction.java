@@ -11,6 +11,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class CreateIssTableAction extends AbstractJSkatAction {
 
     /**
+     * Creates the create iss table action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public CreateIssTableAction() {

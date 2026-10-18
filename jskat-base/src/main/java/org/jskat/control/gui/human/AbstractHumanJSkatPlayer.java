@@ -8,6 +8,12 @@ import org.jskat.player.AbstractJSkatPlayer;
  */
 public abstract class AbstractHumanJSkatPlayer extends AbstractJSkatPlayer {
 
+    /**
+     * Creates a human-controlled player.
+     */
+    protected AbstractHumanJSkatPlayer() {
+    }
+
     @Override
     public final boolean isAIPlayer() {
         return false;

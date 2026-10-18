@@ -61,6 +61,9 @@ public class GameSummary {
      */
     public Map<Player, Integer> playerPoints = new HashMap<>();
 
+    /**
+     * Ramsch losers value.
+     */
     public Set<Player> ramschLosers = new HashSet<>();
 
     /**
@@ -160,6 +163,10 @@ public class GameSummary {
             tmpSummary.tricks.addAll(tricks);
         }
 
+        /**
+         * Sets the points recorded for each player.
+         * @param playerAndPoints player-to-points mapping
+         */
         public void setPlayerPoints(final Map<Player, Integer> playerAndPoints) {
             tmpSummary.playerPoints.putAll(playerAndPoints);
         }
@@ -183,6 +190,10 @@ public class GameSummary {
             tmpSummary.declarer = position;
         }
 
+        /**
+         * Add ramsch looser.
+         * @param looser looser value.
+         */
         public void addRamschLooser(final Player looser) {
             tmpSummary.ramschLosers.add(looser);
         }
@@ -210,10 +221,18 @@ public class GameSummary {
             return true;
         }
 
+        /**
+         * Sets contra.
+         * @param contra contra value.
+         */
         public void setContra(final Boolean contra) {
             tmpSummary.contra = contra;
         }
 
+        /**
+         * Sets re.
+         * @param re re value.
+         */
         public void setRe(final Boolean re) {
             tmpSummary.re = re;
         }
@@ -398,10 +417,18 @@ public class GameSummary {
         return Collections.unmodifiableSet(ramschLosers);
     }
 
+    /**
+     * Returns or indicates contra.
+     * @return is contra result.
+     */
     public Boolean isContra() {
         return contra;
     }
 
+    /**
+     * Returns or indicates re.
+     * @return is re result.
+     */
     public Boolean isRe() {
         return re;
     }

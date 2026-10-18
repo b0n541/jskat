@@ -14,6 +14,12 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractSkatRule implements SkatRule {
 
+    /**
+     * Creates a rule implementation with the shared logger.
+     */
+    protected AbstractSkatRule() {
+    }
+
     private static final Logger log = LoggerFactory.getLogger(AbstractSkatRule.class);
 
     /**

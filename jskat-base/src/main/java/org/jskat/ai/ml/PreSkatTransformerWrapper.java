@@ -79,9 +79,20 @@ public class PreSkatTransformerWrapper extends AbstractONNXWrapper {
      * Result container for PreSkatTransformer predictions.
      */
     public static class Result {
+        /**
+         * Predicted success probabilities for picking up the skat.
+         */
         public final float[] pickupProbs;  // Length 63
+        /**
+         * Predicted success probabilities for playing hand.
+         */
         public final float[] handProbs;    // Length 63
 
+        /**
+         * Performs result.
+         * @param pickupProbs pickup probs value.
+         * @param handProbs hand probs value.
+         */
         public Result(float[] pickupProbs, float[] handProbs) {
             this.pickupProbs = pickupProbs;
             this.handProbs = handProbs;

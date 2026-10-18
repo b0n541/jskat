@@ -24,7 +24,13 @@ public record GameContract(
         boolean ouvert,
         CardList ouvertCards) {
 
+    /**
+     * Validates the contract's game type and announcement flags.
+     */
     public GameContract {
+        /**
+         * Provides this API member.
+         */
         Objects.requireNonNull(gameType);
         Objects.requireNonNull(ouvertCards);
 
@@ -55,14 +61,29 @@ public record GameContract(
         }
     }
 
+    /**
+     * Performs game contract.
+     * @param gameType game type value.
+     */
     public GameContract(final GameType gameType) {
         this(gameType, false, false, false, false, new CardList());
     }
 
+    /**
+     * Performs game contract.
+     * @param gameType game type value.
+     * @param hand hand value.
+     */
     public GameContract(final GameType gameType, final boolean hand) {
         this(gameType, hand, false, false, false, new CardList());
     }
 
+    /**
+     * Performs game contract.
+     * @param gameType game type value.
+     * @param ouvert ouvert value.
+     * @param ouvertCards ouvert cards value.
+     */
     public GameContract(final GameType gameType, final boolean ouvert, final CardList ouvertCards) {
         this(
                 gameType,
@@ -73,6 +94,13 @@ public record GameContract(
                 ouvertCards);
     }
 
+    /**
+     * Performs game contract.
+     * @param gameType game type value.
+     * @param hand hand value.
+     * @param ouvert ouvert value.
+     * @param ouvertCards ouvert cards value.
+     */
     public GameContract(final GameType gameType, final boolean hand, final boolean ouvert, final CardList ouvertCards) {
         this(
                 gameType,
@@ -83,10 +111,20 @@ public record GameContract(
                 ouvertCards);
     }
 
+    /**
+     * Performs game contract.
+     * @param gameType game type value.
+     * @param schneider schneider value.
+     * @param schwarz schwarz value.
+     */
     public GameContract(final GameType gameType, final boolean schneider, final boolean schwarz) {
         this(gameType, true, schneider, schwarz, false, new CardList());
     }
 
+    /**
+     * Performs with hand.
+     * @return with hand result.
+     */
     public GameContract withHand() {
         return new GameContract(gameType,
                 true,
@@ -96,6 +134,10 @@ public record GameContract(
                 ouvertCards);
     }
 
+    /**
+     * Performs with schneider.
+     * @return with schneider result.
+     */
     public GameContract withSchneider() {
         return new GameContract(gameType,
                 GameType.GRAND_SUIT.contains(gameType),
@@ -105,6 +147,10 @@ public record GameContract(
                 ouvertCards);
     }
 
+    /**
+     * Performs with schwarz.
+     * @return with schwarz result.
+     */
     public GameContract withSchwarz() {
         return new GameContract(gameType,
                 GameType.GRAND_SUIT.contains(gameType),
@@ -114,6 +160,11 @@ public record GameContract(
                 ouvertCards);
     }
 
+    /**
+     * Performs with ouvert.
+     * @param ouvertCards ouvert cards value.
+     * @return with ouvert result.
+     */
     public GameContract withOuvert(final CardList ouvertCards) {
         return new GameContract(gameType,
                 gameType != GameType.NULL || hand,

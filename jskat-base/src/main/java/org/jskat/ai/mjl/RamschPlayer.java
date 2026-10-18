@@ -9,12 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Implements the ramsch player strategy for Skat.
  * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class RamschPlayer extends AbstractCardPlayer {
 
-	/** log */
+	/**
+	 * log
+	 */
 	private static Logger log = LoggerFactory.getLogger(RamschPlayer.class);
 	private CardList cards;
 
@@ -115,7 +118,9 @@ public class RamschPlayer extends AbstractCardPlayer {
 		playerID = id;
 	}
 
-	/** player id */
+	/**
+	 * player id
+	 */
 	private int playerID = -1;
 	private final SkatRule rules;
 

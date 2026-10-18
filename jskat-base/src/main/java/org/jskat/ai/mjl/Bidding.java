@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Implements the bidding strategy for Skat.
  * @author Markus J. Luzius <markus@luzius.de>
  * 
  */

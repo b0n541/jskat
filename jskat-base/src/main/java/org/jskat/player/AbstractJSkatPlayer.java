@@ -18,6 +18,15 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
+    /**
+     * Creates a player with fresh game knowledge.
+     */
+    protected AbstractJSkatPlayer() {
+    }
+
+    /**
+     * Logger used for player lifecycle and game messages.
+     */
     protected Logger log = LoggerFactory.getLogger(AbstractJSkatPlayer.class);
 
     /**
@@ -252,6 +261,11 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
         return result;
     }
 
+    /**
+     * Chooses the cards to put into the skat after picking it up.
+     *
+     * @return cards to discard
+     */
     protected abstract CardList getCardsToDiscard();
 
     /**

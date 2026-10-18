@@ -10,6 +10,8 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 public class PlayGrandHandAction extends AbstractHumanJSkatAction {
 
     /**
+     * Creates the play grand hand action.
+     *
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public PlayGrandHandAction() {

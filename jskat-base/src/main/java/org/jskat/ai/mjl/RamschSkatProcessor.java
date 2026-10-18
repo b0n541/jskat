@@ -11,9 +11,15 @@ import org.slf4j.LoggerFactory;
 import java.util.Vector;
 
 /**
+ * Implements the ramsch skat processor strategy for Skat.
  * @author Markus J. Luzius (markus@luzius.de)
  */
 public class RamschSkatProcessor {
+    /**
+     * Creates an instance of this type.
+     */
+    public RamschSkatProcessor() {
+    }
 
     private static final Logger log = LoggerFactory.getLogger(RamschSkatProcessor.class);
 

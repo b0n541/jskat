@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Random;
 
 /**
+ * Implements the opponent player strategy for Skat.
  * @author Markus J. Luzius (markus@luzius.de)
  */
 public class OpponentPlayer extends AbstractCardPlayer {
