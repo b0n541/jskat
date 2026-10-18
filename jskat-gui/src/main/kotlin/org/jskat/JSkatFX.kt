@@ -66,6 +66,7 @@ class JSkatFX : Application() {
         stage.y = restoredGeometry.minY
         stage.width = restoredGeometry.width
         stage.height = restoredGeometry.height
+        stage.isMaximized = jskatOptions.isMainFrameMaximized
 
         stage.xProperty().addListener { _, _, newValue ->
             if (!stage.isMaximized) {
@@ -99,6 +100,7 @@ class JSkatFX : Application() {
 
     @Subscribe
     fun exitJSkatOn(command: ExitCommand) {
+        stage?.let { jskatOptions.setMainFrameMaximized(it.isMaximized) }
         jskatOptions.saveJSkatProperties()
         Platform.exit()
     }

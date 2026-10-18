@@ -43,6 +43,7 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
         assertTrue(options.getBoolean(Option.SHOW_TIPS_AT_START_UP));
         assertFalse(options.getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP));
         assertFalse(options.getBoolean(Option.HIDE_TOOLBAR));
+        assertFalse(options.isMainFrameMaximized());
 
         if (Locale.getDefault().getLanguage().equals(Locale.GERMAN.getLanguage())) {
             assertThat(options.getLanguage()).isEqualTo(SupportedLanguage.GERMAN);
@@ -141,6 +142,21 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
         final JSkatOptions options = createOptions(temporaryDirectory);
 
         assertThat(options.getMainFrameGeometry()).isEqualTo(WindowGeometry.unset());
+    }
+
+    @Test
+    public void loadsAndSavesMainFrameMaximizedState() throws IOException {
+        final Path propertiesFile = temporaryDirectory.resolve("jskat.properties");
+        Files.writeString(propertiesFile, "mainFrameMaximized=true\n");
+        final JSkatOptions options = createOptions(temporaryDirectory);
+
+        assertThat(options.isMainFrameMaximized()).isTrue();
+
+        options.setMainFrameMaximized(false);
+        options.saveJSkatProperties();
+
+        assertThat(Files.readString(propertiesFile)).contains("mainFrameMaximized=false");
+        assertThat(createOptions(temporaryDirectory).isMainFrameMaximized()).isFalse();
     }
 
     private static JSkatOptions createOptions(final Path path) {

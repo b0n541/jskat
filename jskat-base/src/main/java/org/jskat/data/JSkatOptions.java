@@ -178,7 +178,11 @@ public final class JSkatOptions {
         /**
          * Height of main frame
          */
-        MAIN_FRAME_HEIGHT(Integer.class);
+        MAIN_FRAME_HEIGHT(Integer.class),
+        /**
+         * Whether the main frame is maximized
+         */
+        MAIN_FRAME_MAXIMIZED(Boolean.class);
 
         /**
          * Java type stored for this option.
@@ -383,6 +387,22 @@ public final class JSkatOptions {
      */
     public void setMainFrameHeight(final Integer height) {
         setOption(Option.MAIN_FRAME_HEIGHT, height);
+    }
+
+    /**
+     * Returns whether the main frame is maximized.
+     * @return whether the main frame is maximized
+     */
+    public Boolean isMainFrameMaximized() {
+        return getBoolean(Option.MAIN_FRAME_MAXIMIZED);
+    }
+
+    /**
+     * Sets whether the main frame is maximized.
+     * @param maximized maximized value
+     */
+    public void setMainFrameMaximized(final Boolean maximized) {
+        setOption(Option.MAIN_FRAME_MAXIMIZED, maximized);
     }
 
     /**
@@ -1262,6 +1282,9 @@ public final class JSkatOptions {
             case MAIN_FRAME_Y_POSITION:
                 setMainFrameYPosition(Integer.valueOf(value));
                 break;
+            case MAIN_FRAME_MAXIMIZED:
+                setMainFrameMaximized(Boolean.valueOf(value));
+                break;
         }
     }
 
@@ -1360,6 +1383,7 @@ public final class JSkatOptions {
         setOption(Option.MAIN_FRAME_Y_POSITION, Integer.MIN_VALUE);
         setOption(Option.MAIN_FRAME_WIDTH, Integer.MIN_VALUE);
         setOption(Option.MAIN_FRAME_HEIGHT, Integer.MIN_VALUE);
+        setOption(Option.MAIN_FRAME_MAXIMIZED, Boolean.FALSE);
     }
 
     /**
