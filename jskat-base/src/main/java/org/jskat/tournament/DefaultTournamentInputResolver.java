@@ -82,6 +82,14 @@ public final class DefaultTournamentInputResolver implements TournamentInputReso
         new ModelSource.Installed(label);
         Path releases = modelStore.resolve("releases");
         Path release = releases.resolve(label);
+        // ModelManager stores tagged releases as v<version>; explicit directory labels remain
+        // valid.
+        // Prefer an exact direct child, with the conventional tag only as a fallback.
+        if (source instanceof ModelSource.Installed
+                && !Files.exists(release, LinkOption.NOFOLLOW_LINKS)
+                && label.matches("[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+].*)?")) {
+            release = releases.resolve("v" + label);
+        }
         if (Files.isSymbolicLink(release))
             throw new IOException("Release directory must not be a symbolic link");
         return release;

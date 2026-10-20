@@ -9,7 +9,9 @@ Pointers and sort through `ValidationResult`. Model-free validation never reads
 or creates the model store.
 
 `DefaultTournamentInputResolver` reads Active as a direct-child installed alias;
-Installed and Development labels have no compatibility allowlist. `discover()`
+Installed and Development labels have no compatibility allowlist. Installed
+`1.4.0` resolves an exact child first and otherwise the conventional `v1.4.0`
+release directory, preserving the configured provenance. `discover()`
 returns invalid candidates with reasons; Active and its installed directory are
 one discovery candidate. Signatures accept FLOAT/INT64/BOOL tensor types, exact
 names, ranks and nonbatch dimensions. Batch is dynamic or one; scalar win
@@ -55,7 +57,8 @@ A lease binds each effective inference fallback to competitor UUID, stable game
 ID, actual game phase enum name and error. `GameLease.fallbacks()` returns an
 immutable copy. Sinks are replaced before reuse and cleared on release. The
 existing fallback randomness remains unseeded. Comparison-only dense logging in
-ML-Pro is excluded because it does not change a decision. The runner includes
+ML-Pro is excluded because it does not change a decision. The game core Supplier overload observes `lease::fallbacks` only after all
+callbacks; the List overload remains available for retained audit replay. The runner includes
 these records in the result and retains permanent non-reproducibility status.
 
 Tests cover model-free/read-only preflight, roster aggregation, real installed
@@ -66,3 +69,12 @@ failure, and inference attribution after reuse. Native calls are mocked only at
 the external ONNX API boundary for failure injection. Actual installed release
 integration tests skip explicitly when the local fixture is absent; no download
 is performed.
+
+The integration fixture plays 24 retained shuffled deals with actual registered
+Random and Algorithmic leases, replays every audit through the verifier, and
+repeats each deal after pool reuse with identical events/outcomes/scores. This
+identified two legacy Algorithmic issues: unknown contract type during standard
+DISCARDING incorrectly entered Ramsch/global options, and some strategy proposals
+violated follow-suit. Standard discard now uses its declarer strategy and the
+player's existing legal-card fallback also handles invalid proposals. The core
+still rejects every illegal player output; it does not repair player actions.

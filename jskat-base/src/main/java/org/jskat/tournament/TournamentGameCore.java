@@ -26,6 +26,13 @@ public final class TournamentGameCore {
     public TournamentGameResult play(ScheduledTournamentGame scheduled, List<JSkatPlayer> players,
                                      String inputDigest, UUID attemptId, UUID sessionId,
                                      List<TournamentInferenceFallback> fallbacks) {
+        return play(scheduled, players, inputDigest, attemptId, sessionId, () -> fallbacks);
+    }
+
+    /** Observe inference fallbacks after all game callbacks, immediately before freezing success. */
+    public TournamentGameResult play(ScheduledTournamentGame scheduled, List<JSkatPlayer> players,
+                                     String inputDigest, UUID attemptId, UUID sessionId,
+                                     java.util.function.Supplier<List<TournamentInferenceFallback>> fallbacks) {
         Objects.requireNonNull(scheduled);
         if (players.size() != 3)
             throw new IllegalArgumentException("Three isolated players required");
@@ -73,7 +80,7 @@ public final class TournamentGameCore {
             audit.add("score", score);
             audit.add("complete", CanonicalJson.object().put("ruleset", "standard-skat-v1"));
             return new TournamentGameResult(scheduled.gameId(), attemptId, sessionId, inputDigest,
-                    outcome, scores, audit.events, fallbacks);
+                    outcome, scores, audit.events, fallbacks.get());
         } catch (RuntimeException failure) {
             throw new GameFailure(new TournamentFailedAttempt(scheduled.gameId(), attemptId, sessionId,
                     phase[0], failure.toString(), audit.events),

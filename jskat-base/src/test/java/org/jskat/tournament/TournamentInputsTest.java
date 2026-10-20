@@ -94,6 +94,14 @@ class TournamentInputsTest {
                 if (java.nio.file.Files.isRegularFile(file))
                     java.nio.file.Files.copy(file, development.resolve(file.getFileName()));
         }
+        var manifest =
+                org.jskat.ai.ml.ModelReleaseManifest.parse(
+                        java.nio.file.Files.readString(development.resolve("models.json")));
+        java.nio.file.Files.writeString(
+                development.resolve("models.json"),
+                new org.jskat.ai.ml.ModelReleaseManifest(
+                                "local-workbench", manifest.baseUrl(), manifest.assets())
+                        .sourceJson());
         var roster =
                 List.of(
                         competitor(
@@ -115,6 +123,8 @@ class TournamentInputsTest {
                         CancellationToken.NONE);
         assertThat(result.issues()).isEmpty();
         assertThat(result.valid()).isTrue();
+        assertThat(result.value().competitors().getFirst().releaseLabel())
+                .isEqualTo("local-workbench");
         try (var files = java.nio.file.Files.list(development)) {
             for (var file : files.toList()) java.nio.file.Files.delete(file);
         }
@@ -164,7 +174,7 @@ class TournamentInputsTest {
                         competitor(
                                 "00000000-0000-4000-8000-000000000002",
                                 PlayerImplementation.ML,
-                                new ModelSource.Installed(active)));
+                                new ModelSource.Installed(active.replaceFirst("^v", ""))));
         var result =
                 new DefaultTournamentInputResolver(store)
                         .validate(config(roster), CancellationToken.NONE);
@@ -173,6 +183,62 @@ class TournamentInputsTest {
                 .containsExactly("duplicate-inputs");
         assertThat(java.nio.file.Files.readString(store.resolve("active")).strip())
                 .isEqualTo(active);
+        assertThat(dir.resolve("out")).doesNotExist();
+    }
+
+    @Test
+    void hashValidArtifactsWithWrongTensorSignatureAreRejected() throws Exception {
+        Path installed = Path.of(System.getProperty("user.home"), ".jskat/models/releases/v1.4.0");
+        org.junit.jupiter.api.Assumptions.assumeTrue(
+                java.nio.file.Files.exists(installed.resolve("models.json")),
+                "Local ONNX integration fixture not installed");
+        Path development = dir.resolve("development");
+        java.nio.file.Files.createDirectory(development);
+        try (var files = java.nio.file.Files.list(installed)) {
+            for (var file : files.toList())
+                if (java.nio.file.Files.isRegularFile(file))
+                    java.nio.file.Files.copy(file, development.resolve(file.getFileName()));
+        }
+        var original =
+                org.jskat.ai.ml.ModelReleaseManifest.parse(
+                        java.nio.file.Files.readString(installed.resolve("models.json")));
+        var replacement = original.asset("game_eval_dense.onnx");
+        java.nio.file.Files.copy(
+                development.resolve("game_eval_dense.onnx"),
+                development.resolve("bidding_dense.onnx"),
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        var inventory =
+                original.assets().stream()
+                        .map(
+                                a ->
+                                        a.name().equals("bidding_dense.onnx")
+                                                ? new org.jskat.ai.ml.ModelAsset(
+                                                        a.name(),
+                                                        replacement.sizeBytes(),
+                                                        replacement.sha256())
+                                                : a)
+                        .toList();
+        java.nio.file.Files.writeString(
+                development.resolve("models.json"),
+                new org.jskat.ai.ml.ModelReleaseManifest(
+                                "different-label", original.baseUrl(), inventory)
+                        .sourceJson());
+        var roster =
+                List.of(
+                        competitor(
+                                "00000000-0000-4000-8000-000000000001",
+                                PlayerImplementation.ML,
+                                new ModelSource.Development(
+                                        new ConfiguredPath("development", development))),
+                        competitor(
+                                "00000000-0000-4000-8000-000000000002",
+                                PlayerImplementation.RANDOM,
+                                null));
+        var result =
+                new DefaultTournamentInputResolver(dir.resolve("absent"))
+                        .validate(config(roster), CancellationToken.NONE);
+        assertThat(result.issues()).hasSize(1);
+        assertThat(result.issues().getFirst().message()).contains("incompatible");
         assertThat(dir.resolve("out")).doesNotExist();
     }
 }
