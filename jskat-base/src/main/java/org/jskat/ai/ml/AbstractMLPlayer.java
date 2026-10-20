@@ -88,13 +88,25 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
      * Subclasses should call this before running inference.
      * @param models resolved paths to required model assets
      */
+    protected ONNXConstructionPolicy constructionPolicy = ONNXConstructionPolicy.INTERACTIVE;
+    private java.util.function.BiConsumer<String, Throwable> fallbackSink = (phase, error) -> {};
+
+    /** Per-lease diagnostics; fallback randomness deliberately remains unseeded. */
+    public void setFallbackSink(java.util.function.BiConsumer<String, Throwable> sink) {
+        fallbackSink = java.util.Objects.requireNonNull(sink);
+    }
+    protected void reportFallback(String phase, Throwable error) {
+        fallbackSink.accept(knowledge.getGameState() == null ? phase : knowledge.getGameState().name(), error);
+    }
+
     protected void initializeSharedModels(final ResolvedModelSet models) {
         try {
             this.biddingDenseModel = new ONNXModelWrapper(models.biddingDense().toString(),
-                    ONNXModelWrapper.ModelType.BIDDING_DENSE);
-            this.cardPlayTransformerModel = new TransformerModelWrapper(models.cardPlayTransformer().toString());
+                    ONNXModelWrapper.ModelType.BIDDING_DENSE, constructionPolicy);
+            this.cardPlayTransformerModel = new TransformerModelWrapper(models.cardPlayTransformer().toString(), constructionPolicy);
             logger.info("Card play transformer loaded");
-        } catch (OrtException | IOException e) {
+        } catch (OrtException | IOException | RuntimeException e) {
+            cleanupAfterFailure(e);
             logger.error("Failed to load ML models", e);
             throw new RuntimeException("Cannot initialize ML player without models", e);
         }
@@ -113,15 +125,22 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
     public void finalizeGame() {
     }
 
-    @Override
-    public void close() {
-        if (biddingDenseModel != null) {
-            biddingDenseModel.close();
-        }
-        if (cardPlayTransformerModel != null) {
-            cardPlayTransformerModel.close();
-        }
+    protected void cleanupAfterFailure(Throwable failure) {
+        try { close(); } catch (RuntimeException cleanup) { failure.addSuppressed(cleanup); }
     }
+
+    protected void closeModels(AbstractONNXWrapper... models) {
+        RuntimeException failure = null;
+        for (var model : models) if (model != null) {
+            try { model.close(); } catch (RuntimeException e) {
+                if (failure == null) failure = e; else failure.addSuppressed(e);
+            }
+        }
+        if (failure != null) throw failure;
+    }
+
+    @Override
+    public void close() { closeModels(biddingDenseModel, cardPlayTransformerModel); }
 
     @Override
     public void startGame() {
@@ -176,6 +195,7 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
             }
 
         } catch (OrtException e) {
+            reportFallback("BIDDING", e);
             logger.error("Bidding inference failed, falling back to conservative bid", e);
             mlMaxBidValue = 18;
             mlShouldPickupSkat = true;
@@ -362,7 +382,7 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
             return result.gameContract;
         } else {
             logger.warn("Game search failed, using fallback (Diamonds)");
-            return new GameContract(GameType.DIAMONDS);
+            return new GameContract(GameType.DIAMONDS, !mlShouldPickupSkat);
         }
     }
 
@@ -430,6 +450,7 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
             }
 
         } catch (Exception e) {
+            reportFallback("DECLARING", e);
             logger.error("Error during game announcement search", e);
         }
 
@@ -487,9 +508,11 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
             }
 
         } catch (Exception e) {
+            reportFallback("TRICK_PLAYING", e);
             logger.error("Card play transformer error, falling back to random", e);
         }
 
+        if (playable.isEmpty()) reportFallback("TRICK_PLAYING", new IllegalStateException("Inference returned no legal candidates"));
         logger.warn("Using random fallback for playCard");
         return playable.get(random.nextInt(playable.size()));
     }

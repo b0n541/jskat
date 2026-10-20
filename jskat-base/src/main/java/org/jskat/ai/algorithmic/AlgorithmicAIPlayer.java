@@ -25,12 +25,15 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 
     private IAlgorithmicAIPlayer aiPlayer = null;
     BidEvaluator bidEvaluator = null;
+    private boolean handGame;
 
     /*
      *
      */
     @Override
     public void prepareForNewGame() {
+        bidEvaluator = null;
+        handGame = false;
         log.debug("New game preparation for player <" + playerName + ">");
         aiPlayer = null;
     }
@@ -76,7 +79,8 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
         if (bidEvaluator == null) {
             bidEvaluator = new BidEvaluator(knowledge.getOwnCards());
         }
-        return bidEvaluator.pickUpSkat();
+        handGame = !bidEvaluator.pickUpSkat();
+        return !handGame;
     }
 
     /*
@@ -88,7 +92,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
             bidEvaluator = new BidEvaluator(knowledge.getOwnCards());
         }
         aiPlayer = new AlgorithmicSinglePlayer(this);
-        return new GameContract(bidEvaluator.getSuggestedGameType());
+        return new GameContract(bidEvaluator.getSuggestedGameType(), handGame);
     }
 
     /*

@@ -25,6 +25,10 @@ public class AIPlayerRND extends AbstractAIPlayer {
      * Random generator for decision-making.
      */
     private final Random random = new Random();
+    private boolean handGame;
+
+    /** Reset the decision stream for one retained tournament seat. */
+    public void reseed(long seed) { random.setSeed(seed); }
 
     /**
      * Creates a new instance of AIPlayerRND.
@@ -44,7 +48,8 @@ public class AIPlayerRND extends AbstractAIPlayer {
 
     @Override
     public boolean pickUpSkat() {
-        return random.nextBoolean();
+        handGame = !random.nextBoolean();
+        return !handGame;
     }
 
     @Override
@@ -62,9 +67,9 @@ public class AIPlayerRND extends AbstractAIPlayer {
         // select a random game type (without RAMSCH and PASSED_IN)
         final GameType gameType = GameType.values()[random.nextInt(GameType.values().length - 2)];
 
-        final var contract = new GameContract(gameType);
-        if (random.nextBoolean()) {
-            contract.withOuvert(knowledge.getOwnCards());
+        var contract = new GameContract(gameType, handGame);
+        if (random.nextBoolean() && (handGame || gameType == GameType.NULL)) {
+            contract = contract.withOuvert(knowledge.getOwnCards());
         }
 
         return contract;
@@ -130,7 +135,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
 
     @Override
     public void prepareForNewGame() {
-        // nothing to do for AIPlayerRND
+        handGame = false;
     }
 
     @Override

@@ -38,7 +38,11 @@ public class ONNXModelWrapper extends AbstractONNXWrapper {
      * @throws IOException  If file cannot be read
      */
     public ONNXModelWrapper(String modelPath, ModelType modelType) throws OrtException, IOException {
-        super(modelPath, modelType.name());
+        this(modelPath, modelType, ONNXConstructionPolicy.INTERACTIVE);
+    }
+
+    public ONNXModelWrapper(String modelPath, ModelType modelType, ONNXConstructionPolicy policy) throws OrtException, IOException {
+        super(modelPath, modelType.name(), policy);
         this.modelType = modelType;
     }
 

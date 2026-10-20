@@ -26,6 +26,8 @@ public abstract class AbstractONNXWrapper implements AutoCloseable {
      * Loaded model inference session.
      */
     protected final OrtSession session;
+    private final ONNXConstructionPolicy policy;
+    private boolean closed;
 
     /**
      * Loads an ONNX model from the given path.
@@ -36,6 +38,11 @@ public abstract class AbstractONNXWrapper implements AutoCloseable {
      * @throws IOException  If file cannot be read
      */
     protected AbstractONNXWrapper(String modelPath, String modelName) throws OrtException, IOException {
+        this(modelPath, modelName, ONNXConstructionPolicy.INTERACTIVE);
+    }
+
+    protected AbstractONNXWrapper(String modelPath, String modelName, ONNXConstructionPolicy policy) throws OrtException, IOException {
+        this.policy = policy;
         this.env = OrtEnvironment.getEnvironment();
 
         Path path = Paths.get(modelPath);
@@ -50,16 +57,30 @@ public abstract class AbstractONNXWrapper implements AutoCloseable {
         }
 
         logger.info("Loading {} from {}", modelName, modelPath);
-        this.session = env.createSession(modelPath, new OrtSession.SessionOptions());
+        OrtSession created = null;
+        try (var options = new OrtSession.SessionOptions()) {
+            if (policy == ONNXConstructionPolicy.TOURNAMENT) {
+                options.setIntraOpNumThreads(1);
+                options.setInterOpNumThreads(1);
+            }
+            created = env.createSession(modelPath, options);
+        } catch (OrtException | RuntimeException failure) {
+            if (created != null) try { created.close(); } catch (OrtException cleanup) { failure.addSuppressed(cleanup); }
+            throw failure;
+        }
+        this.session = created;
         logger.info("{} loaded successfully", modelName);
     }
 
     @Override
-    public void close() {
+    public synchronized void close() {
+        if (closed) return;
         if (session != null) {
             try {
                 session.close();
+                closed = true;
             } catch (OrtException e) {
+                if (policy == ONNXConstructionPolicy.TOURNAMENT) throw new IllegalStateException("Error closing ONNX session", e);
                 logger.error("Error closing ONNX session", e);
             }
         }

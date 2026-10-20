@@ -33,7 +33,11 @@ public class PreSkatTransformerWrapper extends AbstractONNXWrapper {
      * @throws IOException  If file cannot be read
      */
     public PreSkatTransformerWrapper(String modelPath) throws OrtException, IOException {
-        super(modelPath, "PreSkatTransformer");
+        this(modelPath, ONNXConstructionPolicy.INTERACTIVE);
+    }
+
+    public PreSkatTransformerWrapper(String modelPath, ONNXConstructionPolicy policy) throws OrtException, IOException {
+        super(modelPath, "PreSkatTransformer", policy);
     }
 
     /**
