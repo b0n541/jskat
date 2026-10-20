@@ -1,0 +1,1 @@
+{"configuration":{"competitors":[{"id":"550e8400-e29b-41d4-a716-446655440000","implementation":"random","name":"Random"},{"id":"ca207ce9-3ca4-4ce1-8443-81e081b8344e","implementation":"algorithmic","name":"Algorithmic"}],"epochs":2,"output":"/tmp/runs/test","ruleset":"standard-skat-v1","schemaVersion":1},"encoding":"jskat-request-v1"}
