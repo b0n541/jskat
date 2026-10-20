@@ -40,7 +40,11 @@ public class CardSetEvaluatorWrapper extends AbstractONNXWrapper {
      * @throws IOException  If file cannot be read
      */
     public CardSetEvaluatorWrapper(String modelPath) throws OrtException, IOException {
-        super(modelPath, "CardSetEvaluator");
+        this(modelPath, ONNXConstructionPolicy.INTERACTIVE);
+    }
+
+    public CardSetEvaluatorWrapper(String modelPath, ONNXConstructionPolicy policy) throws OrtException, IOException {
+        super(modelPath, "CardSetEvaluator", policy);
     }
 
     /**

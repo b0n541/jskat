@@ -25,12 +25,15 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 
     private IAlgorithmicAIPlayer aiPlayer = null;
     BidEvaluator bidEvaluator = null;
+    private boolean handGame;
 
     /*
      *
      */
     @Override
     public void prepareForNewGame() {
+        bidEvaluator = null;
+        handGame = false;
         log.debug("New game preparation for player <" + playerName + ">");
         aiPlayer = null;
     }
@@ -76,7 +79,8 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
         if (bidEvaluator == null) {
             bidEvaluator = new BidEvaluator(knowledge.getOwnCards());
         }
-        return bidEvaluator.pickUpSkat();
+        handGame = !bidEvaluator.pickUpSkat();
+        return !handGame;
     }
 
     /*
@@ -88,7 +92,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
             bidEvaluator = new BidEvaluator(knowledge.getOwnCards());
         }
         aiPlayer = new AlgorithmicSinglePlayer(this);
-        return new GameContract(bidEvaluator.getSuggestedGameType());
+        return new GameContract(bidEvaluator.getSuggestedGameType(), handGame);
     }
 
     /*
@@ -110,10 +114,13 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
                 + knowledge.getOwnCards() + " (" + aiPlayer.getClass()
                 + ") -+-+-+-+-+-+-+-+-+-");
         final Card c = aiPlayer.playCard();
-        if (c != null) {
+        if (c != null && knowledge.getOwnCards().contains(c)
+                && c.isAllowed(knowledge.getGameType(),
+                        knowledge.getTrickCards().isEmpty() ? null : knowledge.getTrickCards().get(0),
+                        knowledge.getOwnCards())) {
             return c;
         }
-        log.warn("no card returned from AI player!");
+        log.warn("Strategy returned no legal card; selecting the first legal card");
         if (knowledge.getTrickCards().size() < 1) {
             return knowledge.getOwnCards().get(0);
         }
@@ -129,6 +136,14 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 
     @Override
     public CardList getCardsToDiscard() {
+        // Before the declarer announces a standard contract the game type is still unknown.
+        // The DISCARDING phase distinguishes this from Schieberamsch.
+        if (knowledge.getGameState() == org.jskat.data.SkatGameData.GameState.DISCARDING
+                && knowledge.getGameType() == null) {
+            if (bidEvaluator == null) bidEvaluator = new BidEvaluator(knowledge.getOwnCards());
+            aiPlayer = new AlgorithmicSinglePlayer(this);
+            return aiPlayer.discardSkat(bidEvaluator);
+        }
         if (aiPlayer == null || !(aiPlayer instanceof AlgorithmicSinglePlayer)) {
             if (knowledge.getGameType() == null
                     || knowledge.getGameType() == GameType.RAMSCH) {

@@ -35,6 +35,11 @@ public class MLPlayerPro extends AbstractMLPlayer {
       * @param models models value.
      */
     public MLPlayerPro(final ResolvedModelSet models) {
+        this(models, ONNXConstructionPolicy.INTERACTIVE);
+    }
+
+    public MLPlayerPro(final ResolvedModelSet models, ONNXConstructionPolicy policy) {
+        this.constructionPolicy = policy;
         setPlayerName("MLPlayerPro");
 
         // Initialize shared models (bidding dense, card play transformer)
@@ -42,8 +47,9 @@ public class MLPlayerPro extends AbstractMLPlayer {
 
         // Initialize game evaluation transformer model
         try {
-            this.gameEvalTransformerModel = new CardSetEvaluatorWrapper(models.gameEvalTransformer().toString());
-        } catch (OrtException | IOException e) {
+            this.gameEvalTransformerModel = new CardSetEvaluatorWrapper(models.gameEvalTransformer().toString(), policy);
+        } catch (OrtException | IOException | RuntimeException e) {
+            cleanupAfterFailure(e);
             logger.error("Failed to load game evaluation transformer model", e);
             throw new RuntimeException("Cannot initialize MLPlayerPro without game evaluation model", e);
         }
@@ -51,9 +57,13 @@ public class MLPlayerPro extends AbstractMLPlayer {
         // Initialize bidding transformer (optional - falls back to dense bidding model)
         if (models.biddingTransformer() != null) {
             try {
-                this.biddingTransformerModel = new PreSkatTransformerWrapper(models.biddingTransformer().toString());
+                this.biddingTransformerModel = new PreSkatTransformerWrapper(models.biddingTransformer().toString(), policy);
                 logger.info("Bidding transformer loaded - using attention-based bidding");
-            } catch (OrtException | IOException e) {
+            } catch (OrtException | IOException | RuntimeException e) {
+                if (policy == ONNXConstructionPolicy.TOURNAMENT) {
+                    cleanupAfterFailure(e);
+                    throw new IllegalStateException("Tournament bidding model failed", e);
+                }
                 logger.warn("Bidding transformer could not be loaded, falling back to dense bidding model");
                 this.biddingTransformerModel = null;
             }
@@ -63,15 +73,7 @@ public class MLPlayerPro extends AbstractMLPlayer {
     }
 
     @Override
-    public void close() {
-        super.close();
-        if (gameEvalTransformerModel != null) {
-            gameEvalTransformerModel.close();
-        }
-        if (biddingTransformerModel != null) {
-            biddingTransformerModel.close();
-        }
-    }
+    public void close() { closeModels(biddingDenseModel, cardPlayTransformerModel, gameEvalTransformerModel, biddingTransformerModel); }
 
     // ==================== Bidding (Transformer override) ====================
 
@@ -139,6 +141,7 @@ public class MLPlayerPro extends AbstractMLPlayer {
                 return;
 
             } catch (OrtException e) {
+                reportFallback("BIDDING", e);
                 logger.warn("Bidding transformer inference failed, falling back to dense bidding model", e);
             }
         }
@@ -211,6 +214,7 @@ public class MLPlayerPro extends AbstractMLPlayer {
             return new GameSearchResult(contract, winProb, expectedValue, gameValue);
 
         } catch (OrtException e) {
+            reportFallback("DECLARING", e);
             logger.error("Game eval transformer inference failed for contract: {}", contract, e);
             return null;
         }

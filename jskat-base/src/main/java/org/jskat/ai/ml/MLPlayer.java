@@ -28,6 +28,11 @@ public class MLPlayer extends AbstractMLPlayer {
       * @param models models value.
      */
     public MLPlayer(final ResolvedModelSet models) {
+        this(models, ONNXConstructionPolicy.INTERACTIVE);
+    }
+
+    public MLPlayer(final ResolvedModelSet models, ONNXConstructionPolicy policy) {
+        this.constructionPolicy = policy;
         setPlayerName("MLPlayer");
 
         // Initialize shared models (bidding dense, card play transformer)
@@ -36,21 +41,17 @@ public class MLPlayer extends AbstractMLPlayer {
         // Initialize game evaluation dense model
         try {
             this.gameEvalDenseModel = new ONNXModelWrapper(models.gameEvalDense().toString(),
-                    ONNXModelWrapper.ModelType.GAME_EVAL_DENSE);
+                    ONNXModelWrapper.ModelType.GAME_EVAL_DENSE, policy);
             logger.info("MLPlayer initialized successfully");
-        } catch (OrtException | IOException e) {
+        } catch (OrtException | IOException | RuntimeException e) {
+            cleanupAfterFailure(e);
             logger.error("Failed to load game evaluation dense model", e);
             throw new RuntimeException("Cannot initialize MLPlayer without game evaluation model", e);
         }
     }
 
     @Override
-    public void close() {
-        super.close();
-        if (gameEvalDenseModel != null) {
-            gameEvalDenseModel.close();
-        }
-    }
+    public void close() { closeModels(biddingDenseModel, cardPlayTransformerModel, gameEvalDenseModel); }
 
     @Override
     protected GameSearchResult evaluateGameContract(CardList playingHand, CardList matadorHand, Player position, GameContract contract,
@@ -83,6 +84,7 @@ public class MLPlayer extends AbstractMLPlayer {
             return new GameSearchResult(contract, winProb, expectedValue, gameValue);
 
         } catch (OrtException e) {
+            reportFallback("DECLARING", e);
             logger.error("Game eval inference failed for contract: {}", contract, e);
             return null;
         }

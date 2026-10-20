@@ -4,6 +4,10 @@ import java.nio.file.Path;
 
 /** Preparation validates the whole roster and publishes tournament-owned verified snapshots. */
 public interface TournamentInputResolver {
+    /** Complete read-only source preflight, including probes; never creates run/output storage. */
+    ValidationResult<TournamentConfiguration> validate(
+            TournamentConfiguration requested, CancellationToken cancellation);
+
     ValidationResult<ResolvedTournamentConfiguration> prepare(
             TournamentConfiguration requested,
             long effectiveSeed,

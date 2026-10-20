@@ -43,7 +43,11 @@ public class TransformerModelWrapper extends AbstractONNXWrapper {
      * @throws IOException  If file cannot be read
      */
     public TransformerModelWrapper(String modelPath) throws OrtException, IOException {
-        super(modelPath, "Card Play Transformer");
+        this(modelPath, ONNXConstructionPolicy.INTERACTIVE);
+    }
+
+    public TransformerModelWrapper(String modelPath, ONNXConstructionPolicy policy) throws OrtException, IOException {
+        super(modelPath, "Card Play Transformer", policy);
     }
 
     /**

@@ -37,24 +37,24 @@ public class ImmutablePlayerKnowledge {
      * Contains all cards played by the players
      */
     // FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
-    protected final Map<Player, Set<Card>> playedCards = new HashMap<>();
+    protected final Map<Player, Set<Card>> playedCards = new EnumMap<>(Player.class);
 
     /**
      * Contains all cards that could be on a certain position
      */
     // FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
-    protected final Map<Player, Set<Card>> possiblePlayerCards = new HashMap<>();
+    protected final Map<Player, Set<Card>> possiblePlayerCards = new EnumMap<>(Player.class);
 
     /**
      * Contains all cards that could be in the skat
      */
     // FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
-    protected final Set<Card> possibleSkatCards = new HashSet<>();
+    protected final Set<Card> possibleSkatCards = EnumSet.noneOf(Card.class);
 
     /**
      * Holds the highest bid every player has made during bidding
      */
-    protected final Map<Player, Integer> highestBid = new HashMap<>();
+    protected final Map<Player, Integer> highestBid = new EnumMap<>(Player.class);
 
     /**
      * The current trick
@@ -102,15 +102,15 @@ public class ImmutablePlayerKnowledge {
     /**
      * Player cards
      */
-    protected final Set<Card> ownCards = new HashSet<>();
+    protected final Set<Card> ownCards = EnumSet.noneOf(Card.class);
     /**
      * Skat cards
      */
-    protected final Set<Card> skat = new HashSet<>();
+    protected final Set<Card> skat = EnumSet.noneOf(Card.class);
     /**
      * Cards of the single player
      */
-    protected Set<Card> singlePlayerCards = new HashSet<>();
+    protected Set<Card> singlePlayerCards = EnumSet.noneOf(Card.class);
     /**
      * Flag for hand game
      */
@@ -582,7 +582,7 @@ public class ImmutablePlayerKnowledge {
      */
     public Set<Player> getPlayerPartyMembers() {
 
-        final Set<Player> result = new HashSet<>();
+        final Set<Player> result = EnumSet.noneOf(Player.class);
         if (getGameType() == GameType.RAMSCH) {
             result.add(playerPosition);
         } else if (getDeclarer().equals(getPlayerPosition())) {
@@ -620,7 +620,7 @@ public class ImmutablePlayerKnowledge {
 
         final List<Player> result = Player.getOrderedList();
         result.removeAll(getPlayerPartyMembers());
-        return Set.copyOf(result);
+        return Collections.unmodifiableSet(new LinkedHashSet<>(result));
     }
 
     /**
