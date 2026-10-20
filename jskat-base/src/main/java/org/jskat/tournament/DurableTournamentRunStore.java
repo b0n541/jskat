@@ -696,7 +696,10 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
         versions.put("deckRng", TournamentSchedules.DECK_VERSION);
         versions.put("gameAudit", "jskat-game-audit-v1");
         versions.put("resultRules", "standard-skat-seeger-fabian-v1");
-        versions.put("ratingExport", "jskat-rating-export-v1");
+        versions.put("ratingExport", TournamentReports.VERSION);
+        versions.put("rating", TournamentRatings.VERSION);
+        versions.put("bootstrap", TournamentRatings.BOOTSTRAP_VERSION);
+        versions.put("predictiveDiagnostics", TournamentReports.DIAGNOSTICS_VERSION);
         return versions;
     }
 

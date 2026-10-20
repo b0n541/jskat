@@ -19,7 +19,7 @@ class TournamentRecordTest {
                         () ->
                                 TournamentRecords.decode(
                                         new String(encoded, java.nio.charset.StandardCharsets.UTF_8)
-                                                .replace("42", "43")
+                                                .replace("\"answer\":42", "\"answer\":43")
                                                 .getBytes(java.nio.charset.StandardCharsets.UTF_8),
                                         run,
                                         "test"))
