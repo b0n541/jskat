@@ -184,6 +184,11 @@ public class SkatGameData {
      */
     @Subscribe
     public void adjustDataOn(final SkatGameEvent event) {
+        apply(event);
+    }
+
+    /** Applies authoritative state synchronously without event-bus error suppression. */
+    public void apply(final SkatGameEvent event) {
         event.processForward(this);
         gameMoves.add(event);
     }

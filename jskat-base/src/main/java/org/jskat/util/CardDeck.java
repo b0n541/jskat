@@ -41,6 +41,17 @@ public class CardDeck extends CardList {
 
     private boolean isShuffled = false;
 
+    /** Copies a validated full deck in retained dealing order without shuffling it. */
+    public static CardDeck fromRetainedOrder(List<Card> order) {
+        if (order.size() != 32 || new HashSet<>(order).size() != 32 || order.stream().anyMatch(java.util.Objects::isNull))
+            throw new IllegalArgumentException("A retained deck must contain every card once");
+        CardDeck deck = new CardDeck();
+        deck.clear();
+        deck.addAll(order);
+        deck.isShuffled = true;
+        return deck;
+    }
+
     /**
      * Creates a new instance of CardDeck
      */
