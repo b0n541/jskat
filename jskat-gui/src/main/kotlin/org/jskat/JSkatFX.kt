@@ -32,6 +32,8 @@ class JSkatFX : Application() {
     private val jskatOptions: JSkatOptions = JSkatOptions.instance()
 
     private var stage: Stage? = null
+    private var tournamentController: org.jskat.gui.javafx.tournament.TournamentController? = null
+    private var exiting = false
 
     override fun start(stage: Stage) {
         this.stage = stage
@@ -41,7 +43,10 @@ class JSkatFX : Application() {
 
         // TODO: Replace with better approach
         val human = SwingHumanPlayer()
-        val mainWindow = JSkatMainWindowFX()
+        val developerMode = parameters.raw.contains("--developer-mode")
+        tournamentController = if (developerMode) org.jskat.gui.javafx.tournament.TournamentController() else null
+        val mainWindow = JSkatMainWindowFX(developerMode = developerMode, tournamentController = tournamentController,
+            openTournamentDirectory = { hostServices.showDocument(it.toUri().toString()) })
         val jskatView = JSkatViewFX(
             mainWindow,
             human,
@@ -54,7 +59,8 @@ class JSkatFX : Application() {
         JSkatFX::class.java.getResourceAsStream("/org/jskat/gui/img/gui/jskat_logo.png")?.use {
             stage.icons.add(Image(it))
         }
-        stage.setOnCloseRequest {
+        stage.setOnCloseRequest { event ->
+            event.consume()
             eventBus.post(ExitCommand())
         }
 
@@ -100,9 +106,26 @@ class JSkatFX : Application() {
 
     @Subscribe
     fun exitJSkatOn(command: ExitCommand) {
-        stage?.let { jskatOptions.setMainFrameMaximized(it.isMaximized) }
-        jskatOptions.saveJSkatProperties()
-        Platform.exit()
+        if (!Platform.isFxApplicationThread()) {
+            Platform.runLater { exitJSkatOn(command) }
+            return
+        }
+        if (exiting) return
+        val exit = {
+            exiting = true
+            stage?.let { jskatOptions.setMainFrameMaximized(it.isMaximized) }
+            jskatOptions.saveJSkatProperties()
+            Platform.exit()
+        }
+        tournamentController?.requestExit({
+            val cancel = javafx.scene.control.ButtonType("Cancel tournament and wait", javafx.scene.control.ButtonBar.ButtonData.OK_DONE)
+            val stay = javafx.scene.control.ButtonType("Stay", javafx.scene.control.ButtonBar.ButtonData.CANCEL_CLOSE)
+            val dialog = javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.WARNING,
+                "JSkat will stay open until admitted games, reports and resource cleanup finish. This can take time if a player is stalled.", cancel, stay)
+            dialog.initOwner(stage)
+            dialog.headerText = "A tournament is active"
+            dialog.showAndWait().orElse(stay) == cancel
+        }, exit) ?: exit()
     }
 
     companion object {
@@ -112,7 +135,7 @@ class JSkatFX : Application() {
         fun main(args: Array<String>, applicationVersion: String) {
             this.applicationVersion = applicationVersion
             JSkatOptions.instance(DesktopSavePathResolver())
-            launch(JSkatFX::class.java)
+            launch(JSkatFX::class.java, *args)
         }
     }
 }

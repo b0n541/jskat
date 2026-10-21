@@ -47,7 +47,10 @@ class JSkatMainWindowFX(
             JSkatResourceBundle.INSTANCE.getString("modelUnavailableDuringStartup"),
             null
         )
-    )
+    ),
+    developerMode: Boolean = false,
+    tournamentController: org.jskat.gui.javafx.tournament.TournamentController? = null,
+    openTournamentDirectory: (java.nio.file.Path) -> Unit = {}
 ) : VBox() {
 
     private val jskatMaster: JSkatMaster = JSkatMaster.INSTANCE
@@ -65,7 +68,10 @@ class JSkatMainWindowFX(
     init {
         JSkatEventBus.INSTANCE.register(this)
 
-        val menuBar = JSkatMenuFactory.build()
+        val tournamentHost = if (developerMode) org.jskat.gui.javafx.tournament.TournamentTabHost(
+            tabs, requireNotNull(tournamentController), openDirectory = openTournamentDirectory
+        ) else null
+        val menuBar = JSkatMenuFactory.build(developerMode) { tournamentHost?.openMonitor() }
 
         toolbar.items.addAll(
             createToolbarButton(actions[JSkatAction.CREATE_LOCAL_TABLE]!!),
