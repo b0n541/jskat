@@ -65,7 +65,10 @@ probe, verification and publication work execute outside the JavaFX thread.
 
 One application-owned controller retains the active requested configuration and
 runner through preparation, admitted-game draining, publication and final cleanup.
-Monitors subscribe to immutable observations. Routine observations coalesce;
+Monitors subscribe to immutable observations. `TournamentProgress.Kind` controls
+coalescing and urgency, typed service recovery status controls the recovery action,
+and the controller retains operation failure separately from its diagnostic text.
+Changing readable wording never changes these decisions. Routine observations coalesce;
 lifecycle/failure/stall observations are queued promptly and older sequence values
 cannot replace newer progress. Disposed/broken listeners cannot affect cleanup.
 

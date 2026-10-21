@@ -36,6 +36,10 @@ class TournamentController {
         private set
     var diagnostic: String = "Ready"
         private set
+    var operationFailed: Boolean = false
+        private set
+    var recovery: org.jskat.tournament.TournamentService.Recovery = org.jskat.tournament.TournamentService.Recovery.NOT_REQUIRED
+        private set
     private var cancellation = TournamentCancellation()
     private val listeners = linkedSetOf<() -> Unit>()
     private var afterCleanup: (() -> Unit)? = null
@@ -64,23 +68,29 @@ class TournamentController {
         cancellation = TournamentCancellation()
         progress = null
         nonReproducible = false
+        operationFailed = false
+        recovery = org.jskat.tournament.TournamentService.Recovery.NOT_REQUIRED
         observedState = null
         diagnostic = "Preparing tournament"
         notifyMonitors()
         // This non-daemon owner survives all monitor disposal until operation returns after cleanup.
         val executor = Executors.newSingleThreadExecutor { Thread(it, "tournament-owner") }
         executor.execute {
-            var failure: String? = null
+            var failure: Throwable? = null
             try {
                 operation(cancellation, TournamentProgress.Observer(::observe))
             } catch (error: Throwable) {
-                failure = error.toString()
+                failure = error
             } finally {
                 executor.shutdown()
                 Platform.runLater {
                     latest.getAndSet(null)?.let(::applyProgress)
                     active = false
-                    diagnostic = failure ?: progress?.message() ?: "Operation finished"
+                    operationFailed = failure != null
+                    recovery = if (failure is org.jskat.tournament.TournamentRecoveryRequiredException)
+                        org.jskat.tournament.TournamentService.Recovery.EXPLICIT_AUTHORIZATION_REQUIRED
+                    else org.jskat.tournament.TournamentService.Recovery.NOT_REQUIRED
+                    diagnostic = failure?.toString() ?: progress?.message() ?: "Operation finished"
                     notifyMonitors()
                     val exit = afterCleanup
                     afterCleanup = null
@@ -93,7 +103,7 @@ class TournamentController {
 
     private fun observe(value: TournamentProgress) {
         if (!value.reproducible()) nonReproducible = true
-        val immediate = value.state() != observedState || value.message() !in setOf("Tournament progress", "Game progress")
+        val immediate = value.state() != observedState || value.kind() != TournamentProgress.Kind.ROUTINE
         observedState = value.state()
         if (immediate) {
             latest.set(null)

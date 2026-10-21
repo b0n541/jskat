@@ -14,7 +14,11 @@ generation without requiring the writer lock. `verify` acquires the existing
 lock for strict read-only integrity/build verification. Neither starts players.
 `run` blocks through preparation, execution, report publication and full cleanup.
 Its result distinguishes configuration rejection from COMPLETED, CANCELLED and
-FAILED. An existing output path is not silently reused. RESUME validates retained
+FAILED. `RunResult.recovery()` is `EXPLICIT_AUTHORIZATION_REQUIRED` only after
+unreleased owner metadata blocks resume with a free OS lock; other failures use
+`NOT_REQUIRED`. The store exposes that refusal as
+`TournamentRecoveryRequiredException`, an `IOException` subtype. Tolerant inspection
+messages never grant recovery authority. An existing output path is not silently reused. RESUME validates retained
 snapshots without consulting original model sources; a certified completed run
 returns read-only, and publication-only recovery creates no pool or game workers.
 
@@ -49,7 +53,11 @@ continues cancellation/progress/stall observation.
 
 ## Progress and termination
 
-`TournamentProgress` includes `TournamentMetrics`: monotonic elapsed/attempt
+`TournamentProgress.kind()` classifies observations as `ROUTINE`, `NOTICE`,
+`STALL_WARNING`, or `FAILURE`. Adapters use these typed categories and lifecycle
+state for coalescing/urgency; readable message wording carries no control semantics.
+Compatibility constructors default to `ROUTINE`. `TournamentProgress` includes
+`TournamentMetrics`: monotonic elapsed/attempt
 times, sequence, session throughput, optional ETA, running attempts, latest
 coherent summary and generation. Admissions/failures are session counts;
 committed games and complete epochs include retained history. Throughput uses

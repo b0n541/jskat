@@ -41,9 +41,19 @@ class TournamentCommandTest {
             display.onProgress(new TournamentProgress(TournamentProgress.State.RUNNING, 60, i, i, 0, i / 6, false, true, "Epoch reports published", metrics));
         }
         assertThat(bytes.toString().lines().count()).isEqualTo(1);
-        display.onProgress(new TournamentProgress(TournamentProgress.State.RUNNING, 60, 10, 10, 0, 1, false, true, "Stall warning: game a", TournamentMetrics.empty()));
-        display.onProgress(new TournamentProgress(TournamentProgress.State.FAILED, 60, 10, 10, 1, 1, false, true, "Callback failed", TournamentMetrics.empty()));
-        assertThat(bytes.toString()).contains("Stall warning: game a", "FAILED");
+        display.onProgress(new TournamentProgress(TournamentProgress.State.RUNNING, 60, 10, 10, 0, 1, false, true, "Slow callback a", TournamentMetrics.empty(), TournamentProgress.Kind.STALL_WARNING));
+        display.onProgress(new TournamentProgress(TournamentProgress.State.RUNNING, 60, 10, 10, 0, 1, false, true, "Callback unavailable", TournamentMetrics.empty(), TournamentProgress.Kind.FAILURE));
+        assertThat(bytes.toString()).contains("Slow callback a", "Callback unavailable");
+    }
+
+    @Test void routineMessageWordingDoesNotBypassProgressCoalescing() {
+        var bytes = new ByteArrayOutputStream();
+        var display = new TournamentCommand.ProgressOutput(new PrintStream(bytes), false);
+        display.onProgress(new TournamentProgress(TournamentProgress.State.RUNNING, 60, 0, 0, 0, 0,
+                false, true, "First observation", TournamentMetrics.empty()));
+        display.onProgress(new TournamentProgress(TournamentProgress.State.RUNNING, 60, 0, 0, 0, 0,
+                false, true, "Reading /models/failure-analysis", TournamentMetrics.empty()));
+        assertThat(bytes.toString().lines().count()).isEqualTo(1);
     }
 
     @Test void standaloneHelpIsDisplayFreeAndSuccessful() {

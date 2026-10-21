@@ -63,7 +63,7 @@ class TournamentPanel(
     private val start = Button("Start new").apply { id = "tournament-start" }
     private val verify = Button("Verify retained run").apply { id = "tournament-verify" }
     private val resume = Button("Resume").apply { id = "tournament-resume" }
-    private val recovery = Button("Recover stale ownership and resume…").apply { isVisible = false; isManaged = false }
+    private val recovery = Button("Recover stale ownership and resume…").apply { id = "tournament-recovery"; isVisible = false; isManaged = false }
     private val validate = Button("Validate").apply { id = "tournament-validate" }
     private val cancel = Button("Cancel after admitted games")
     private var followController = true
@@ -151,7 +151,6 @@ class TournamentPanel(
         cancel.isDisable = !controller.active || !monitorInvocation
         recovery.isDisable = busy || controller.active
         workers.isDisable = controller.active; stall.isDisable = controller.active; verbose.isDisable = controller.active
-        if (!controller.active && monitorInvocation && lastRenderedProgress === controller.progress && controller.diagnostic.contains("Error")) status.text = controller.diagnostic
         controller.progress?.takeIf { monitorInvocation && it !== lastRenderedProgress }?.let { p ->
             lastRenderedProgress = p
             status.text = "${p.state()}: ${p.message()}"
@@ -163,6 +162,10 @@ class TournamentPanel(
             nonReproducible = nonReproducible || controller.nonReproducible || !p.reproducible()
             p.metrics().summaryJson().ifPresent { showSummary(it, p.state() != TournamentProgress.State.COMPLETED) }
         }
+        if (!controller.active && monitorInvocation && controller.operationFailed) {
+            status.text = controller.diagnostic
+            updateRecovery(controller.recovery)
+        }
         fallback.text = if (nonReproducible) "NON-REPRODUCIBLE: inference fallback occurred. See retained diagnostics and audit history." else ""
     }
 
@@ -172,7 +175,7 @@ class TournamentPanel(
         busy = true; render()
         background.execute {
             try { val result = work(); Platform.runLater { busy = false; lease?.close(); done(result); render() } }
-            catch (e: Throwable) { Platform.runLater { busy = false; lease?.close(); status.text = e.toString(); detail.text = e.toString(); updateRecovery(e.toString()); render() } }
+            catch (e: Throwable) { Platform.runLater { busy = false; lease?.close(); status.text = e.toString(); detail.text = e.toString(); updateRecovery(if (e is TournamentRecoveryRequiredException) TournamentService.Recovery.EXPLICIT_AUTHORIZATION_REQUIRED else TournamentService.Recovery.NOT_REQUIRED); render() } }
         }
     }
 
@@ -224,7 +227,7 @@ class TournamentPanel(
         task({ Pair(backend.open(directory), backend.audit(directory)) }) { (opened, history) ->
             retained = opened.inspection().requested().orElse(null)
             retained?.let { editor.load(it, true) }
-            updateRecovery(opened.diagnostics().joinToString("\n"))
+            updateRecovery(TournamentService.Recovery.NOT_REQUIRED)
             detail.text = "Run ${opened.inspection().runId().orElse(null)}\nDirectory: $openedDirectory\n" + opened.diagnostics().joinToString("\n")
             audit.text = history; opened.reports().ifPresent(::showReports)
             status.text = "Read-only retained inspection. Verify before explicit Resume."
@@ -275,16 +278,16 @@ class TournamentPanel(
                     verified = false; completed = result.disposition() == TournamentService.Disposition.COMPLETED
                     result.reports().ifPresent(::showReports)
                     status.text = result.disposition().toString()
-                    // Recovery is never inferred from inspection. A fresh strict verify will report stale metadata.
-                    updateRecovery(result.diagnostics().joinToString("\n"))
+                    // Only the typed ownership failure offers recovery; inspection diagnostics are text.
+                    updateRecovery(result.recovery())
                     if (result.disposition() != TournamentService.Disposition.CONFIGURATION_ERROR) loadEvidence(result.output())
                 }
             }
         }
     }
 
-    private fun updateRecovery(diagnostic: String) {
-        val stale = diagnostic.contains("stale", true) && retained != null && !completed
+    private fun updateRecovery(recoveryStatus: TournamentService.Recovery) {
+        val stale = recoveryStatus == TournamentService.Recovery.EXPLICIT_AUTHORIZATION_REQUIRED && retained != null && !completed
         recovery.isVisible = stale; recovery.isManaged = stale
     }
 

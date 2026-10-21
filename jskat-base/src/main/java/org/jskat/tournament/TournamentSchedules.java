@@ -22,7 +22,7 @@ public final class TournamentSchedules {
         for (long epoch = 0; epoch < epochs; epoch++) {
             long deckSeed = TournamentIdentities.deriveSeed(rootSeed, "deck", "epoch:" + epoch);
             var deck = new ArrayList<>(List.of(Card.values()));
-            var random = new SplitMix(deckSeed);
+            var random = new TournamentRandomV1(deckSeed);
             for (int i = 31; i > 0; i--) Collections.swap(deck, i, random.bounded(i + 1));
             if (ids.size() == 2) {
                 UUID a = ids.get(0), b = ids.get(1);
@@ -97,27 +97,4 @@ public final class TournamentSchedules {
         }
     }
 
-    private static final class SplitMix {
-        private long state;
-
-        SplitMix(long seed) {
-            state = seed;
-        }
-
-        long next() {
-            long z = (state += 0x9e3779b97f4a7c15L);
-            z = (z ^ (z >>> 30)) * 0xbf58476d1ce4e5b9L;
-            z = (z ^ (z >>> 27)) * 0x94d049bb133111ebL;
-            return z ^ (z >>> 31);
-        }
-
-        int bounded(int bound) {
-            long bits, value;
-            do {
-                bits = next() >>> 1;
-                value = bits % bound;
-            } while (bits - value + (bound - 1) < 0);
-            return (int) value;
-        }
-    }
 }

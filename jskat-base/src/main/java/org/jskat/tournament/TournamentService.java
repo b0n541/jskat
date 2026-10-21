@@ -20,6 +20,8 @@ public final class TournamentService {
         FAILED
     }
 
+    public enum Recovery { NOT_REQUIRED, EXPLICIT_AUTHORIZATION_REQUIRED }
+
     public record RunResult(
             Disposition disposition,
             Path output,
@@ -27,8 +29,17 @@ public final class TournamentService {
             Optional<UUID> sessionId,
             Optional<DurableTournamentRunStore.ReportGeneration> reports,
             List<ValidationIssue> configurationIssues,
-            List<String> diagnostics) {
+            List<String> diagnostics,
+            Recovery recovery) {
+        public RunResult(Disposition disposition, Path output, Optional<UUID> runId,
+                Optional<UUID> sessionId, Optional<DurableTournamentRunStore.ReportGeneration> reports,
+                List<ValidationIssue> configurationIssues, List<String> diagnostics) {
+            this(disposition, output, runId, sessionId, reports, configurationIssues, diagnostics,
+                    Recovery.NOT_REQUIRED);
+        }
+
         public RunResult {
+            Objects.requireNonNull(recovery);
             configurationIssues = List.copyOf(configurationIssues);
             diagnostics = List.copyOf(diagnostics);
         }
@@ -321,6 +332,7 @@ public final class TournamentService {
                 newCommits,
                 nextTurn;
         boolean reproducible = true, failed, interrupted, sessionStarted;
+        Recovery recovery = Recovery.NOT_REQUIRED;
         Disposition disposition = Disposition.FAILED;
         TournamentProgress.State state = TournamentProgress.State.PREPARING;
         DurableTournamentRunStore store;
@@ -357,7 +369,9 @@ public final class TournamentService {
             failed = true;
             requestStop();
             diagnostics.add(error.toString());
-            emit("Failure: " + error, true);
+            if (error instanceof TournamentRecoveryRequiredException)
+                recovery = Recovery.EXPLICIT_AUTHORIZATION_REQUIRED;
+            emit("Failure: " + error, TournamentProgress.Kind.FAILURE);
             if (store != null)
                 try {
                     store.diagnostic(TournamentRecords.tree(Map.of("error", error.toString())));
@@ -570,7 +584,7 @@ public final class TournamentService {
                 }
                 emit(
                         result.errors.isEmpty() ? "Game progress" : "Game attempt failed",
-                        !result.errors.isEmpty());
+                        result.errors.isEmpty() ? TournamentProgress.Kind.ROUTINE : TournamentProgress.Kind.FAILURE);
             }
         }
 
@@ -773,7 +787,7 @@ public final class TournamentService {
             }
             for (String warning : warnings) {
                 diagnostics.add(warning);
-                emit(warning, true);
+                emit(warning, TournamentProgress.Kind.STALL_WARNING);
             }
             emit("Tournament progress", false);
         }
@@ -783,6 +797,11 @@ public final class TournamentService {
         }
 
         void emit(String message, boolean immediate) {
+            emit(message, immediate ? TournamentProgress.Kind.NOTICE : TournamentProgress.Kind.ROUTINE);
+        }
+
+        void emit(String message, TournamentProgress.Kind kind) {
+            boolean immediate = kind != TournamentProgress.Kind.ROUTINE;
             long now = nanoTime.getAsLong();
             if (!immediate && lastTick != Long.MIN_VALUE && now - lastTick < 1_000_000_000L) return;
             lastTick = now;
@@ -842,7 +861,8 @@ public final class TournamentService {
                                 cancellation(),
                                 reproducible,
                                 message,
-                                metrics));
+                                metrics,
+                                kind));
             } catch (Throwable observerFailure) {
                 diagnostics.add("Progress observer: " + observerFailure);
             }
@@ -863,7 +883,8 @@ public final class TournamentService {
                     Optional.ofNullable(sessionId),
                     Optional.ofNullable(reports),
                     issues,
-                    diagnostics);
+                    diagnostics,
+                    recovery);
         }
 
         final class ActiveAttempt {
