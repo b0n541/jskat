@@ -30,6 +30,30 @@ class TournamentScheduleTest {
     }
 
     @Test
+    void fourCompetitorsCoverEveryTripleWithOneSharedDeckAndBalancedSeats() {
+        var ids = java.util.stream.IntStream.rangeClosed(1, 4).mapToObj(i -> new UUID(0, i)).toList();
+        var schedule = TournamentSchedules.generate(ids.reversed(), 2, 42);
+        assertThat(schedule).hasSize(48);
+        assertThat(schedule.stream().map(ScheduledTournamentGame::gameId).distinct()).hasSize(48);
+        for (long epoch : List.of(0L, 1L)) {
+            var games = schedule.stream().filter(g -> g.epoch() == epoch).toList();
+            assertThat(games.stream().map(ScheduledTournamentGame::deck).distinct()).hasSize(1);
+            assertThat(games.stream().map(ScheduledTournamentGame::blockId).distinct()).hasSize(4);
+            for (var id : ids) {
+                var seats = games.stream().flatMap(g -> g.seats().stream()).filter(s -> s.competitorId().equals(id)).toList();
+                assertThat(seats).hasSize(18);
+                for (var seat : org.jskat.util.Player.getOrderedList()) assertThat(seats.stream().filter(s -> s.seat() == seat)).hasSize(6);
+            }
+            for (var block : games.stream().collect(java.util.stream.Collectors.groupingBy(ScheduledTournamentGame::blockId)).values()) {
+                assertThat(block).hasSize(6);
+                assertThat(block.stream().map(g -> g.seats().stream().map(TournamentSeat::competitorId).toList()).distinct()).hasSize(6);
+            }
+        }
+        assertThat(schedule.getFirst().deck()).isNotEqualTo(schedule.getLast().deck());
+        assertThat(schedule.stream().flatMap(g -> g.seats().stream()).map(TournamentSeat::seed).distinct()).hasSize(144);
+    }
+
+    @Test
     void exactGoldenSchedulesUseIndependentPythonFixtures() throws Exception {
         var ids =
                 List.of(

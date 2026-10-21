@@ -31,12 +31,37 @@ class TournamentWorkflowTest {
         }
         fail<Unit>("UI did not reach expected state")
     }
+    @Test fun `native import and real source preflight preserve complete shared ordered issues`() {
+        JavaFxTestSupport.initializeToolkit()
+        val root = root(); val file = configuration(root)
+        val panel = onFxThread { TournamentPanel(TournamentController()) }
+        Files.writeString(file, """{"schemaVersion":2,"epochs":1.5,"unknown":true}""")
+        val structural = TournamentService().read(file).issues()
+        onFxThread { panel.importConfiguration(file) }
+        awaitUi { panel.issuesView.items.isNotEmpty() }
+        onFxThread { assertEquals(structural, panel.issuesView.items.toList()) }
+        configuration(root, root.resolve("missing-source"))
+        Files.createDirectory(root.resolve("out"))
+        val service = TournamentService()
+        val expected = service.preflightNew(service.read(file).value(), CancellationToken.NONE).issues()
+        assertTrue(expected.size >= 2)
+        onFxThread { panel.importConfiguration(file) }
+        awaitUi { panel.editor.configurationFile == file && !(panel.lookup("#tournament-validate") as Button).isDisable }
+        onFxThread { (panel.lookup("#tournament-validate") as Button).fire() }
+        awaitUi { panel.status.text == "Validation failed" }
+        onFxThread {
+            assertEquals(expected, panel.issuesView.items.toList())
+            panel.detach()
+        }
+        Files.list(root.resolve("out")).use { assertEquals(0, it.count()) }
+    }
+
     @Test fun `native workflow starts real model-free run and verifies completed evidence without replay`() {
         JavaFxTestSupport.initializeToolkit()
         val root = root(); val file = configuration(root)
         val controller = onFxThread { TournamentController() }
         val panel = onFxThread { TournamentPanel(controller).apply { importConfiguration(file) } }
-        awaitUi { panel.editor.configurationFile == file }
+        awaitUi { panel.editor.configurationFile == file && !(panel.lookup("#tournament-validate") as Button).isDisable }
         onFxThread { (panel.lookup("#tournament-validate") as Button).fire() }
         awaitUi { panel.status.text.startsWith("Validation passed") }
         assertFalse(Files.exists(root.resolve("out")))
@@ -52,7 +77,34 @@ class TournamentWorkflowTest {
             assertTrue(panel.editor.output.isDisable)
             panel.detach()
         }
-        assertEquals(6, TournamentService().verify(root.resolve("out"), CancellationToken.NONE).committedSet().games().size)
+        val before = TournamentService().verify(root.resolve("out"), CancellationToken.NONE)
+        assertEquals(6, before.committedSet().games().size)
+        Files.delete(root.resolve("out/reports").resolve(before.reports().orElseThrow().generationId()).resolve("leaderboard.csv"))
+        val recovery = onFxThread { TournamentPanel(controller).apply { openRun(root.resolve("out")) } }
+        awaitUi { recovery.status.text.startsWith("Read-only retained inspection") }
+        onFxThread { (recovery.lookup("#tournament-verify") as Button).fire() }
+        awaitUi { recovery.status.text.startsWith("Verified retained snapshots") }
+        onFxThread {
+            assertFalse((recovery.lookup("#tournament-resume") as Button).isDisable)
+            (recovery.lookup("#tournament-resume") as Button).fire()
+        }
+        awaitUi { !controller.active && recovery.status.text == "COMPLETED" }
+        assertEquals(0, controller.progress!!.admittedGames())
+        val after = TournamentService().verify(root.resolve("out"), CancellationToken.NONE)
+        assertTrue(after.successfullyCompleted())
+        assertEquals(before.committedSet(), after.committedSet())
+        assertNotEquals(before.reports().orElseThrow().generationId(), after.reports().orElseThrow().generationId())
+        val ready = root.resolve("out/ready.json")
+        val unsupported = Files.readString(ready).replace("\"schemaVersion\":1", "\"schemaVersion\":2")
+        Files.writeString(ready, unsupported)
+        onFxThread { recovery.openRun(root.resolve("out")) }
+        awaitUi { recovery.status.text.startsWith("Read-only retained inspection") }
+        onFxThread {
+            assertTrue((recovery.lookup("#tournament-start") as Button).isDisable)
+            assertTrue((recovery.lookup("#tournament-resume") as Button).isDisable)
+            recovery.detach()
+        }
+        assertEquals(unsupported, Files.readString(ready))
     }
 
     @Test fun `retained native inspection verifies snapshots after original source disappears and corruption stays inspectable`() {

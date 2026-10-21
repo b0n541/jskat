@@ -52,6 +52,19 @@ Run the test suite before opening a pull request:
 ./gradlew test
 ```
 
+## AI player tournaments
+
+Compare built-in players and model releases with reproducible retained deals.
+Random versus Algorithmic requires no models. The [headless command manual](app/TOURNAMENT.md)
+provides a complete JSON example, session controls, exit codes and signal behavior.
+The [developer JavaFX manual](jskat-gui/TOURNAMENT.md) describes the native workflow
+available with `--developer-mode` through **Extras → Tournament…**.
+
+See the [shared configuration and format contracts](jskat-base/TOURNAMENT.md),
+[retained runs and exact-build resume](jskat-base/TOURNAMENT-STORE.md),
+[ratings and interpretation](jskat-base/TOURNAMENT-RATINGS.md), and
+[acceptance evidence and support limits](jskat-base/TOURNAMENT-ACCEPTANCE.md).
+
 ## Project layout
 
 | Directory | What you will find there |
