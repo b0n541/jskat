@@ -114,6 +114,14 @@ class TournamentInputsTest {
                                 PlayerImplementation.RANDOM,
                                 null));
         var resolver = new DefaultTournamentInputResolver(dir.resolve("absent"));
+        var preflight =
+                new TournamentService(resolver)
+                        .preflightNew(config(roster), CancellationToken.NONE);
+        assertThat(preflight.competitors()).hasSize(2);
+        assertThat(preflight.competitors().getFirst().releaseLabel()).isEqualTo("local-workbench");
+        assertThat(preflight.competitors().getFirst().fingerprint()).matches("[0-9a-f]{64}");
+        assertThat(dir.resolve("out")).doesNotExist();
+        assertThat(dir.resolve("snapshots")).doesNotExist();
         var result =
                 resolver.prepare(
                         config(roster),
@@ -123,6 +131,8 @@ class TournamentInputsTest {
                         CancellationToken.NONE);
         assertThat(result.issues()).isEmpty();
         assertThat(result.valid()).isTrue();
+        assertThat(result.value().competitors().getFirst().fingerprint())
+                .isEqualTo(preflight.competitors().getFirst().fingerprint());
         assertThat(result.value().competitors().getFirst().releaseLabel())
                 .isEqualTo("local-workbench");
         try (var files = java.nio.file.Files.list(development)) {

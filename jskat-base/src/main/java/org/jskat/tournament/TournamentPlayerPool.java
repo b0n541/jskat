@@ -5,7 +5,6 @@ import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.player.JSkatPlayer;
 
 import java.util.*;
-import java.util.concurrent.CancellationException;
 
 /**
  * Run-scoped ownership. Each synchronized reservation acquires all three seats atomically. Native
@@ -44,14 +43,14 @@ public final class TournamentPlayerPool implements AutoCloseable {
         while (true) {
             ensureOpen();
             if (cancellation.isCancellationRequested())
-                throw new CancellationException("Player acquisition cancelled");
+                throw new TournamentCancellationException("Player acquisition cancelled");
             // Three slots must fit independently of reuse. Other games retain exactly three.
             if (count - idle.size() + 3 <= capacity) break;
             try {
                 wait(50);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                throw new CancellationException("Player acquisition interrupted");
+                throw new TournamentCancellationException("Player acquisition interrupted");
             }
         }
         var acquired = new ArrayList<Entry>();
