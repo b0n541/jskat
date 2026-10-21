@@ -12,6 +12,24 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 class TournamentPanelTest {
+    @Test fun `owner operation failure is displayed even without Error in its wording`() {
+        JavaFxTestSupport.initializeToolkit()
+        val finished = CountDownLatch(1)
+        val owner = onFxThread { TournamentController() }
+        val panel = onFxThread {
+            TournamentPanel(owner).also {
+                owner.subscribe { if (owner.operationFailed) finished.countDown() }
+                owner.execute { _, _ -> throw IllegalStateException("Native boundary stopped") }
+            }
+        }
+        assertTrue(finished.await(10, TimeUnit.SECONDS))
+        onFxThread {
+            assertEquals(owner.diagnostic, panel.status.text)
+            assertTrue(panel.status.text.contains("Native boundary stopped"))
+            panel.detach()
+        }
+    }
+
     @Test fun `validation runs off FX and exposes the shared ordered issues on native fields`() {
         JavaFxTestSupport.initializeToolkit()
         val entered = CountDownLatch(1)

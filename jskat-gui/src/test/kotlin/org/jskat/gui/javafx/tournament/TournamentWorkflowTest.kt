@@ -31,6 +31,30 @@ class TournamentWorkflowTest {
         }
         fail<Unit>("UI did not reach expected state")
     }
+    @Test fun `ownership recovery uses typed status rather than diagnostic wording`() {
+        JavaFxTestSupport.initializeToolkit()
+        val root = root()
+        val requested = TournamentService().read(configuration(root)).value()
+        DurableTournamentRunStore.create(requested, 123, TournamentBuildIdentity.current(),
+            DefaultTournamentInputResolver(), CancellationToken.NONE).close()
+        var error: java.io.IOException = java.io.IOException("Report set is stale")
+        val backend = object : TournamentBackend() {
+            override fun verify(configuration: TournamentConfiguration, cancellation: CancellationToken): DurableTournamentRunStore.Verification = throw error
+        }
+        val panel = onFxThread { TournamentPanel(TournamentController(), backend).apply { openRun(root.resolve("out")) } }
+        awaitUi { panel.status.text.startsWith("Read-only retained inspection") }
+        for ((failure, expected) in listOf(
+            java.io.IOException("Report set is stale") to false,
+            TournamentRecoveryRequiredException("Ownership authorization needed") to true,
+            java.io.IOException("Unknown stale-input failure") to false)) {
+            error = failure
+            onFxThread { panel.verifyRun() }
+            awaitUi { panel.status.text == failure.toString() }
+            onFxThread { assertEquals(expected, (panel.lookup("#tournament-recovery") as Button).isVisible) }
+        }
+        onFxThread { panel.detach() }
+    }
+
     @Test fun `native import and real source preflight preserve complete shared ordered issues`() {
         JavaFxTestSupport.initializeToolkit()
         val root = root(); val file = configuration(root)

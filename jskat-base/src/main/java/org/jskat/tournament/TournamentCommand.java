@@ -149,7 +149,7 @@ public final class TournamentCommand {
         public ProgressOutput(PrintStream out, boolean verbose) { this.out = out; this.verbose = verbose; }
         public synchronized void onProgress(TournamentProgress p) {
             boolean immediate = previous == null || previous.state() != p.state() || p.failedAttempts() > previous.failedAttempts()
-                    || p.message().startsWith("Stall warning:") || p.message().toLowerCase(Locale.ROOT).contains("fail");
+                    || p.kind().urgent();
             previous = p;
             if (!immediate && p.metrics().elapsed().minus(last).compareTo(Duration.ofSeconds(1)) < 0) return;
             last = p.metrics().elapsed();

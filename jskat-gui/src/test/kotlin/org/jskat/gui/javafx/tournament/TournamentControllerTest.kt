@@ -9,6 +9,34 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 class TournamentControllerTest {
+    @Test fun `routine progress coalesces independently of human wording`() {
+        JavaFxTestSupport.initializeToolkit()
+        val emitted = CountDownLatch(1)
+        val release = CountDownLatch(1)
+        val finished = CountDownLatch(1)
+        val displayed = mutableListOf<String>()
+        val controller = onFxThread {
+            TournamentController().apply {
+                subscribe { progress?.let { displayed.add(it.message()) } }
+                execute { _, observer ->
+                    for (i in 0..2) observer.onProgress(org.jskat.tournament.TournamentProgress(
+                        org.jskat.tournament.TournamentProgress.State.RUNNING, 6, 0, 0, 0, 0,
+                        false, true, "Changed wording $i", org.jskat.tournament.TournamentMetrics.empty()))
+                    emitted.countDown()
+                    assertTrue(release.await(10, TimeUnit.SECONDS))
+                }
+                // Keep FX blocked until the observation burst is queued.
+                assertTrue(emitted.await(10, TimeUnit.SECONDS))
+            }
+        }
+        onFxThread {
+            assertEquals(listOf("Changed wording 0", "Changed wording 2"), displayed)
+            controller.requestExit({ true }) { finished.countDown() }
+        }
+        release.countDown()
+        assertTrue(finished.await(10, TimeUnit.SECONDS))
+    }
+
     @Test fun `Continue preserves monitoring and finalizing approval detaches without new cancellation`() {
         JavaFxTestSupport.initializeToolkit()
         val entered = CountDownLatch(1)

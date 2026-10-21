@@ -134,6 +134,34 @@ class TournamentRunnerTest {
     }
 
     @Test
+    void unreleasedOwnershipHasTypedRecoveryButUnrelatedStaleErrorsDoNot() throws Exception {
+        var config = configuration("recovery-status");
+        UUID runId;
+        try (var store = DurableTournamentRunStore.create(config, 7, BUILD,
+                new DefaultTournamentInputResolver(parent.resolve("unused")), CancellationToken.NONE)) {
+            runId = store.runId();
+        }
+        var ownerPath = config.output().absolute().resolve("lock-owner.json");
+        var owner = TournamentRecords.decode(Files.readAllBytes(ownerPath), runId, "lock-owner");
+        ((com.fasterxml.jackson.databind.node.ObjectNode) owner).put("released", false).put("releasedAt", "");
+        Files.write(ownerPath, TournamentRecords.encode(runId, "lock-owner", owner));
+        var denied = normal().run(config, new TournamentInvocation(TournamentInvocation.Action.RESUME, false),
+                TournamentSessionOptions.defaults(), CancellationToken.NONE, p -> {});
+        assertThat(denied.disposition()).isEqualTo(TournamentService.Disposition.FAILED);
+        assertThat(denied.recovery()).isEqualTo(TournamentService.Recovery.EXPLICIT_AUTHORIZATION_REQUIRED);
+        var recovered = normal().run(config, new TournamentInvocation(TournamentInvocation.Action.RESUME, true),
+                TournamentSessionOptions.defaults(), CancellationToken.NONE, p -> {});
+        assertThat(recovered.disposition()).describedAs(recovered.diagnostics().toString())
+                .isEqualTo(TournamentService.Disposition.COMPLETED);
+        assertThat(recovered.recovery()).isEqualTo(TournamentService.Recovery.NOT_REQUIRED);
+        var unrelated = service((c, w) -> { throw new IllegalStateException("stale model path"); },
+                TournamentReports::calculate);
+        var failed = run(unrelated, configuration("unrelated"), 1, CancellationToken.NONE, p -> {});
+        assertThat(failed.disposition()).isEqualTo(TournamentService.Disposition.FAILED);
+        assertThat(failed.recovery()).isEqualTo(TournamentService.Recovery.NOT_REQUIRED);
+    }
+
+    @Test
     void ownerReleaseErrorStillReleasesOsLockAndReturnsFailed() throws Exception {
         var owners = new AtomicInteger();
         var io =
@@ -514,7 +542,7 @@ class TournamentRunnerTest {
                                                     1, false, Duration.ofSeconds(1)),
                                             cancellation,
                                             p -> {
-                                                if (p.message().startsWith("Stall warning")) {
+                                                if (p.kind() == TournamentProgress.Kind.STALL_WARNING) {
                                                     warnings.incrementAndGet();
                                                     warned.countDown();
                                                 }

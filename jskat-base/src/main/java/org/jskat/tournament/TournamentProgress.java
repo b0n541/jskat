@@ -13,7 +13,24 @@ public record TournamentProgress(
         boolean cancellationRequested,
         boolean reproducible,
         String message,
-        TournamentMetrics metrics) {
+        TournamentMetrics metrics,
+        Kind kind) {
+    /** Presentation policy is independent of diagnostic wording. */
+    public enum Kind {
+        ROUTINE, NOTICE, STALL_WARNING, FAILURE;
+
+        public boolean urgent() {
+            return this == STALL_WARNING || this == FAILURE;
+        }
+    }
+
+    public TournamentProgress(
+            State state, long totalGames, long admittedGames, long committedGames,
+            long failedAttempts, long completeEpochs, boolean cancellationRequested,
+            boolean reproducible, String message, TournamentMetrics metrics) {
+        this(state, totalGames, admittedGames, committedGames, failedAttempts, completeEpochs,
+                cancellationRequested, reproducible, message, metrics, Kind.ROUTINE);
+    }
     public TournamentProgress(
             State state,
             long totalGames,
@@ -50,6 +67,8 @@ public record TournamentProgress(
     public TournamentProgress {
         Objects.requireNonNull(state);
         Objects.requireNonNull(message);
+        Objects.requireNonNull(metrics);
+        Objects.requireNonNull(kind);
         if (totalGames < 0
                 || admittedGames < 0
                 || committedGames < 0

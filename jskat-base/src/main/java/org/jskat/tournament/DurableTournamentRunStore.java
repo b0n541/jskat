@@ -869,7 +869,7 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
             }
             if (!released) {
                 if (!recover)
-                    throw new IOException("Stale lock metadata requires explicit recovery");
+                    throw new TournamentRecoveryRequiredException("Stale lock metadata requires explicit recovery");
                 var audit = CanonicalJson.object();
                 audit.put("previousBase64", Base64.getEncoder().encodeToString(previous));
                 audit.put("previousSha256", CanonicalJson.sha256(previous));

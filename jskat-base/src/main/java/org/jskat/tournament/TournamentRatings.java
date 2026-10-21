@@ -164,11 +164,11 @@ public final class TournamentRatings {
         }
         var samples = new HashMap<UUID, double[]>();
         for (var id : ids) samples.put(id, new double[REPLICATES]);
-        var rng = new SplitMix(seed);
+        var rng = new TournamentRandomV1(seed);
         for (int replicate = 0; replicate < REPLICATES; replicate++) {
             var sampled = new ArrayList<Observation>();
             for (int j = 0; j < epochs.size(); j++)
-                sampled.addAll(byEpoch.get(epochs.get(rng.index(epochs.size()))));
+                sampled.addAll(byEpoch.get(epochs.get(rng.bounded(epochs.size()))));
             var ratings = fit(ids, sampled);
             for (var id : ids) samples.get(id)[replicate] = ratings.get(id);
         }
@@ -187,27 +187,4 @@ public final class TournamentRatings {
         return values[lo] + (values[Math.min(lo + 1, values.length - 1)] - values[lo]) * (at - lo);
     }
 
-    private static final class SplitMix {
-        long state;
-
-        SplitMix(long state) {
-            this.state = state;
-        }
-
-        long next() {
-            long z = (state += 0x9e3779b97f4a7c15L);
-            z = (z ^ (z >>> 30)) * 0xbf58476d1ce4e5b9L;
-            z = (z ^ (z >>> 27)) * 0x94d049bb133111ebL;
-            return z ^ (z >>> 31);
-        }
-
-        int index(int bound) {
-            long bits, value;
-            do {
-                bits = next() >>> 1;
-                value = bits % bound;
-            } while (bits - value + bound - 1 < 0);
-            return (int) value;
-        }
-    }
 }
