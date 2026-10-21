@@ -177,6 +177,53 @@ class TournamentNativeOwnershipTest {
         }
     }
 
+    @Test
+    void repeatedNativePlayerEvictionNeverExceedsTwelveSessionsPerWorkerAndClosesEverything() throws Exception {
+        models();
+        var env = mock(OrtEnvironment.class);
+        var live = new java.util.concurrent.atomic.AtomicInteger();
+        var peak = new java.util.concurrent.atomic.AtomicInteger();
+        var created = new java.util.concurrent.atomic.AtomicInteger();
+        var entries = new ArrayList<ResolvedTournamentCompetitor>();
+        var artifacts = ModelManager.REQUIRED_MODEL_FILES.stream().map(name -> new TournamentArtifact(name, 0,
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")).toList();
+        for (var implementation : List.of(PlayerImplementation.ML_PRO, PlayerImplementation.ML)) {
+            int i = entries.size() + 1;
+            entries.add(new ResolvedTournamentCompetitor(
+                    new TournamentCompetitor(new UUID(0x4000, Long.MIN_VALUE + i), implementation.id(), implementation, nullModel()),
+                    implementation.className(), "fixture", TournamentIdentities.artifactFingerprint(artifacts), directory, artifacts));
+        }
+        try (var environment = mockStatic(OrtEnvironment.class)) {
+            environment.when(OrtEnvironment::getEnvironment).thenReturn(env);
+            when(env.createSession(anyString(), any(OrtSession.SessionOptions.class))).thenAnswer(invocation -> {
+                var session = mock(OrtSession.class);
+                created.incrementAndGet();
+                peak.accumulateAndGet(live.incrementAndGet(), Math::max);
+                doAnswer(close -> { assertThat(live.decrementAndGet()).isNotNegative(); return null; }).when(session).close();
+                return session;
+            });
+            try (var pool = new TournamentPlayerPool(entries, 3)) {
+                for (int round = 0; round < 12; round++) {
+                    var leases = new ArrayList<TournamentPlayerPool.GameLease>();
+                    try {
+                        for (int worker = 0; worker < 3; worker++) {
+                            var id = entries.get(round % entries.size()).requested().id();
+                            var game = new ScheduledTournamentGame("game-" + round + "-" + worker, 0, "block",
+                                    org.jskat.util.Player.getOrderedList().stream().map(seat -> new TournamentSeat(seat, id, 42)).toList(),
+                                    Arrays.asList(org.jskat.util.Card.values()), 1);
+                            leases.add(pool.acquire(game, CancellationToken.NONE));
+                            assertThat(live.get()).isLessThanOrEqualTo(36);
+                        }
+                        assertThat(live.get()).isEqualTo(round % 2 == 0 ? 36 : 27);
+                    } finally { for (var lease : leases) lease.close(); }
+                }
+            }
+            assertThat(peak.get()).isEqualTo(36);
+            assertThat(created.get()).isGreaterThan(36);
+            assertThat(live.get()).isZero();
+        }
+    }
+
     private ModelSource nullModel() {
         return new ModelSource.Development(new ConfiguredPath("fixture", directory));
     }

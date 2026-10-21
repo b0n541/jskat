@@ -131,3 +131,55 @@ exclusive lock and close releases it. `TournamentProgress` distinguishes durable
 commits from admissions and unsuccessful attempts. Cancellation is a thread-safe
 cooperative signal; the runner remains responsible for the admission boundary,
 letting admitted games finish and observing the signal before new admission.
+
+## Operating guide
+
+Start with the complete model-free configuration and launcher commands in
+[the CLI manual](../app/TOURNAMENT.md), or use the native editor documented in
+[the JavaFX manual](../jskat-gui/TOURNAMENT.md). `ml` and `ml-pro` require a
+model variant; replace a model-free implementation with, for example:
+
+```json
+{"id":"ca207ce9-3ca4-4ce1-8443-81e081b8344e","name":"Candidate",
+ "implementation":"ml-pro","model":{"source":"development","path":"../models/candidate"}}
+```
+
+Other source variants are `{"source":"active"}` and
+`{"source":"installed","version":"v1.4.0"}`. Installed versions are exact
+directory labels under `~/.jskat/models/releases`, including any `v` prefix.
+Each model implementation can appear with distinct effective fingerprints;
+Random and Algorithmic can each appear only once. A roster may compare the same
+release with different ML implementations. See [inputs and native ownership](TOURNAMENT-INPUTS.md)
+for inventories, signatures and source discovery.
+
+A run always uses standard three-player Skat: no Ramsch or configurable rule
+variants. All-pass consumes its scheduled game with three zero scores. Winning
+declarers receive signed game value +50; losing declarers receive signed game
+value −50, and each defender receives 40. Defenders receive zero on declarer
+wins. Add every occupied seat to its competitor's block total, including both
+seats when one competitor occupies two. Compare totals ordinally; score margins
+do not affect the rating. [The shared game core](TOURNAMENT-GAME.md) and
+[ratings manual](TOURNAMENT-RATINGS.md) specify legal results, observations,
+relative ratings, coverage, whole-deal uncertainty and predictive diagnostics.
+
+Retain the entire output directory. `summary.json`, `leaderboard.csv` and
+`game-scores.csv` are a single captured report generation; audit records retain
+complete successful events, unscored failed attempts, sessions and fallback
+causes. [The store manual](TOURNAMENT-STORE.md) gives the exact layout, format
+versions, atomic publication boundaries and recovery procedure. Resume uses the
+exact original requested configuration and complete packaged build identity,
+including any dirty-source digest. Only session workers, verbosity and stall
+warning duration may change. Original model sources may disappear after readiness;
+retained snapshots must remain intact. Preserve the matching executable/build.
+
+Resume never repairs authoritative records or initializes an incomplete run.
+There is no format migration, salvage, overwrite, forced lock takeover, automatic
+retry, hard deadline or hard callback termination. Explicit stale recovery requires
+a free OS lock and retains the previous owner bytes. Cancellation drains admitted
+games, computes and publishes final observations, closes resources and releases
+ownership before returning. A hung player callback can delay that indefinitely;
+a monotonic stall warning does not end the attempt. See [runner lifecycle](TOURNAMENT-RUNNER.md)
+for failure precedence and the bounded worker/player ownership contract.
+
+[Acceptance evidence](TOURNAMENT-ACCEPTANCE.md) records executed scenarios and
+limits, including the selected Linux/ext4 software durability boundary.
