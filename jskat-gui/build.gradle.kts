@@ -8,6 +8,7 @@ plugins {
 
 dependencies {
     implementation(project(":jskat-base"))
+    implementation(libs.jackson.databind)
 }
 
 val javafxVersion = extensions.getByType<VersionCatalogsExtension>()

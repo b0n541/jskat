@@ -197,6 +197,39 @@ class TournamentInputsTest {
     }
 
     @Test
+    void discoveryChecksOnlyTheSelectedImplementationsSignatures() throws Exception {
+        Path installed = Path.of(System.getProperty("user.home"), ".jskat/models/releases/v1.4.0");
+        org.junit.jupiter.api.Assumptions.assumeTrue(
+                java.nio.file.Files.exists(installed.resolve("models.json")),
+                "Local ONNX integration fixture not installed");
+        Path store = dir.resolve("discovery-store");
+        Path release = store.resolve("releases/local");
+        java.nio.file.Files.createDirectories(release);
+        try (var files = java.nio.file.Files.list(installed)) {
+            for (var file : files.toList())
+                if (java.nio.file.Files.isRegularFile(file))
+                    java.nio.file.Files.copy(file, release.resolve(file.getFileName()));
+        }
+        var original = org.jskat.ai.ml.ModelReleaseManifest.parse(
+                java.nio.file.Files.readString(release.resolve("models.json")));
+        var replacement = original.asset("game_eval_dense.onnx");
+        java.nio.file.Files.copy(release.resolve("game_eval_dense.onnx"),
+                release.resolve("bidding_transformer.onnx"), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+        var assets = original.assets().stream().map(a -> a.name().equals("bidding_transformer.onnx")
+                ? new org.jskat.ai.ml.ModelAsset(a.name(), replacement.sizeBytes(), replacement.sha256()) : a).toList();
+        java.nio.file.Files.writeString(release.resolve("models.json"),
+                new org.jskat.ai.ml.ModelReleaseManifest("local", original.baseUrl(), assets).sourceJson());
+        java.nio.file.Files.writeString(store.resolve("active"), "local");
+        var resolver = new DefaultTournamentInputResolver(store);
+        assertThat(resolver.discover(PlayerImplementation.ML)).hasSize(1);
+        assertThat(resolver.discover(PlayerImplementation.ML).getFirst().issues()).isEmpty();
+        assertThat(resolver.discover(PlayerImplementation.ML_PRO).getFirst().issues()).isNotEmpty();
+        assertThat(resolver.candidate(new ModelSource.Active()).issues()).isNotEmpty();
+        java.nio.file.Files.delete(release.resolve("bidding_transformer.onnx.data"));
+        assertThat(resolver.discover(PlayerImplementation.ML).getFirst().issues()).isNotEmpty();
+    }
+
+    @Test
     void hashValidArtifactsWithWrongTensorSignatureAreRejected() throws Exception {
         Path installed = Path.of(System.getProperty("user.home"), ".jskat/models/releases/v1.4.0");
         org.junit.jupiter.api.Assumptions.assumeTrue(

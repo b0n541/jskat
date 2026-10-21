@@ -31,8 +31,14 @@ public final class DefaultTournamentInputResolver implements TournamentInputReso
 
     /** Invalid installed candidates remain discoverable with their reasons. */
     public List<Candidate> discover() {
+        return discover(null);
+    }
+
+    /** Read-only inventory and signatures for the selected registered implementation. */
+    public List<Candidate> discover(PlayerImplementation implementation) {
+        if (implementation != null && !implementation.modelRequired()) return List.of();
         var candidates = new ArrayList<Candidate>();
-        candidates.add(candidate(new ModelSource.Active()));
+        candidates.add(candidate(new ModelSource.Active(), implementation));
         var releases = modelStore.resolve("releases");
         if (Files.isDirectory(releases))
             try (var entries = Files.list(releases)) {
@@ -44,7 +50,7 @@ public final class DefaultTournamentInputResolver implements TournamentInputReso
                                         candidates.add(
                                                 candidate(
                                                         new ModelSource.Installed(
-                                                                p.getFileName().toString()))));
+                                                                p.getFileName().toString()), implementation)));
             } catch (IOException e) {
                 candidates.add(
                         new Candidate(
@@ -57,6 +63,10 @@ public final class DefaultTournamentInputResolver implements TournamentInputReso
     }
 
     public Candidate candidate(ModelSource source) {
+        return candidate(source, null);
+    }
+
+    public Candidate candidate(ModelSource source, PlayerImplementation implementation) {
         Path directory = null;
         String label = "Unknown";
         try {
@@ -64,8 +74,14 @@ public final class DefaultTournamentInputResolver implements TournamentInputReso
             var manifest = readManifest(directory);
             label = manifest.version();
             inventory(directory, manifest, CancellationToken.NONE);
-            TournamentModelSignatures.verify(directory, PlayerImplementation.ML);
-            TournamentModelSignatures.verify(directory, PlayerImplementation.ML_PRO);
+            if (implementation == null) {
+                TournamentModelSignatures.verify(directory, PlayerImplementation.ML);
+                TournamentModelSignatures.verify(directory, PlayerImplementation.ML_PRO);
+            } else {
+                if (!implementation.modelRequired())
+                    throw new IllegalArgumentException("Model-free implementation has no model candidate");
+                TournamentModelSignatures.verify(directory, implementation);
+            }
             return new Candidate(source, directory, label, List.of());
         } catch (Exception e) {
             return new Candidate(source, directory, label, List.of(issue("/models", "model", e)));

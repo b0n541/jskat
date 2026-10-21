@@ -36,6 +36,10 @@ public final class JSkatMenuFactory {
      * @return Menu for JSkat
      */
     public static MenuBar build() {
+        return build(false, () -> {});
+    }
+
+    public static MenuBar build(boolean developerMode, Runnable openTournament) {
 
         final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
@@ -98,6 +102,12 @@ public final class JSkatMenuFactory {
         preferencesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.PREFERENCES, IconSize.SMALL));
 
         extrasMenu.getItems().addAll(preferencesMenuItem);
+        if (developerMode) {
+            final MenuItem tournament = new MenuItem("Tournament…");
+            tournament.setId("tournament-menu");
+            tournament.setOnAction(event -> openTournament.run());
+            extrasMenu.getItems().add(tournament);
+        }
 
         final Menu helpMenu = new Menu(strings.getString("help"));
 
