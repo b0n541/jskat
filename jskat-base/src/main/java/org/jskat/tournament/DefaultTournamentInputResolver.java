@@ -138,7 +138,7 @@ public final class DefaultTournamentInputResolver implements TournamentInputReso
 
     private static void checkCancellation(CancellationToken token) {
         if (token.isCancellationRequested())
-            throw new java.util.concurrent.CancellationException("Input preparation cancelled");
+            throw new TournamentCancellationException("Input preparation cancelled");
     }
 
     private static ValidationIssue issue(String path, String code, Exception e) {
@@ -153,7 +153,15 @@ public final class DefaultTournamentInputResolver implements TournamentInputReso
     @Override
     public ValidationResult<TournamentConfiguration> validate(
             TournamentConfiguration requested, CancellationToken token) {
+        var result = preflight(requested, token);
+        return new ValidationResult<>(result.valid() ? requested : null, result.issues());
+    }
+
+    @Override
+    public ValidationResult<List<InputIdentity>> preflight(
+            TournamentConfiguration requested, CancellationToken token) {
         var issues = new ArrayList<ValidationIssue>();
+        var details = new ArrayList<InputIdentity>();
         var identities = new HashSet<String>();
         int index = 0;
         for (var competitor : requested.competitors()) {
@@ -194,11 +202,21 @@ public final class DefaultTournamentInputResolver implements TournamentInputReso
                                     pointer,
                                     "Duplicate implementation and effective model inputs"));
                 probe(entry);
+                details.add(
+                        new InputIdentity(
+                                competitor.id(),
+                                entry.concreteClass(),
+                                entry.releaseLabel(),
+                                entry.fingerprint()));
+            } catch (TournamentCancellationException e) {
+                if (!issues.isEmpty())
+                    e.addSuppressed(new IllegalStateException(issues.toString()));
+                throw e;
             } catch (Exception e) {
                 issues.add(issue(pointer, "input", e));
             }
         }
-        return new ValidationResult<>(issues.isEmpty() ? requested : null, issues);
+        return new ValidationResult<>(List.copyOf(details), issues);
     }
 
     @Override
@@ -277,6 +295,16 @@ public final class DefaultTournamentInputResolver implements TournamentInputReso
                                     "Duplicate implementation and effective model inputs"));
                 probe(entry);
                 resolved.add(entry);
+            } catch (TournamentCancellationException e) {
+                for (var path : created)
+                    try {
+                        deleteTree(path);
+                    } catch (IOException cleanup) {
+                        e.addSuppressed(cleanup);
+                    }
+                if (!issues.isEmpty())
+                    e.addSuppressed(new IllegalStateException(issues.toString()));
+                throw e;
             } catch (Exception e) {
                 issues.add(issue(pointer, "input", e));
             }
@@ -333,6 +361,8 @@ public final class DefaultTournamentInputResolver implements TournamentInputReso
                 if (!entry.concreteClass().equals(entry.requested().implementation().className()))
                     throw new IOException("Player implementation changed");
                 if (entry.requested().implementation().modelRequired()) verifyModel(entry, token);
+            } catch (TournamentCancellationException e) {
+                throw e;
             } catch (Exception e) {
                 issues.add(issue("/competitors/" + index, "snapshot", e));
             } finally {

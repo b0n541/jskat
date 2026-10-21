@@ -12,7 +12,31 @@ public record TournamentProgress(
         long completeEpochs,
         boolean cancellationRequested,
         boolean reproducible,
-        String message) {
+        String message,
+        TournamentMetrics metrics) {
+    public TournamentProgress(
+            State state,
+            long totalGames,
+            long admittedGames,
+            long committedGames,
+            long failedAttempts,
+            long completeEpochs,
+            boolean cancellationRequested,
+            boolean reproducible,
+            String message) {
+        this(
+                state,
+                totalGames,
+                admittedGames,
+                committedGames,
+                failedAttempts,
+                completeEpochs,
+                cancellationRequested,
+                reproducible,
+                message,
+                TournamentMetrics.empty());
+    }
+
     public enum State {
         PREPARING,
         RUNNING,

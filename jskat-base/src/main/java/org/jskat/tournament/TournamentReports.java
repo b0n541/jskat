@@ -13,6 +13,15 @@ import java.util.*;
 public final class TournamentReports {
     private TournamentReports() {}
 
+    /** Structured failed-attempt fallback evidence is permanent across resumed sessions. */
+    public static List<JsonNode> retainedFallbacks(String historyJson) {
+        var result = new ArrayList<JsonNode>();
+        for (var diagnostic : CanonicalJson.parse(historyJson).path("diagnostics"))
+            for (var fallback : diagnostic.path("payload").path("detail").path("fallbacks"))
+                result.add(fallback.deepCopy());
+        return List.copyOf(result);
+    }
+
     public static final String VERSION = "jskat-rating-export-v1";
     public static final String DIAGNOSTICS_VERSION = "jskat-loeo-ten-bins-v1";
 
@@ -241,6 +250,7 @@ public final class TournamentReports {
                 "partialEpochGames",
                 set.games().size() - epochs.stream().mapToInt(expected::get).sum());
         summary.set("includedEpochs", TournamentRecords.tree(epochs));
+        retainedFallbacks(historyJson).forEach(fallback::add);
         summary.put("reproducible", fallback.isEmpty());
         summary.set("inferenceFallbacks", fallback);
         var params = summary.putObject("ratingParameters");
@@ -327,7 +337,7 @@ public final class TournamentReports {
         summary.put(
                 "descriptivePopulation",
                 "all committed seat appearances, including partial epochs; contracts count seat"
-                    + " appearances, bidding counts accepted audit actions");
+                        + " appearances, bidding counts accepted audit actions");
         var pairs = summary.putArray("pairwise");
         long ties = 0;
         for (int i = 0; i < ids.size(); i++)
@@ -372,10 +382,10 @@ public final class TournamentReports {
         summary.putArray("interpretationLimits")
                 .add(
                         "Ratings are roster-relative ordinal comparisons: score margins are"
-                            + " discarded.")
+                                + " discarded.")
                 .add(
                         "Partner effects and nontransitive matchups may not be represented by one"
-                            + " scalar rating.")
+                                + " scalar rating.")
                 .add("Bootstrap intervals resample whole deals and are not a stopping criterion.")
                 .add("Role and bidding breakdowns are descriptive, not separate ratings.")
                 .add("Final means every scheduled game committed, not narrow uncertainty.");

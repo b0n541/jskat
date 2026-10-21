@@ -79,7 +79,8 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
         var preflight = resolver.validate(requested, cancellation);
         if (!preflight.valid())
             throw new IOException("Tournament source preflight failed: " + preflight.issues());
-        if (cancellation.isCancellationRequested()) throw new IOException("Preparation cancelled");
+        if (cancellation.isCancellationRequested())
+            throw new TournamentCancellationException("Preparation cancelled");
 
         createParents(root.getParent());
         Files.createDirectory(root);
@@ -104,7 +105,7 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
                             "reports")) store.mkdir(dir);
             store.takeOwnership(false);
             if (cancellation.isCancellationRequested())
-                throw new IOException("Preparation cancelled");
+                throw new TournamentCancellationException("Preparation cancelled");
             var resolved =
                     resolver.prepare(
                             requested, seed, build, root.resolve("inputs/models"), cancellation);
@@ -720,14 +721,26 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
         }
     }
 
+    /** Read-only profile and ancestor suitability; does not create or force any file. */
+    public static void validateOutputFilesystem(Path output) throws IOException {
+        checkAncestors(output.getParent());
+        Path ancestor = output.getParent();
+        while (attributes(ancestor) == null) ancestor = ancestor.getParent();
+        checkFilesystemProfile(ancestor);
+    }
+
     private static void checkFilesystem(Path root) throws IOException {
+        checkFilesystemProfile(root);
+        forceDirectory(root);
+    }
+
+    private static void checkFilesystemProfile(Path root) throws IOException {
         var store = Files.getFileStore(root);
         if (!System.getProperty("os.name").equals("Linux")
                 || !root.getFileSystem().provider().getScheme().equals("file")
                 || !store.type().equals("ext4"))
             throw new IOException(
                     "Unsupported filesystem for durable tournaments: " + store.type());
-        forceDirectory(root);
     }
 
     private static void checkAncestors(Path path) throws IOException {
@@ -1102,8 +1115,19 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
                 generation, fixed.digest(), CanonicalJson.encode(metadata), exports);
     }
 
+    /** Coherent immutable-generation observation, without execution authority or a writer lock. */
+    public static ReportGeneration inspectReports(Path directory, UUID runId) throws IOException {
+        Path root = directory.toAbsolutePath().normalize();
+        checkAncestors(root);
+        return new DurableTournamentRunStore(root, null, null, runId).readReports(false);
+    }
+
     public synchronized ReportGeneration readCurrentReports() throws IOException {
         ensureOpen();
+        return readReports(true);
+    }
+
+    private ReportGeneration readReports(boolean verifySet) throws IOException {
         var pointer = read("reports/current.json", "report-current");
         TournamentRecords.fields(pointer, "generationId", "manifestSha256", "setDigest");
         String id = pointer.path("generationId").asText();
@@ -1132,13 +1156,15 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
                 throw new IOException("Report export checksum conflict: " + name);
             exports.put(name, bytes);
         }
-        var fixed = captureCommittedSet();
-        if (!manifest.get("gameChecksums").equals(TournamentRecords.tree(fixed.gameChecksums()))
-                || !CanonicalJson.encode(manifest.get("completeEpochs"))
-                        .equals(
-                                CanonicalJson.encode(
-                                        TournamentRecords.tree(fixed.completeEpochs())))
-                || !fixed.digest().equals(manifest.path("setDigest").asText()))
+        var fixed = verifySet ? captureCommittedSet() : null;
+        if (verifySet
+                && (!manifest.get("gameChecksums")
+                                .equals(TournamentRecords.tree(fixed.gameChecksums()))
+                        || !CanonicalJson.encode(manifest.get("completeEpochs"))
+                                .equals(
+                                        CanonicalJson.encode(
+                                                TournamentRecords.tree(fixed.completeEpochs())))
+                        || !fixed.digest().equals(manifest.path("setDigest").asText())))
             throw new IOException(
                     "Report generation does not cover the current verified committed set");
         try (var entries = Files.list(safe(relative))) {
@@ -1153,7 +1179,10 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
                 throw new IOException("Unexpected report generation entries");
         }
         return new ReportGeneration(
-                id, fixed.digest(), CanonicalJson.encode(manifest.get("metadata")), exports);
+                id,
+                manifest.path("setDigest").asText(),
+                CanonicalJson.encode(manifest.get("metadata")),
+                exports);
     }
 
     /**
@@ -1261,7 +1290,7 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
     @Override
     public synchronized void close() throws IOException {
         if (closed) return;
-        IOException problem = null;
+        Throwable problem = null;
         try {
             if (owner) {
                 var p = activeOwner.deepCopy();
@@ -1269,30 +1298,47 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
                 p.put("releasedAt", Instant.now().toString());
                 publish("lock-owner.json", TournamentRecords.encode(runId, "lock-owner", p), true);
             }
-        } catch (IOException e) {
+        } catch (Throwable e) {
             problem = e;
             try {
                 diagnostic(
                         CanonicalJson.object()
                                 .put("operation", "owner-release")
                                 .put("error", e.toString()));
-            } catch (IOException diagnosticError) {
-                problem.addSuppressed(diagnosticError);
+            } catch (Throwable diagnosticError) {
+                if (problem != diagnosticError) problem.addSuppressed(diagnosticError);
             }
         }
-        closed = true;
         try {
             lock.release();
-        } catch (IOException e) {
+        } catch (Throwable e) {
             if (problem == null) problem = e;
-            else problem.addSuppressed(e);
+            else if (problem != e) problem.addSuppressed(e);
+            closeDiagnostic(e);
         }
         try {
             channel.close();
-        } catch (IOException e) {
+        } catch (Throwable e) {
             if (problem == null) problem = e;
-            else problem.addSuppressed(e);
+            else if (problem != e) problem.addSuppressed(e);
         }
-        if (problem != null) throw problem;
+        closed = true;
+        if (problem instanceof IOException io) throw io;
+        if (problem instanceof RuntimeException runtime) throw runtime;
+        if (problem instanceof Error error) throw error;
+        if (problem != null) throw new IOException("Tournament resource cleanup failed", problem);
+    }
+
+    private void closeDiagnostic(Throwable problem) {
+        // A reported release error does not prove that the OS lock is still owned.
+        if (owner && lock.isValid())
+            try {
+                diagnostic(
+                        CanonicalJson.object()
+                                .put("operation", "lock-release")
+                                .put("error", problem.toString()));
+            } catch (Throwable diagnosticError) {
+                if (problem != diagnosticError) problem.addSuppressed(diagnosticError);
+            }
     }
 }
