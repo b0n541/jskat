@@ -12,6 +12,7 @@ plugins {
 
 dependencies {
     implementation(project(":jskat-gui"))
+    implementation(project(":jskat-base"))
 }
 
 val javafxVersion = extensions.getByType<VersionCatalogsExtension>()
@@ -93,4 +94,8 @@ tasks.register("fatjar", Jar::class.java) {
         configurations.runtimeClasspath.get()
             .onEach { println("add from dependencies : ${it.name}") }
             .map { if (it.isDirectory) it else zipTree(it) })
+}
+
+tasks.named<Test>("test") {
+    systemProperty("jskat.application.classpath", sourceSets.main.get().runtimeClasspath.asPath)
 }
