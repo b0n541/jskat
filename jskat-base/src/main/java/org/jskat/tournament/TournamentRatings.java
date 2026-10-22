@@ -6,7 +6,7 @@ import java.util.*;
 public final class TournamentRatings {
     private TournamentRatings() {}
 
-    public static final String VERSION = "jskat-bt-map-newton-v1";
+    public static final String VERSION = "jskat-bt-map-newton-v2";
     public static final String BOOTSTRAP_VERSION = "jskat-epoch-splitmix64-percentile7-v1";
     public static final int REPLICATES = 5000;
 
@@ -83,7 +83,16 @@ public final class TournamentRatings {
                 break;
             }
             double[] step = solve(h, g);
+            // At large observation counts the gradient can hit its rounding floor.
+            // The Newton correction measures the remaining error in rating coordinates.
+            double maxStep = 0;
+            for (double v : step) maxStep = Math.max(maxStep, Math.abs(v));
+            if (maxStep < 1e-12) {
+                converged = true;
+                break;
+            }
             double before = objective(x, pairs.values(), precision), directional = 0;
+            double roundoff = Math.max(1e-14, 16 * Math.ulp(before));
             for (int i = 0; i < n; i++) directional += g[i] * step[i];
             boolean accepted = false;
             for (int backtrack = 0; backtrack < 50; backtrack++) {
@@ -91,7 +100,7 @@ public final class TournamentRatings {
                 double[] candidate = x.clone();
                 for (int i = 0; i < n; i++) candidate[i] -= alpha * step[i];
                 if (objective(candidate, pairs.values(), precision)
-                        <= before - 1e-4 * alpha * directional + 1e-14) {
+                        <= before - 1e-4 * alpha * directional + roundoff) {
                     x = candidate;
                     accepted = true;
                     break;
@@ -117,9 +126,11 @@ public final class TournamentRatings {
         for (double v : x) value += precision * v * v / 2;
         for (var p : pairs) {
             double z = x[(int) p[0]] - x[(int) p[1]];
-            value +=
-                    p[2] * (Math.max(z, 0) + StrictMath.log1p(StrictMath.exp(-Math.abs(z))))
-                            - p[3] * z;
+            // Sum win/loss losses directly: subtracting wins*z from count*softplus(z)
+            // loses precision for one-sided results and can stall the line search.
+            double tail = StrictMath.log1p(StrictMath.exp(-Math.abs(z)));
+            value += p[3] * (Math.max(-z, 0) + tail)
+                    + (p[2] - p[3]) * (Math.max(z, 0) + tail);
         }
         return value;
     }

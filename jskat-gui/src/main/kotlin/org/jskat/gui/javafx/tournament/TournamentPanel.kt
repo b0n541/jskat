@@ -12,6 +12,7 @@ import org.jskat.tournament.*
 import java.nio.file.Files
 import java.nio.file.Path
 import java.time.Duration
+import java.util.Locale
 import java.util.concurrent.Executor
 
 /** A disposable monitor/editor; all expensive work is owned outside the JavaFX thread. */
@@ -80,6 +81,13 @@ class TournamentPanel(
     private var subscription: AutoCloseable? = null
     private val background = Executor { Thread(it, "tournament-inspection").start() }
 
+    private fun displayNumber(value: Double) = "%.2f".format(Locale.ROOT, value)
+
+    private fun displayDuration(value: Duration): String {
+        val seconds = value.seconds
+        return "%02d:%02d:%02d".format(Locale.ROOT, seconds / 3600, seconds % 3600 / 60, seconds % 60)
+    }
+
     init {
         padding = Insets(8.0)
         val new = Button("New run").apply { setOnAction { if (!controller.active && !busy) newConfiguration() } }
@@ -97,16 +105,24 @@ class TournamentPanel(
         val directory = Button("Run directory").apply { setOnAction { openedDirectory?.let(openDirectory) } }
         val refresh = Button("Refresh reports / audit").apply { setOnAction { openedDirectory?.let { loadEvidence(it) } } }
         top = VBox(8.0, FlowPane(8.0, 4.0, new, import, export, open, discover, directory, refresh),
-            FlowPane(8.0, 4.0, Label("Session workers"), workers, verbose, Label("Stall warning seconds"), stall),
-            FlowPane(8.0, 4.0, validate, start, verify, resume, recovery, cancel), status, progress, ratings, fallback)
+            FlowPane(8.0, 4.0, Label("Session workers"), workers, verbose, Label("Stall warning seconds"), stall)).apply {
+            padding = Insets(0.0, 0.0, 8.0, 0.0)
+        }
         val reports = TabPane().apply {
             tabs.addAll(Tab("Summary JSON", summary), Tab("Leaderboard CSV", leaderboard), Tab("Game scores CSV", scores), Tab("Audit history", audit))
             tabs.forEach { it.isClosable = false }
         }
         val configuration = ScrollPane(editor).apply { isFitToWidth = true }
-        center = SplitPane(configuration, VBox(6.0, Label("Validation / identities / diagnostics"), issuesView, detail, generation, leaderboardTable, reports).apply {
+        val results = VBox(16.0, Label("Validation / identities / diagnostics"), issuesView, detail, generation, leaderboardTable, reports).apply {
+            padding = Insets(12.0)
             VBox.setVgrow(reports, Priority.ALWAYS)
-        }).apply { setDividerPositions(0.52) }
+        }
+        center = SplitPane(configuration, results).apply { setDividerPositions(0.52) }
+        bottom = VBox(8.0,
+            FlowPane(8.0, 4.0, validate, start, verify, resume, recovery, cancel),
+            VBox(8.0, status, progress, ratings, fallback)).apply {
+            padding = Insets(8.0, 0.0, 0.0, 0.0)
+        }
         issuesView.prefHeight = 110.0
         issuesView.setCellFactory { object : ListCell<ValidationIssue>() {
             override fun updateItem(item: ValidationIssue?, empty: Boolean) {
@@ -155,10 +171,13 @@ class TournamentPanel(
             lastRenderedProgress = p
             status.text = "${p.state()}: ${p.message()}"
             val epochs = retained?.epochs() ?: editor.epochs.text.toLongOrNull()
+            val activeGames = p.metrics().runningAttempts().size
+            val gameStatus = if (activeGames == 0) "Games finished"
+                else "$activeGames ${if (activeGames == 1) "game" else "games"} in progress for epoch ${p.completeEpochs() + 1}"
             progress.text = "Committed ${p.committedGames()} / ${p.totalGames()} · Session admissions ${p.admittedGames()} · Failed attempts ${p.failedAttempts()}\n" +
                 "Complete epochs ${p.completeEpochs()} / ${epochs ?: "?"} · Committed games outside complete epochs: ${p.committedGames() - (if (epochs != null && epochs > 0) p.completeEpochs() * (p.totalGames() / epochs) else 0)}\n" +
-                "Elapsed ${p.metrics().elapsed()} · ${"%.2f".format(p.metrics().gamesPerSecond())} committed games/s · ETA ${p.metrics().estimatedRemaining().map { it.toString() }.orElse("unavailable")} (rating/publication may pause play)\n" +
-                p.metrics().runningAttempts().joinToString("\n") { "Game ${it.gameId()} · attempt ${it.attemptId()} · ${it.elapsed()} · competitors ${it.competitors()}${if (it.stallWarned()) " · STALL WARNING" else ""}" }
+                "Elapsed ${displayDuration(p.metrics().elapsed())} · ${displayNumber(p.metrics().gamesPerSecond())} committed games/s · ETA ${p.metrics().estimatedRemaining().map(::displayDuration).orElse("unavailable")} (rating/publication may pause play)\n" +
+                gameStatus
             nonReproducible = nonReproducible || controller.nonReproducible || !p.reproducible()
             p.metrics().summaryJson().ifPresent { showSummary(it, p.state() != TournamentProgress.State.COMPLETED) }
         }
@@ -324,8 +343,8 @@ class TournamentPanel(
                 val rows = tree.path("leaderboard").map { row ->
                     val interval = row.path("interval")
                     LeaderboardRow(row.path("rank").asText(), row.path("name").asText(), row.path("implementation").asText(),
-                        if (row.path("rating").isNumber) "%.2f".format(java.util.Locale.ROOT, row.path("rating").asDouble()) else "No rated evidence",
-                        if (interval.isArray && interval.size() == 2) "${interval[0].asText()} – ${interval[1].asText()}"
+                        if (row.path("rating").isNumber) displayNumber(row.path("rating").asDouble()) else "No rated evidence",
+                        if (interval.isArray && interval.size() == 2) "${displayNumber(interval[0].asDouble())} – ${displayNumber(interval[1].asDouble())}"
                         else "Unavailable: ${row.path("intervalUnavailableReason").asText("not calculated")}")
                 }
                 Platform.runLater {

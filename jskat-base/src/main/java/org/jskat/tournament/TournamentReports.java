@@ -256,10 +256,12 @@ public final class TournamentReports {
         var params = summary.putObject("ratingParameters");
         params.put("algorithm", TournamentRatings.VERSION);
         params.put("gradientInfinityTolerance", 1e-10);
+        params.put("newtonStepInfinityTolerance", 1e-12);
         params.put("maximumNewtonIterations", 100);
         params.put("maximumBacktracks", 50);
         params.put("armijoCoefficient", 1e-4);
         params.put("objectiveRoundoffAllowance", 1e-14);
+        params.put("objectiveRoundoffUlps", 16);
         params.put("bootstrapPercentileConvention", "type-7-linear-interpolation");
         params.put("bootstrapEpochCount", epochs.size());
         params.put("calibrationBins", 10);

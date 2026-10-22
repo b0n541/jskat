@@ -3,11 +3,9 @@
   * no discard button when looking into skat
 * improve game type selector
   * add symbols
-  * disable announce button during bidding
   * don't use game announce panel at all
-  * keep selected game type from bidding for discarding
-* centralize big button creation
-* add some waiting time during bidding of AI player (100 ms?)
+* show JSkat logo in system tray
 
-* move discard panel to the right
-* start skat series button at the first start of table
+ISS
+* add at least 100ms delay on AI player moves
+* switch buttons for next game and leave table

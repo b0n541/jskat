@@ -14,7 +14,7 @@ import java.util.UUID
 class TournamentEditor(initialFile: Path = Path.of("tournament.json").toAbsolutePath()) : VBox(8.0) {
     var configurationFile: Path = initialFile.toAbsolutePath().normalize()
         private set
-    val output = TextField("tournament-run").apply { prefColumnCount = 30 }
+    val output = TextField(".tournaments/tournament-run").apply { prefColumnCount = 30 }
     val epochs = TextField("1")
     val seed = TextField().apply { prefColumnCount = 25 }
     val ruleset = Label("standard-skat-v1")
@@ -37,7 +37,7 @@ class TournamentEditor(initialFile: Path = Path.of("tournament.json").toAbsolute
         children.addAll(Label("Tournament configuration"), base,
             field("Fresh output directory", output, Button("Choose parent…").apply {
                 setOnAction { DirectoryChooser().showDialog(scene?.window)?.let {
-                    output.text = it.toPath().resolve("tournament-run").toString()
+                    output.text = it.toPath().resolve(".tournaments/tournament-run").toString()
                 } }
             }), field("Whole epochs", epochs), field("Root seed", seed),
             field("Fixed ruleset", ruleset), count, roster, add)
@@ -151,7 +151,7 @@ class TournamentEditor(initialFile: Path = Path.of("tournament.json").toAbsolute
 
     fun reset() {
         configurationFile = Path.of("tournament.json").toAbsolutePath(); updateBase()
-        output.text = "tournament-run"; epochs.text = "1"; seed.clear()
+        output.text = ".tournaments/tournament-run"; epochs.text = "1"; seed.clear()
         rows.clear(); roster.children.clear()
         addRow(PlayerImplementation.RANDOM, "Random"); addRow(PlayerImplementation.ALGORITHMIC, "Algorithmic")
         retained = false; isDisable = false

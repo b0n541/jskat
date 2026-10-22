@@ -22,18 +22,29 @@ continues to belong to durable store/session verification.
 
 ## Numerical definitions
 
-`jskat-bt-map-newton-v1` minimizes logistic negative log likelihood plus independent
+`jskat-bt-map-newton-v2` minimizes logistic negative log likelihood plus independent
 Normal(0,400) penalties on deviations from 1500. Internally
 `x=(rating-1500)*ln(10)/400` has prior variance `ln(10)^2`. The Newton Hessian is a
 positive definite weighted graph Laplacian plus prior precision; Cholesky solves
 it without a reference-player constraint. Initial x is zero. Convergence requires
-gradient infinity norm <1e-10, within 100 Newton iterations. Backtracking tries
-alpha=2^-k for k=0..49; Armijo coefficient 1e-4 and absolute objective-roundoff
-allowance 1e-14. Stable softplus/logistic forms avoid unnecessary overflow. Java
+gradient infinity norm <1e-10 or Newton correction infinity norm <1e-12, within
+100 Newton iterations. The latter bounds the correction in Elo units to less than
+1.74e-10 and handles the gradient's floating-point floor. Backtracking tries
+alpha=2^-k for k=0..49; Armijo coefficient 1e-4 and objective-roundoff allowance
+max(1e-14, 16 ulps of the current objective). Win and loss softplus terms are summed
+directly, avoiding cancellation for one-sided results. Stable softplus/logistic
+forms avoid unnecessary overflow. Java
 StrictMath supplies transcendentals and square root. Final deviations are centered
 by subtracting their mean. Nonfinite arithmetic, failed factorization, line search
 or convergence throws an explicit exception; no alternative estimator is used.
 Observations aggregate into canonical pair counts, with exact integer/half counts.
+
+Version 2 fixes version 1's rounding stall near the optimum: subtracting the win
+term from the softplus likelihood could reject an accurate full Newton step,
+then repeatedly accept a backtracked step too small to change x. The estimator,
+prior, bootstrap draws and percentile convention are unchanged. Reports retain
+the new optimizer version and both stopping tolerances; exact build matching for
+resume still applies to runs created with the earlier build.
 
 `jskat-epoch-splitmix64-percentile7-v1` derives its retained seed with
 `deriveSeed(root,"bootstrap","ratings-v1")`. It sorts distinct epoch IDs, draws

@@ -2,7 +2,7 @@
 
 ## Question
 
-What scheduling and deal-reuse design gives three or more tournament competitors fair exposure to opponents, seats, declarer and defender roles, and card distributions while preserving a reproducible seed and practical runtime?
+What scheduling and deal-reuse design gives two or more tournament competitors fair exposure to opponents, seats, declarer and defender roles, and card distributions while preserving a reproducible seed and practical runtime?
 
 ## Recommendation
 
@@ -11,15 +11,16 @@ Use a **complete duplicate epoch** as the scoring unit.
 For each epoch:
 
 1. Generate one 32-card deck order from the tournament seed and epoch number.
-2. Enumerate every unordered group of three competitors.
-3. For each group, play that same deck under all six assignments of the three competitors to `FOREHAND`, `MIDDLEHAND`, and `REARHAND`.
+2. With exactly two competitors, create independent player instances for the six mixed seat assignments `AAB`, `ABA`, `BAA`, `ABB`, `BAB`, and `BBA`.
+3. With three or more competitors, enumerate every unordered group of three competitors and play that same deck under all six assignments of each group to `FOREHAND`, `MIDDLEHAND`, and `REARHAND`.
 4. Start each game with fresh per-game player state and deterministic, independently derived random streams.
 5. Count an epoch in the official leaderboard only when every scheduled game in it has completed. Persist individual results immediately so an interrupted epoch can resume exactly; a partial leaderboard must be labelled provisional.
 
 This is the strongest simple design for the expected small roster of model releases. It exactly balances opponents, positions, and cards instead of hoping those factors average out. The number of games per epoch is
 
 ```text
-6 × C(n, 3) = n × (n - 1) × (n - 2)
+n = 2: 6
+n ≥ 3: 6 × C(n, 3) = n × (n - 1) × (n - 2)
 ```
 
 where `n` is the competitor count. The UI and CLI should show this cost before starting and accept a fixed number of epochs. Do not stop early because a rating appears settled; a user may interrupt, but only completed epochs belong in the final comparison.
@@ -37,6 +38,34 @@ Seat assignment therefore affects more than who leads. It affects bidding inform
 Duplicate play is an established variance-reduction method for evaluating game-playing agents. The organizers' report on the [Annual Computer Poker Competition](https://ojs.aaai.org/aimagazine/index.php/aimagazine/article/view/2474/2362) describes resetting agents, switching their seats, and replaying the same cards; it says the multiplayer process is analogous. Davidson, Archibald, and Bowling's original paper, [*Baseline: Practical Control Variates for Agent Evaluation in Zero-Sum Domains*](https://poker.cs.ualberta.ca/publications/AAMAS13-baseline.pdf), defines full duplicate play as replaying each hand once for every player configuration and identifies factorial growth in the number of players at a table as its cost. For Skat that factor is fixed at only `3! = 6` because each game always has three active seats.
 
 ## Exact balance provided by one epoch
+
+### Exactly two competitors
+
+For competitors `A` and `B`, use six independent player configurations:
+
+| Forehand | Middlehand | Rearhand |
+|---|---|---|
+| A | A | B |
+| A | B | A |
+| B | A | A |
+| A | B | B |
+| B | A | B |
+| B | B | A |
+
+Each table entry represents a separate Tournament player instance. Two entries
+with the same competitor identity use the same AI implementation and model
+release, but each instance owns separate game knowledge, mutable state, and a
+deterministic random stream. Instances cannot exchange knowledge or other
+per-game data.
+
+Across the six-game cell, each competitor occupies every seat three times,
+contributes nine seat participations, appears as the duplicated competitor in
+three games, and appears as the single competitor in three games. Both
+competitors therefore see the same cards and the same mixture of single and
+duplicated participation. The completed cell produces one direct comparison
+block between `A` and `B`.
+
+### Three or more competitors
 
 Let competitors have stable IDs, sorted canonically. For each unordered triple `{A, B, C}`, enumerate these six seat assignments:
 
@@ -62,7 +91,7 @@ The whole six-game cell must share one immutable `dealId`. Its results should al
 
 Do not force declarer assignments. Under standard Skat the highest bidder becomes declarer (ISkO 3.3.5), so assigning the role externally would evaluate a different game and hide differences in bidding quality.
 
-The six permutations instead equalize each competitor's opportunity: the same player sees the same hand in the same seat twice, with the two opponents exchanged. Actual declarer and defender counts are outcomes of the models. Record and report at least:
+The six permutations instead equalize each competitor's opportunity. With two competitors, each competitor receives each exact hand in each seat three times: once as the single competitor and twice as the duplicated competitor. With three or more competitors, the same competitor sees the same hand in the same seat twice within each triple, with the two opponents exchanged. Actual declarer and defender counts are outcomes of the models. Record and report at least:
 
 - games, bids won, and passed hands by competitor and seat;
 - declarer games, wins, losses, and game value;
@@ -86,14 +115,14 @@ A seed alone is insufficient unless every source of randomness and its consumpti
 Derive independent sub-seeds from immutable identifiers, for example:
 
 ```text
-SHA-256(rootSeed || purpose || epoch || tripleIds || permutation || competitorId)
+SHA-256(rootSeed || purpose || epoch || lineupIds || permutation || competitorId || seat)
 ```
 
 Use distinct purpose labels such as `deal`, `schedule-order`, and `player`. Never consume one shared mutable RNG from parallel workers: task order, retries, or resume would then change later games. Generate the complete schedule before execution, and sort persisted results by stable game ID rather than completion order.
 
 Use a named, versioned shuffle implementation. A straightforward choice is a locally specified Fisher–Yates shuffle driven by a reproducible generator. Oracle specifies that two [`java.util.Random`](https://docs.oracle.com/en/java/javase/20/docs/api/java.base/java/util/Random.html) instances given the same seed and method-call sequence produce identical results across Java implementations, and [`Collections.shuffle`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collections.html#shuffle(java.util.List,java.util.random.RandomGenerator)) accepts an explicit generator. Persisting the deck order remains the authoritative replay mechanism and protects old reports if the generator changes later.
 
-Reset all mutable player state between games so a competitor cannot remember a previously seen duplicate deal. Immutable model weights and inference sessions may be cached for performance, but bidding/play state and player RNG must be per-game. This follows the ACPC duplicate protocol, which resets bots before replaying the same cards with changed seats.
+Create a separate Tournament player instance for every occupied seat and reset all mutable player state between games so a competitor cannot remember a previously seen duplicate deal. This is required even when two seats use the same Tournament competitor: each instance has independent knowledge and cannot share per-game data with the other instance. Immutable model weights and inference sessions may be cached for performance only when doing so cannot expose mutable gameplay state. Bidding/play state and player RNG must remain per-instance and per-game. This follows the ACPC duplicate protocol, which resets bots before replaying the same cards with changed seats.
 
 ## Runtime and interruption
 
@@ -101,6 +130,7 @@ The exact schedule grows cubically with roster size, but its unit costs are tran
 
 | Competitors | Games per epoch |
 |---:|---:|
+| 2 | 6 |
 | 3 | 6 |
 | 4 | 24 |
 | 5 | 60 |
