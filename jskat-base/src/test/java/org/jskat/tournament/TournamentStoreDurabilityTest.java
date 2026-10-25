@@ -210,6 +210,44 @@ class TournamentStoreDurabilityTest {
     }
 
     @Test
+    void backgroundReportsAcceptAuthenticSnapshotsButRejectForgeryAndRegression() throws Exception {
+        var c = requested();
+        try (var store = DurableTournamentRunStore.create(c, 0, BUILD, RESOLVER, () -> false)) {
+            UUID session = UUID.randomUUID();
+            store.startSession(session, CanonicalJson.object());
+            DurableTournamentRunStore.CommittedSet earlier = null;
+            for (var game : store.schedule().subList(0, 2)) {
+                store.commit(new TournamentGameCore().play(game, TournamentGameCoreTest.passing(),
+                        TournamentIdentities.resolvedDigest(store.configuration()),
+                        UUID.randomUUID(), session, List.of()));
+                if (earlier == null) earlier = store.captureCommittedSet();
+            }
+            var fixed = earlier;
+            var exports = Map.of("summary.json", "{}".getBytes(), "leaderboard.csv", new byte[0],
+                    "game-scores.csv", new byte[0]);
+            var metadata = CanonicalJson.object().put("outcome", "RUNNING");
+            var published = store.publishReportSnapshot(fixed, exports, metadata);
+            assertThat(DurableTournamentRunStore.inspectReports(c.output().absolute(), store.runId())
+                    .setDigest()).isEqualTo(fixed.digest()).isEqualTo(published.setDigest());
+            assertThatThrownBy(store::readCurrentReports).hasMessageContaining("current verified committed set");
+            assertThatThrownBy(() -> store.publishReports(fixed, exports, metadata))
+                    .hasMessageContaining("stale or foreign");
+            var foreign = new DurableTournamentRunStore.CommittedSet(UUID.randomUUID(), fixed.digest(),
+                    fixed.games(), fixed.gameChecksums(), fixed.completeEpochs());
+            assertThatThrownBy(() -> store.publishReportSnapshot(foreign, exports, metadata))
+                    .hasMessageContaining("foreign or inconsistent");
+            var forged = new DurableTournamentRunStore.CommittedSet(fixed.runId(), fixed.digest(),
+                    List.of(), fixed.gameChecksums(), fixed.completeEpochs());
+            assertThatThrownBy(() -> store.publishReportSnapshot(forged, exports, metadata))
+                    .hasMessageContaining("foreign or inconsistent");
+            store.publishReports(store.captureCommittedSet(), exports, metadata);
+            assertThatThrownBy(() -> store.publishReportSnapshot(fixed, exports, metadata))
+                    .hasMessageContaining("backwards");
+            assertThat(store.readCurrentReports().setDigest()).isEqualTo(store.captureCommittedSet().digest());
+        }
+    }
+
+    @Test
     void completedVerificationIsReadOnlyAndMissingExportsRequireOnlyPublicationRecovery()
             throws Exception {
         var c = requested();

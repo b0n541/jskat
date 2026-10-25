@@ -29,6 +29,7 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
     private TournamentPublicationIO io = TournamentPublicationIO.LOCAL;
     private final Map<String, TournamentGameResult> committed = new LinkedHashMap<>();
     private final Map<String, String> checksums = new LinkedHashMap<>();
+    private Map<String, String> reportedChecksums = Map.of();
     private final Map<UUID, JsonNode> sessions = new HashMap<>();
     private final Set<UUID> attempts = new HashSet<>();
     private final Set<UUID> endedSessions = new HashSet<>();
@@ -249,6 +250,8 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
         var store = openExisting(requested, build, resolver, cancellation);
         try {
             store.takeOwnership(recover);
+            // Reports in this ownership period must include every game retained on resume.
+            store.reportedChecksums = Map.copyOf(store.checksums);
             return store;
         } catch (Throwable e) {
             try {
@@ -1046,24 +1049,31 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
 
     public synchronized CommittedSet captureCommittedSet() throws IOException {
         ensureOpen();
-        var games = committedGames();
+        return committedSet(committed.keySet());
+    }
+
+    private CommittedSet committedSet(Set<String> gameIds) {
+        var games = schedule.stream().filter(g -> gameIds.contains(g.gameId()))
+                .map(g -> committed.get(g.gameId())).filter(Objects::nonNull).toList();
+        var snapshotChecksums = new TreeMap<String, String>();
+        for (var game : games) snapshotChecksums.put(game.gameId(), checksums.get(game.gameId()));
         var epochs = new ArrayList<Long>();
         var expected = new HashMap<Long, Integer>();
         var actual = new HashMap<Long, Integer>();
         for (var game : schedule) {
             expected.merge(game.epoch(), 1, Integer::sum);
-            if (committed.containsKey(game.gameId())) actual.merge(game.epoch(), 1, Integer::sum);
+            if (snapshotChecksums.containsKey(game.gameId())) actual.merge(game.epoch(), 1, Integer::sum);
         }
         for (long epoch = 0; epoch < configuration.requested().epochs(); epoch++)
             if (expected.get(epoch).equals(actual.get(epoch))) epochs.add(epoch);
         var inventory = CanonicalJson.object();
-        inventory.set("games", TournamentRecords.tree(new TreeMap<>(checksums)));
+        inventory.set("games", TournamentRecords.tree(snapshotChecksums));
         inventory.set("completeEpochs", TournamentRecords.tree(epochs));
         return new CommittedSet(
                 runId,
                 CanonicalJson.sha256(CanonicalJson.bytes(inventory)),
                 games,
-                checksums,
+                snapshotChecksums,
                 epochs);
     }
 
@@ -1075,6 +1085,17 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
         ensureOpen();
         if (!captureCommittedSet().equals(fixed))
             throw new IOException("Report committed set is stale or foreign");
+        return publishReportSnapshot(fixed, exports, metadata);
+    }
+
+    /** Publish an authenticated earlier observation while newer games continue to commit. */
+    synchronized ReportGeneration publishReportSnapshot(
+            CommittedSet fixed, Map<String, byte[]> exports, JsonNode metadata) throws IOException {
+        ensureOpen();
+        if (!committedSet(fixed.gameChecksums().keySet()).equals(fixed))
+            throw new IOException("Report snapshot is foreign or inconsistent with committed games");
+        if (!fixed.gameChecksums().entrySet().containsAll(reportedChecksums.entrySet()))
+            throw new IOException("Report snapshot would move published progress backwards");
         if (!exports.keySet().equals(EXPORT_NAMES))
             throw new IOException(
                     "A report generation requires exactly summary.json, leaderboard.csv and"
@@ -1111,6 +1132,7 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
                 "reports/current.json",
                 TournamentRecords.encode(runId, "report-current", pointer),
                 true);
+        reportedChecksums = fixed.gameChecksums();
         return new ReportGeneration(
                 generation, fixed.digest(), CanonicalJson.encode(metadata), exports);
     }

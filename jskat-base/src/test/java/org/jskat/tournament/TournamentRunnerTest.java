@@ -313,6 +313,179 @@ class TournamentRunnerTest {
     }
 
     @Test
+    void laterEpochStartsWhileAnEarlierGameIsStillRunning() throws Exception {
+        var release = new CountDownLatch(1);
+        var laterEpoch = new CountDownLatch(1);
+        var laterEpochCompleted = new CountDownLatch(1);
+        var first = new AtomicBoolean();
+        var service = service((c, w) -> {
+            var delegate = players(c, w, m -> {}, false, v -> {});
+            return new TournamentService.Players() {
+                public TournamentService.Lease acquire(ScheduledTournamentGame game, CancellationToken cancel) {
+                    var lease = delegate.acquire(game, cancel);
+                    if (game.epoch() > 0) laterEpoch.countDown();
+                    if (!first.compareAndSet(false, true)) return lease;
+                    return new TournamentService.Lease() {
+                        public List<JSkatPlayer> players() { await(release); return lease.players(); }
+                        public List<TournamentInferenceFallback> fallbacks() { return lease.fallbacks(); }
+                        public void discard() { lease.discard(); }
+                        public void close() { lease.close(); }
+                    };
+                }
+                public void close() { delegate.close(); }
+            };
+        }, TournamentReports::calculate);
+        var executor = Executors.newSingleThreadExecutor();
+        try {
+            var future = executor.submit(() -> run(service, configuration("cross-epoch"), 8,
+                    CancellationToken.NONE, p -> {
+                        if (p.committedGames() == 11 && p.completeEpochs() == 1) laterEpochCompleted.countDown();
+                    }));
+            assertThat(laterEpoch.await(5, TimeUnit.SECONDS))
+                    .describedAs("Next epoch must start before the slow earlier game finishes")
+                    .isTrue();
+            assertThat(laterEpochCompleted.await(5, TimeUnit.SECONDS))
+                    .describedAs("A later epoch can complete while the earlier epoch is incomplete")
+                    .isTrue();
+            release.countDown();
+            assertThat(future.get(30, TimeUnit.SECONDS).disposition())
+                    .isEqualTo(TournamentService.Disposition.COMPLETED);
+        } finally {
+            release.countDown();
+            executor.shutdown();
+            assertThat(executor.awaitTermination(30, TimeUnit.SECONDS)).isTrue();
+        }
+    }
+
+    @Test
+    void slowReportsDoNotStopGamesAndPendingEpochReportsAreCoalesced() throws Exception {
+        var reporting = new CountDownLatch(1);
+        var release = new CountDownLatch(1);
+        var allCommitted = new CountDownLatch(1);
+        var calculations = new AtomicInteger();
+        var service = service((c, w) -> players(c, w, m -> {}, false, v -> {}), (c, s, fixed, h, m) -> {
+            if (calculations.incrementAndGet() == 1) {
+                assertThat(fixed.games()).hasSize(6);
+                reporting.countDown();
+                await(release);
+                assertThat(fixed.games()).hasSize(6);
+            }
+            return TournamentReports.calculate(c, s, fixed, h, m);
+        });
+        var config = new TournamentConfigurationReader().read(
+                configuration("background-reports").originalJson().replace("\"epochs\":2", "\"epochs\":6"),
+                parent.resolve("config.json")).value();
+        var executor = Executors.newSingleThreadExecutor();
+        try {
+            var future = executor.submit(() -> run(service, config, 1, CancellationToken.NONE, p -> {
+                if (p.committedGames() == 36) allCommitted.countDown();
+            }));
+            await(reporting);
+            assertThat(allCommitted.await(5, TimeUnit.SECONDS))
+                    .describedAs("Games must keep committing while the report calculator is blocked")
+                    .isTrue();
+            assertThat(future.isDone()).isFalse();
+            release.countDown();
+            var result = future.get(30, TimeUnit.SECONDS);
+            assertThat(result.disposition()).describedAs(result.diagnostics().toString())
+                    .isEqualTo(TournamentService.Disposition.COMPLETED);
+            assertThat(calculations).hasValue(2);
+            var verified = service.verify(config, CancellationToken.NONE);
+            assertThat(verified.successfullyCompleted()).isTrue();
+            assertThat(verified.committedSet().completeEpochs()).hasSize(6);
+        } finally {
+            release.countDown();
+            executor.shutdown();
+            assertThat(executor.awaitTermination(30, TimeUnit.SECONDS)).isTrue();
+        }
+    }
+
+    @Test
+    void reportFailureStopsFurtherAdmissionAndDrainsWaitingWorkers() throws Exception {
+        var release = new CountDownLatch(1);
+        var failed = new CountDownLatch(1);
+        var first = new AtomicBoolean();
+        var service = service((c, w) -> {
+            var delegate = players(c, w, m -> {}, false, v -> {});
+            return new TournamentService.Players() {
+                public TournamentService.Lease acquire(ScheduledTournamentGame game, CancellationToken cancel) {
+                    if (game.epoch() > 0) await(release);
+                    return delegate.acquire(game, cancel);
+                }
+                public void close() { delegate.close(); }
+            };
+        }, (c, s, fixed, h, m) -> {
+            if (first.compareAndSet(false, true)) throw new IllegalStateException("background ratings failed");
+            return TournamentReports.calculate(c, s, fixed, h, m);
+        });
+        var config = configuration("report-failure");
+        var executor = Executors.newSingleThreadExecutor();
+        try {
+            var future = executor.submit(() -> run(service, config, 1, CancellationToken.NONE, p -> {
+                if (p.kind() == TournamentProgress.Kind.FAILURE) failed.countDown();
+            }));
+            await(failed);
+            release.countDown();
+            var result = future.get(30, TimeUnit.SECONDS);
+            assertThat(result.disposition()).isEqualTo(TournamentService.Disposition.FAILED);
+            assertThat(result.diagnostics()).anyMatch(s -> s.contains("background ratings failed"));
+            assertThat(service.verify(config, CancellationToken.NONE).committedSet().games()).hasSize(6);
+        } finally {
+            release.countDown();
+            executor.shutdown();
+            assertThat(executor.awaitTermination(30, TimeUnit.SECONDS)).isTrue();
+        }
+    }
+
+    @Test
+    void cancellationWaitsForBackgroundReportingBeforeReleasingTheRun() throws Exception {
+        var reporting = new CountDownLatch(1);
+        var release = new CountDownLatch(1);
+        var cancelling = new CountDownLatch(1);
+        var cancellation = new TournamentCancellation();
+        var first = new AtomicBoolean();
+        var service = service((c, w) -> {
+            var delegate = players(c, w, m -> {}, false, v -> {});
+            return new TournamentService.Players() {
+                public TournamentService.Lease acquire(ScheduledTournamentGame game, CancellationToken cancel) {
+                    if (game.epoch() > 0) {
+                        await(reporting);
+                        cancellation.requestCancellation();
+                    }
+                    return delegate.acquire(game, cancel);
+                }
+                public void close() { delegate.close(); }
+            };
+        }, (c, s, fixed, h, m) -> {
+            if (first.compareAndSet(false, true)) {
+                reporting.countDown();
+                await(release);
+            }
+            return TournamentReports.calculate(c, s, fixed, h, m);
+        });
+        var config = configuration("cancel-report");
+        var executor = Executors.newSingleThreadExecutor();
+        try {
+            var future = executor.submit(() -> run(service, config, 1, cancellation, p -> {
+                if (p.cancellationRequested()) cancelling.countDown();
+            }));
+            await(cancelling);
+            assertThat(future.isDone()).isFalse();
+            assertThat(TournamentService.isActive()).isTrue();
+            release.countDown();
+            var result = future.get(30, TimeUnit.SECONDS);
+            assertThat(result.disposition()).describedAs(result.diagnostics().toString())
+                    .isEqualTo(TournamentService.Disposition.CANCELLED);
+            assertThat(service.verify(config, CancellationToken.NONE).committedSet().games()).hasSize(6);
+            assertThat(TournamentService.isActive()).isFalse();
+        } finally {
+            release.countDown();
+            executor.shutdown();
+            assertThat(executor.awaitTermination(30, TimeUnit.SECONDS)).isTrue();
+        }
+    }
+
+    @Test
     void actualParallelRunCompletesAndCompletedResumeConstructsNoPlayers() throws Exception {
         var config = configuration("parallel");
         var service = normal();
@@ -448,10 +621,11 @@ class TournamentRunnerTest {
     }
 
     @Test
-    void epochPublicationBlocksNextAdmissionAndFailureClosesTheBarrier() throws Exception {
+    void backgroundReportFailureStillFailsRunAfterGamesComplete() throws Exception {
         var calculating = new CountDownLatch(1);
         var release = new CountDownLatch(1);
         var acquired = new CopyOnWriteArrayList<Long>();
+        var allCommitted = new CountDownLatch(1);
         var first = new AtomicBoolean();
         var service =
                 service(
@@ -487,14 +661,15 @@ class TournamentRunnerTest {
                                             configuration("barrier"),
                                             3,
                                             CancellationToken.NONE,
-                                            p -> {}));
+                                            p -> { if (p.committedGames() == 12) allCommitted.countDown(); }));
             await(calculating);
-            assertThat(acquired).hasSize(6).containsOnly(0L);
+            await(allCommitted);
+            assertThat(acquired).hasSize(12).contains(1L);
             assertThat(future.isDone()).isFalse();
             release.countDown();
             assertThat(future.get(30, TimeUnit.SECONDS).disposition())
                     .isEqualTo(TournamentService.Disposition.FAILED);
-            assertThat(acquired).hasSize(6);
+            assertThat(acquired).hasSize(12);
         } finally {
             release.countDown();
             executor.shutdown();

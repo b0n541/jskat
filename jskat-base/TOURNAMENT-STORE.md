@@ -146,11 +146,27 @@ crash-window tests without weakening production filesystem checks.
 games, payload checksums, complete epochs and their digest. Rating/report writers
 must use this exact observation. `publishReports(set,exports,metadata)` refuses a
 foreign/stale set and requires exactly summary JSON, leaderboard CSV and game
-scores CSV. It forces a private complete generation, publishes the directory,
+scores CSV. The runner's `publishReportSnapshot` also accepts an earlier immutable
+observation while games continue: every game, checksum, complete epoch and digest
+must match the authoritative subset, and publication cannot move backwards within
+an ownership period. On resume the subset must include all already retained games.
+The final report still uses the strict current-set publication path. Publication
+forces a private complete generation, publishes the directory,
 then atomically replaces and forces `current.json`. The manifest contains exact
 game checksums/epochs, metadata and export hashes. A reader resolves the pointer
 once and reads all exports through that generation. Old/orphan generations stay
 available. Export arrays are defensively copied.
+
+Game admission proceeds across all pending epochs without an epoch barrier.
+Epoch completion requests background reporting. There is at most one in-flight
+report and one coalesced request for the latest snapshot; intermediate epochs
+can be skipped for display. Only complete epochs contribute to ratings, including
+when epochs finish out of order. Progress counts completed epochs independently
+of the latest displayed report. Calculation and durable report publication run on
+the dedicated reporting thread; synchronized store operations still serialize
+report publication with game commits. Failures stop further admission and fail
+the run. Finalization drains reporting and publishes a terminal current-set report
+before ending the session or releasing the store.
 
 Terminal report metadata must carry `outcome:"COMPLETED"` and `sessionId` for
 successful completion certification. `verify(...).successfullyCompleted` also

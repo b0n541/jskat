@@ -338,6 +338,9 @@ public final class TournamentService {
         DurableTournamentRunStore store;
         Players players;
         ExecutorService workers, reportsExecutor;
+        Future<DurableTournamentRunStore.ReportGeneration> reportFuture;
+        boolean reportRequested;
+        final Map<Long, Integer> remainingInEpoch = new HashMap<>();
         UUID runId, sessionId;
         DurableTournamentRunStore.ReportGeneration reports;
 
@@ -491,15 +494,8 @@ public final class TournamentService {
                                     r -> new Thread(r, "tournament-game"));
                     state = TournamentProgress.State.RUNNING;
                     emit("Running tournament", true);
-                    int index = 0;
-                    while (index < pending.size() && !stopped.get() && !cancellation()) {
-                        long epoch = pending.get(index).epoch();
-                        int end = index;
-                        while (end < pending.size() && pending.get(end).epoch() == epoch) end++;
-                        playEpoch(pending.subList(index, end));
-                        index = end;
-                        if (!stopped.get() && !cancellation()) publish("RUNNING");
-                    }
+                    for (var game : pending) remainingInEpoch.merge(game.epoch(), 1, Integer::sum);
+                    playGames(pending);
                 }
             } catch (TournamentCancellationException e) {
                 cancelled.set(true);
@@ -511,10 +507,11 @@ public final class TournamentService {
             }
         }
 
-        void playEpoch(List<ScheduledTournamentGame> games) throws Exception {
+        void playGames(List<ScheduledTournamentGame> games) throws Exception {
             var completions = new ExecutorCompletionService<Attempt>(workers);
             int submitted = 0, outstanding = 0;
             while (outstanding > 0 || submitted < games.size()) {
+                updateReports();
                 if (cancellation() && state != TournamentProgress.State.CANCELLING) {
                     state = TournamentProgress.State.CANCELLING;
                     emit("Cancellation requested; draining admitted games", true);
@@ -547,8 +544,9 @@ public final class TournamentService {
                     fault(e.getCause());
                     continue;
                 }
+                ActiveAttempt completed;
                 synchronized (admission) {
-                    running.remove(result.id);
+                    completed = running.remove(result.id);
                 }
                 if (result.result != null)
                     try {
@@ -556,6 +554,10 @@ public final class TournamentService {
                         committed++;
                         newCommits++;
                         reproducible &= result.result.fallbacks().isEmpty();
+                        if (remainingInEpoch.compute(completed.game.epoch(), (epoch, count) -> count - 1) == 0) {
+                            epochs++;
+                            reportRequested = true;
+                        }
                     } catch (Throwable e) {
                         fault(e);
                     }
@@ -662,38 +664,64 @@ public final class TournamentService {
             return new Attempt(id, result, failure, errors, fallbacks);
         }
 
-        void publish(String outcome) throws Exception {
+        void updateReports() {
+            try {
+                if (reportFuture != null && reportFuture.isDone()) finishReport();
+                if (reportFuture == null && reportRequested && !stopped.get()
+                        && !cancellation() && committed < requested.gameCount()) {
+                    // One calculation in flight; later epoch requests coalesce into this flag.
+                    reportRequested = false;
+                    startReport("RUNNING", true);
+                }
+            } catch (Throwable e) {
+                fault(e instanceof ExecutionException ? e.getCause() : e);
+            }
+        }
+
+        void startReport(String outcome, boolean snapshot) throws Exception {
             var fixed = store.captureCommittedSet();
             String history = store.historyJson();
             var metadata =
                     TournamentRecords.tree(
                             Map.of("outcome", outcome, "sessionId", sessionId.toString()));
-            var future =
+            reportFuture =
                     reportsExecutor.submit(
                             () -> {
                                 try (var logging = new TournamentLogging(options.verbose())) {
-                                    return reportCalculator.calculate(
+                                    var report = reportCalculator.calculate(
                                             store.configuration(),
                                             store.schedule(),
                                             fixed,
                                             history,
                                             metadata);
+                                    return snapshot
+                                            ? store.publishReportSnapshot(fixed, report.exports(), metadata)
+                                            : store.publishReports(fixed, report.exports(), metadata);
                                 }
                             });
-            TournamentReports.Report report;
+        }
+
+        void finishReport() throws Exception {
             while (true)
                 try {
-                    report = future.get(50, TimeUnit.MILLISECONDS);
+                    reports = reportFuture.get(50, TimeUnit.MILLISECONDS);
+                    reportFuture = null;
+                    emit("Ratings published", true);
                     break;
                 } catch (TimeoutException e) {
                     tick();
                 } catch (InterruptedException e) {
                     interrupted = true;
                     cancelled.set(true);
+                } catch (ExecutionException e) {
+                    reportFuture = null;
+                    throw e;
                 }
-            reports = store.publishReports(fixed, report.exports(), metadata);
-            epochs = fixed.completeEpochs().size();
-            emit("Ratings published", true);
+        }
+
+        void publish(String outcome) throws Exception {
+            startReport(outcome, false);
+            finishReport();
         }
 
         void finish() {
@@ -710,6 +738,12 @@ public final class TournamentService {
                     players.close();
                 } catch (Throwable e) {
                     fault(e);
+                }
+            if (reportFuture != null)
+                try {
+                    finishReport();
+                } catch (Throwable e) {
+                    fault(e instanceof ExecutionException ? e.getCause() : e);
                 }
             disposition =
                     failed

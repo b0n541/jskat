@@ -62,7 +62,10 @@ ordered shared validation issues (severity, code, JSON Pointer and message),
 usage errors and diagnostics. Routine progress is coalesced to at most once per
 second, including rapid epoch publications. Lifecycle changes, failures and
 stall warnings are immediate. Progress counts only durable commits; ETA is
-advisory and report calculation can pause gameplay. Missing evidence or intervals
+advisory. Games run continuously across epoch boundaries; a dedicated reporting
+thread calculates and publishes immutable snapshots when epochs complete. Pending
+updates coalesce while reporting is busy, so displayed ratings can lag committed
+progress. Finalization waits for a report covering every committed game. Missing evidence or intervals
 are shown as unavailable. Fallback leaves a reproducibility warning. Verbose
 adds attempt identities and operational logs; full events remain in retained
 game records in both modes.
