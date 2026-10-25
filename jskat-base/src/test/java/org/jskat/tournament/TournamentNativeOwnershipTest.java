@@ -106,8 +106,7 @@ class TournamentNativeOwnershipTest {
                         TournamentIdentities.artifactFingerprint(artifacts),
                         directory,
                         artifacts);
-        try (var environment = mockStatic(OrtEnvironment.class)) {
-            environment.when(OrtEnvironment::getEnvironment).thenReturn(env);
+        {
             doAnswer(
                             invocation -> {
                                 var session = mock(OrtSession.class);
@@ -117,7 +116,7 @@ class TournamentNativeOwnershipTest {
                             })
                     .when(env)
                     .createSession(anyString(), any(OrtSession.SessionOptions.class));
-            try (var pool = new TournamentPlayerPool(List.of(entry), 1)) {
+            try (var pool = nativePool(List.of(entry), 1, env)) {
                 var seats =
                         org.jskat.util.Player.getOrderedList().stream()
                                 .map(seat -> new TournamentSeat(seat, id, 42))
@@ -193,8 +192,7 @@ class TournamentNativeOwnershipTest {
                     new TournamentCompetitor(new UUID(0x4000, Long.MIN_VALUE + i), implementation.id(), implementation, nullModel()),
                     implementation.className(), "fixture", TournamentIdentities.artifactFingerprint(artifacts), directory, artifacts));
         }
-        try (var environment = mockStatic(OrtEnvironment.class)) {
-            environment.when(OrtEnvironment::getEnvironment).thenReturn(env);
+        {
             when(env.createSession(anyString(), any(OrtSession.SessionOptions.class))).thenAnswer(invocation -> {
                 var session = mock(OrtSession.class);
                 created.incrementAndGet();
@@ -202,7 +200,7 @@ class TournamentNativeOwnershipTest {
                 doAnswer(close -> { assertThat(live.decrementAndGet()).isNotNegative(); return null; }).when(session).close();
                 return session;
             });
-            try (var pool = new TournamentPlayerPool(entries, 3)) {
+            try (var pool = nativePool(entries, 3, env)) {
                 for (int round = 0; round < 12; round++) {
                     var leases = new ArrayList<TournamentPlayerPool.GameLease>();
                     try {
@@ -222,6 +220,17 @@ class TournamentNativeOwnershipTest {
             assertThat(created.get()).isGreaterThan(36);
             assertThat(live.get()).isZero();
         }
+    }
+
+    private TournamentPlayerPool nativePool(List<ResolvedTournamentCompetitor> entries, int workers, OrtEnvironment env) {
+        var registry = new TournamentPlayerRegistry();
+        return new TournamentPlayerPool(entries, workers, competitor -> {
+            // Mockito static mocks are thread-local; install the fixture on each loader thread.
+            try (var environment = mockStatic(OrtEnvironment.class)) {
+                environment.when(OrtEnvironment::getEnvironment).thenReturn(env);
+                return registry.create(competitor);
+            }
+        }, registry::close);
     }
 
     private ModelSource nullModel() {

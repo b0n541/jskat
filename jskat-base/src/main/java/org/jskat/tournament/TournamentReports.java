@@ -63,12 +63,61 @@ public final class TournamentReports {
         return new String(files.get(name), StandardCharsets.UTF_8);
     }
 
+    /** Run-scoped report work: immutable schedule indexes and per-game audit contributions. */
+    public static final class Calculator implements TournamentService.ReportCalculator {
+        private ResolvedTournamentConfiguration configuration;
+        private List<ScheduledTournamentGame> schedule;
+        private PreparedSchedule prepared;
+        private final Map<String, GameFacts> facts = new HashMap<>();
+
+        @Override
+        public Calculator forSession() { return new Calculator(); }
+
+        @Override
+        public synchronized Report calculate(ResolvedTournamentConfiguration configuration,
+                List<ScheduledTournamentGame> schedule, DurableTournamentRunStore.CommittedSet set,
+                String historyJson, JsonNode metadata) {
+            if (this.configuration != configuration || this.schedule != schedule) {
+                this.configuration = configuration;
+                this.schedule = schedule;
+                prepared = new PreparedSchedule(schedule);
+                facts.clear();
+            }
+            return TournamentReports.calculate(configuration, schedule, set, historyJson, metadata, prepared, facts);
+        }
+    }
+
+    private static final class PreparedSchedule {
+        final Map<String, ScheduledTournamentGame> byId = new HashMap<>();
+        final Map<String, Integer> order = new HashMap<>();
+        final Map<Long, Integer> expected = new TreeMap<>();
+
+        PreparedSchedule(List<ScheduledTournamentGame> schedule) {
+            var sorted = schedule.stream().sorted(Comparator.comparingLong(ScheduledTournamentGame::epoch)
+                    .thenComparing(ScheduledTournamentGame::blockId).thenComparing(ScheduledTournamentGame::gameId)).toList();
+            for (var game : sorted) {
+                if (byId.put(game.gameId(), game) != null) throw new IllegalArgumentException("Duplicate schedule ID");
+                order.put(game.gameId(), order.size());
+                expected.merge(game.epoch(), 1, Integer::sum);
+            }
+        }
+    }
+
+    private record GameFacts(TournamentGameResult result, Map<UUID, Long> totals,
+            Map<UUID, ObjectNode> stats, String scores, List<JsonNode> fallbacks) {}
+
     public static Report calculate(
             ResolvedTournamentConfiguration configuration,
             List<ScheduledTournamentGame> schedule,
             DurableTournamentRunStore.CommittedSet set,
             String historyJson,
             JsonNode metadata) {
+        return calculate(configuration, schedule, set, historyJson, metadata, new PreparedSchedule(schedule), new HashMap<>());
+    }
+
+    private static Report calculate(ResolvedTournamentConfiguration configuration,
+            List<ScheduledTournamentGame> schedule, DurableTournamentRunStore.CommittedSet set,
+            String historyJson, JsonNode metadata, PreparedSchedule prepared, Map<String, GameFacts> cachedFacts) {
         var ids =
                 configuration.competitors().stream()
                         .map(c -> c.requested().id())
@@ -78,116 +127,34 @@ public final class TournamentReports {
         for (var g : set.games())
             if (games.put(g.gameId(), g) != null)
                 throw new IllegalArgumentException("Duplicate committed game");
-        var expected = new TreeMap<Long, Integer>();
+        var expected = prepared.expected;
         var actual = new TreeMap<Long, Integer>();
         var blocks = new TreeMap<Long, Map<String, Map<UUID, Long>>>();
-        var ordered =
-                schedule.stream()
-                        .sorted(
-                                Comparator.comparingLong(ScheduledTournamentGame::epoch)
-                                        .thenComparing(ScheduledTournamentGame::blockId)
-                                        .thenComparing(ScheduledTournamentGame::gameId))
-                        .toList();
+        for (var id : games.keySet())
+            if (!prepared.byId.containsKey(id)) throw new IllegalArgumentException("Committed game outside schedule");
+        var ordered = games.values().stream()
+                .sorted(Comparator.comparingInt(g -> prepared.order.get(g.gameId()))).toList();
         var stats = new LinkedHashMap<UUID, ObjectNode>();
         for (var id : ids) stats.put(id, newStats());
-        StringBuilder scores =
-                new StringBuilder(
-                        "gameId,epoch,blockId,seat,competitorId,score,role,won,allPassed,contract\n");
+        var scores = new StringBuilder("gameId,epoch,blockId,seat,competitorId,score,role,won,allPassed,contract\n");
         var fallback = CanonicalJson.object().putArray("records");
-        for (var game : ordered) {
-            expected.merge(game.epoch(), 1, Integer::sum);
-            var result = games.remove(game.gameId());
-            if (result == null) continue;
-            actual.merge(game.epoch(), 1, Integer::sum);
-            var totals =
-                    blocks.computeIfAbsent(game.epoch(), k -> new TreeMap<>())
-                            .computeIfAbsent(
-                                    game.blockId(),
-                                    k -> new TreeMap<>(Comparator.comparing(UUID::toString)));
-            var outcome = result.outcome();
-            for (var seat : game.seats()) {
-                UUID id = seat.competitorId();
-                long score = result.seatScores().get(seat.seat());
-                totals.merge(id, score, Math::addExact);
-                var s = stats.get(id);
-                increment(s, "seatAppearances", 1);
-                increment(s, "scoreTotal", score);
-                if (outcome.allPassed()) increment(s, "allPassAppearances", 1);
-                String role =
-                        outcome.allPassed()
-                                ? "all-pass"
-                                : seat.seat() == outcome.declarer() ? "declarer" : "defender";
-                boolean won =
-                        !outcome.allPassed() && (role.equals("declarer") == outcome.declarerWon());
-                if (!outcome.allPassed()) {
-                    increment(s, role + "Appearances", 1);
-                    if (role.equals("declarer"))
-                        increment(
-                                (ObjectNode) s.get("declarerContracts"),
-                                outcome.contract().gameType().name(),
-                                1);
-                    increment(s, role + (won ? "Wins" : "Losses"), 1);
-                    increment(
-                            (ObjectNode) s.get("contracts"),
-                            outcome.contract().gameType().name(),
-                            1);
-                    increment(
-                            (ObjectNode) s.get("declarations"),
-                            "hand",
-                            outcome.contract().hand() ? 1 : 0);
-                    increment(
-                            (ObjectNode) s.get("declarations"),
-                            "ouvert",
-                            outcome.contract().ouvert() ? 1 : 0);
-                    increment(
-                            (ObjectNode) s.get("declarations"),
-                            "schneiderAnnounced",
-                            outcome.contract().schneiderAnnounced() ? 1 : 0);
-                    increment(
-                            (ObjectNode) s.get("declarations"),
-                            "schwarzAnnounced",
-                            outcome.contract().schwarzAnnounced() ? 1 : 0);
-                    increment(s, role + "ScoreTotal", score);
-                    increment(s, "cardPoints", outcome.cardPoints().get(seat.seat()));
-                    increment(s, "tricks", outcome.tricks().get(seat.seat()));
-                }
-                csv(
-                        scores,
-                        game.gameId(),
-                        game.epoch(),
-                        game.blockId(),
-                        seat.seat(),
-                        id,
-                        score,
-                        role,
-                        outcome.allPassed() ? "" : won,
-                        outcome.allPassed(),
-                        outcome.allPassed() ? "" : outcome.contract().gameType());
+        for (var result : ordered) {
+            var game = prepared.byId.get(result.gameId());
+            var facts = cachedFacts.get(game.gameId());
+            if (facts == null || !facts.result().equals(result)) {
+                facts = gameFacts(game, result);
+                cachedFacts.put(game.gameId(), facts);
             }
-            for (var event : result.events())
-                if (Set.of("BidEvent", "HoldBidEvent", "PassBidEvent").contains(event.type())) {
-                    var payload = CanonicalJson.parse(event.payloadJson());
-                    Player seat = Player.valueOf(payload.path("seat").asText());
-                    UUID id =
-                            game.seats().stream()
-                                    .filter(s -> s.seat() == seat)
-                                    .findFirst()
-                                    .orElseThrow()
-                                    .competitorId();
-                    var s = stats.get(id);
-                    increment((ObjectNode) s.get("bidding"), event.type(), 1);
-                    if (!event.type().equals("PassBidEvent"))
-                        s.put(
-                                "maximumAcceptedBid",
-                                Math.max(
-                                        s.path("maximumAcceptedBid").asLong(),
-                                        payload.path("bid").asLong()));
-                }
-            for (var f : result.fallbacks()) fallback.add(TournamentRecords.tree(f));
+            actual.merge(game.epoch(), 1, Integer::sum);
+            var totals = blocks.computeIfAbsent(game.epoch(), k -> new TreeMap<>())
+                    .computeIfAbsent(game.blockId(), k -> new TreeMap<>(Comparator.comparing(UUID::toString)));
+            facts.totals().forEach((id, score) -> totals.merge(id, score, Math::addExact));
+            facts.stats().forEach((id, contribution) -> mergeStats(stats.get(id), contribution));
+            scores.append(facts.scores());
+            facts.fallbacks().forEach(fallback::add);
         }
-        if (!games.isEmpty()) throw new IllegalArgumentException("Committed game outside schedule");
         var epochs =
-                expected.keySet().stream()
+                actual.keySet().stream()
                         .filter(e -> expected.get(e).equals(actual.get(e)))
                         .toList();
         if (!epochs.equals(set.completeEpochs()))
@@ -392,6 +359,105 @@ public final class TournamentReports {
                 .add("Role and bidding breakdowns are descriptive, not separate ratings.")
                 .add("Final means every scheduled game committed, not narrow uncertainty.");
         return new Report(CanonicalJson.encode(summary), leaderboard.toString(), scores.toString());
+    }
+
+    private static GameFacts gameFacts(ScheduledTournamentGame game, TournamentGameResult result) {
+        var totals = new TreeMap<UUID, Long>(Comparator.comparing(UUID::toString));
+        var stats = new LinkedHashMap<UUID, ObjectNode>();
+        for (var seat : game.seats()) stats.computeIfAbsent(seat.competitorId(), id -> newStats());
+        var scores = new StringBuilder();
+        var outcome = result.outcome();
+        for (var seat : game.seats()) {
+            UUID id = seat.competitorId();
+            long score = result.seatScores().get(seat.seat());
+            totals.merge(id, score, Math::addExact);
+            var s = stats.get(id);
+            increment(s, "seatAppearances", 1);
+            increment(s, "scoreTotal", score);
+            if (outcome.allPassed()) increment(s, "allPassAppearances", 1);
+            String role =
+                    outcome.allPassed()
+                            ? "all-pass"
+                            : seat.seat() == outcome.declarer() ? "declarer" : "defender";
+            boolean won =
+                    !outcome.allPassed() && (role.equals("declarer") == outcome.declarerWon());
+            if (!outcome.allPassed()) {
+                increment(s, role + "Appearances", 1);
+                if (role.equals("declarer"))
+                    increment(
+                            (ObjectNode) s.get("declarerContracts"),
+                            outcome.contract().gameType().name(),
+                            1);
+                increment(s, role + (won ? "Wins" : "Losses"), 1);
+                increment(
+                        (ObjectNode) s.get("contracts"),
+                        outcome.contract().gameType().name(),
+                        1);
+                increment(
+                        (ObjectNode) s.get("declarations"),
+                        "hand",
+                        outcome.contract().hand() ? 1 : 0);
+                increment(
+                        (ObjectNode) s.get("declarations"),
+                        "ouvert",
+                        outcome.contract().ouvert() ? 1 : 0);
+                increment(
+                        (ObjectNode) s.get("declarations"),
+                        "schneiderAnnounced",
+                        outcome.contract().schneiderAnnounced() ? 1 : 0);
+                increment(
+                        (ObjectNode) s.get("declarations"),
+                        "schwarzAnnounced",
+                        outcome.contract().schwarzAnnounced() ? 1 : 0);
+                increment(s, role + "ScoreTotal", score);
+                increment(s, "cardPoints", outcome.cardPoints().get(seat.seat()));
+                increment(s, "tricks", outcome.tricks().get(seat.seat()));
+            }
+            csv(
+                    scores,
+                    game.gameId(),
+                    game.epoch(),
+                    game.blockId(),
+                    seat.seat(),
+                    id,
+                    score,
+                    role,
+                    outcome.allPassed() ? "" : won,
+                    outcome.allPassed(),
+                    outcome.allPassed() ? "" : outcome.contract().gameType());
+        }
+        for (var event : result.events())
+            if (Set.of("BidEvent", "HoldBidEvent", "PassBidEvent").contains(event.type())) {
+                var payload = CanonicalJson.parse(event.payloadJson());
+                Player seat = Player.valueOf(payload.path("seat").asText());
+                UUID id =
+                        game.seats().stream()
+                                .filter(s -> s.seat() == seat)
+                                .findFirst()
+                                .orElseThrow()
+                                .competitorId();
+                var s = stats.get(id);
+                increment((ObjectNode) s.get("bidding"), event.type(), 1);
+                if (!event.type().equals("PassBidEvent"))
+                    s.put(
+                            "maximumAcceptedBid",
+                            Math.max(
+                                    s.path("maximumAcceptedBid").asLong(),
+                                    payload.path("bid").asLong()));
+            }
+        return new GameFacts(result, totals, stats, scores.toString(),
+                result.fallbacks().stream().map(TournamentRecords::tree).toList());
+    }
+
+    private static void mergeStats(ObjectNode target, ObjectNode contribution) {
+        contribution.properties().forEach(entry -> {
+            String name = entry.getKey();
+            var value = entry.getValue();
+            if (value.isObject()) mergeStats((ObjectNode) target.get(name), (ObjectNode) value);
+            else if (name.equals("maximumAcceptedBid"))
+                target.put(name, Math.max(target.path(name).asLong(), value.asLong()));
+            else increment(target, name, value.asLong());
+        });
     }
 
     private static ObjectNode predictive(

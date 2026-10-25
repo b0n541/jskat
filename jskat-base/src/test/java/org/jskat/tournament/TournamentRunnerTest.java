@@ -486,6 +486,27 @@ class TournamentRunnerTest {
     }
 
     @Test
+    void reportCacheInitializationFailureReleasesTheProcessGate() {
+        var calculator = new TournamentService.ReportCalculator() {
+            public TournamentService.ReportCalculator forSession() {
+                throw new IllegalStateException("report cache initialization failed");
+            }
+            public TournamentReports.Report calculate(ResolvedTournamentConfiguration c,
+                    List<ScheduledTournamentGame> s, DurableTournamentRunStore.CommittedSet set,
+                    String history, com.fasterxml.jackson.databind.JsonNode metadata) {
+                throw new AssertionError("No reports should be calculated");
+            }
+        };
+        var config = configuration("cache-initialization");
+        var result = run(service((c, w) -> { throw new AssertionError("No players should be constructed"); }, calculator),
+                config, 1, CancellationToken.NONE, p -> {});
+        assertThat(result.disposition()).isEqualTo(TournamentService.Disposition.FAILED);
+        assertThat(result.diagnostics()).anyMatch(s -> s.contains("report cache initialization failed"));
+        assertThat(TournamentService.isActive()).isFalse();
+        assertThat(Files.exists(config.output().absolute())).isFalse();
+    }
+
+    @Test
     void actualParallelRunCompletesAndCompletedResumeConstructsNoPlayers() throws Exception {
         var config = configuration("parallel");
         var service = normal();

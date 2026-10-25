@@ -183,3 +183,15 @@ for failure precedence and the bounded worker/player ownership contract.
 
 [Acceptance evidence](TOURNAMENT-ACCEPTANCE.md) records executed scenarios and
 limits, including the selected Linux/ext4 software durability boundary.
+
+### Player acquisition and native construction
+
+The run-scoped pool reserves all three seats atomically and protects every
+matching idle player before choosing eviction victims. Missing players are
+constructed outside the pool monitor, so other games can return their leases.
+When more than one model-backed seat is missing, a bounded three-thread loader
+constructs those independent players concurrently. Reservations count against the
+existing `3*workers` instance limit before construction starts. Native loads are
+joined before cancellation/failure cleanup; close drains both preparing and leased
+players and then shuts down the loader. Mutable game knowledge remains exclusive
+to each leased seat, and the runner's canonical admission order is unchanged.

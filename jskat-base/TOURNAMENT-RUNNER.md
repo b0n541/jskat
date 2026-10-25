@@ -31,7 +31,8 @@ exceptions are isolated. Terminal observation and return follow gate release.
 ## Execution ownership and admission
 
 The coordinator retains at most `workers` outstanding tasks, with a bounded
-executor queue. Only the earliest unfinished epoch is submitted. Workers acquire
+executor queue. Pending games are submitted continuously across epoch boundaries.
+Workers acquire
 all three leases in canonical admission order, check stop/cancellation at the
 final admission boundary and immediately invoke the shared game core. Pool
 capacity counts idle, leased and constructing instances against `3 * workers`.
@@ -47,9 +48,15 @@ Explicit Resume reuses pending game inputs with new attempt/session UUIDs.
 Only acknowledged durable commits increase visible game counts. Uncertain
 publication remains FAILED; resume verifies any final record before deciding
 whether the game is pending. Complete epoch counts come from captured retained
-sets. Epoch reports publish before later admission, including on partial-epoch
-resume. Report calculation runs on an owned executor while the coordinator
-continues cancellation/progress/stall observation.
+sets and incremental pending-epoch counters, including out-of-order completion and
+partial-epoch resume. Epoch completion requests background reporting without an
+admission barrier. One owned report task calculates and publishes an immutable
+snapshot; further requests coalesce into one pending update. The calculator caches
+schedule indexes and immutable per-game contributions for that session, while all
+statistical fits retain their original algorithms and sample counts. Generation
+files are staged outside the game-commit monitor, with authentication and the
+monotonic current-pointer swap protected under it. The coordinator continues
+cancellation/progress/stall observation and handles report failures.
 
 ## Progress and termination
 
@@ -72,8 +79,8 @@ ordinary interactive logger policy is preserved. Verbose mode changes logging,
 not inputs or gameplay. Session history records workers, verbosity, stall warning,
 action, recovery authorization and build.
 
-Finalization stops admission, drains workers, closes players, publishes termination
-reports, records session end, closes report workers and releases store/OS-lock
+Finalization stops admission, drains workers, closes players and their bounded
+loader, drains background reporting, publishes a current-set termination report, records session end, closes report workers and releases store/OS-lock
 ownership. Authoritative execution, storage, publication or cleanup failure wins
 over completed games; all acknowledged scheduled games win over late
 cancellation. Best-effort diagnostic publication errors cannot skip remaining

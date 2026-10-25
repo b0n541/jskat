@@ -209,6 +209,53 @@ class TournamentStoreDurabilityTest {
         }
     }
 
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    void gameCommitContinuesWhileAReportGenerationIsBeingWritten(boolean currentSetRequired) throws Exception {
+        var c = requested();
+        var writing = new java.util.concurrent.CountDownLatch(1);
+        var release = new java.util.concurrent.CountDownLatch(1);
+        var io = new TournamentPublicationIO() {
+            public void forceFile(FileChannel file) throws IOException { LOCAL.forceFile(file); }
+            public void forceDirectory(Path directory) throws IOException { LOCAL.forceDirectory(directory); }
+            public void atomicMove(Path temporary, Path target, boolean replace) throws IOException {
+                if (target.getFileName().toString().equals("summary.json")) {
+                    writing.countDown();
+                    try {
+                        if (!release.await(10, java.util.concurrent.TimeUnit.SECONDS)) throw new IOException("Report latch timed out");
+                    } catch (InterruptedException e) { throw new IOException(e); }
+                }
+                LOCAL.atomicMove(temporary, target, replace);
+            }
+        };
+        try (var store = DurableTournamentRunStore.create(c, 0, BUILD, RESOLVER, () -> false, io);
+                var executor = java.util.concurrent.Executors.newFixedThreadPool(2)) {
+            UUID session = UUID.randomUUID();
+            store.startSession(session, CanonicalJson.object());
+            var fixed = store.captureCommittedSet();
+            var game = store.schedule().getFirst();
+            var result = new TournamentGameCore().play(game, TournamentGameCoreTest.passing(),
+                    TournamentIdentities.resolvedDigest(store.configuration()), UUID.randomUUID(), session, List.of());
+            var exports = Map.of("summary.json", "{}".getBytes(), "leaderboard.csv", new byte[0], "game-scores.csv", new byte[0]);
+            var report = executor.submit(() -> currentSetRequired
+                    ? store.publishReports(fixed, exports, CanonicalJson.object())
+                    : store.publishReportSnapshot(fixed, exports, CanonicalJson.object()));
+            try {
+                assertThat(writing.await(5, java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+                executor.submit(() -> { store.commit(result); return null; })
+                        .get(2, java.util.concurrent.TimeUnit.SECONDS);
+            } finally { release.countDown(); }
+            if (currentSetRequired) {
+                assertThatThrownBy(() -> report.get(10, java.util.concurrent.TimeUnit.SECONDS))
+                        .hasRootCauseMessage("Report committed set is stale or foreign");
+                assertThat(Files.exists(c.output().absolute().resolve("reports/current.json"))).isFalse();
+            } else {
+                assertThat(report.get(10, java.util.concurrent.TimeUnit.SECONDS).setDigest()).isEqualTo(fixed.digest());
+            }
+            assertThat(store.committedGames()).hasSize(1);
+        }
+    }
+
     @Test
     void backgroundReportsAcceptAuthenticSnapshotsButRejectForgeryAndRegression() throws Exception {
         var c = requested();

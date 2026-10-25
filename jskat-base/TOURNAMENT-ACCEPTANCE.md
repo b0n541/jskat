@@ -101,3 +101,22 @@ cache honesty. Production rejects unsupported providers/types. There is no
 salvage/migration/authoritative repair or live-lock takeover. Cooperative
 cancellation and stall warnings cannot terminate a hung callback. Native counts
 bound owned player sessions, not total process threads or memory consumption.
+
+## Throughput resource regression coverage
+
+- `TournamentPlayerPoolTest.modelConstructionDoesNotBlockReturningAnotherGame`
+  latches construction while another lease returns.
+- `reservesEveryReusableSeatBeforeEvictingIdlePlayers` checks that a player needed
+  by a later seat is protected before eviction.
+- `independentlyReservedModelsLoadTogetherAndAllAreClosed` and
+  `failedParallelConstructionJoinsAndClosesSuccessfulSiblings` cover bounded seat
+  loading and draining successful siblings after one load fails. Native ownership
+  stress still verifies at most twelve native sessions per worker and full cleanup.
+- `TournamentStoreDurabilityTest.gameCommitContinuesWhileAReportGenerationIsBeingWritten`
+  latches staged report I/O while a game commits, then checks historical-snapshot
+  acceptance and strict current-set rejection. Existing report-pointer crash
+  tests retain coverage of both rename outcomes.
+- `TournamentReportsTest.cachedReportsMatchFreshReportsAcrossOutOfOrderSnapshotsAndChangedAuditData`
+  compares complete exports across growing, out-of-order, older and changed
+  observations. `TournamentRunnerTest.reportCacheInitializationFailureReleasesTheProcessGate`
+  verifies failure before preparation cannot retain global tournament ownership.

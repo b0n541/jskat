@@ -100,6 +100,9 @@ public final class TournamentService {
                 DurableTournamentRunStore.CommittedSet set,
                 String history,
                 com.fasterxml.jackson.databind.JsonNode metadata);
+
+        /** Stateful calculators can give each run its own cache without retaining ended runs. */
+        default ReportCalculator forSession() { return this; }
     }
 
     private static final AtomicBoolean ACTIVE = new AtomicBoolean();
@@ -124,7 +127,7 @@ public final class TournamentService {
                 resolver,
                 TournamentBuildIdentity::current,
                 TournamentService::defaultPlayers,
-                TournamentReports::calculate,
+                new TournamentReports.Calculator(),
                 System::nanoTime,
                 TournamentPublicationIO.LOCAL);
     }
@@ -317,6 +320,7 @@ public final class TournamentService {
         final TournamentSessionOptions options;
         final CancellationToken external;
         final TournamentProgress.Observer observer;
+        ReportCalculator calculator;
         final AtomicBoolean stopped = new AtomicBoolean(), cancelled = new AtomicBoolean();
         final Object admission = new Object();
         final Map<UUID, ActiveAttempt> running = new LinkedHashMap<>();
@@ -388,6 +392,7 @@ public final class TournamentService {
             try {
                 if (cancellation())
                     throw new TournamentCancellationException("Preparation cancelled");
+                calculator = Objects.requireNonNull(reportCalculator.forSession());
                 if (invocation.action() == TournamentInvocation.Action.NEW) {
                     var validation = validateNew(requested, this::cancellation);
                     issues.addAll(validation.issues());
@@ -688,7 +693,7 @@ public final class TournamentService {
                     reportsExecutor.submit(
                             () -> {
                                 try (var logging = new TournamentLogging(options.verbose())) {
-                                    var report = reportCalculator.calculate(
+                                    var report = calculator.calculate(
                                             store.configuration(),
                                             store.schedule(),
                                             fixed,

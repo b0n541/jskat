@@ -29,7 +29,15 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
     private TournamentPublicationIO io = TournamentPublicationIO.LOCAL;
     private final Map<String, TournamentGameResult> committed = new LinkedHashMap<>();
     private final Map<String, String> checksums = new LinkedHashMap<>();
+    private Map<String, Integer> scheduleOrder;
+    private Map<Long, Integer> expectedEpochCounts;
+    private final NavigableMap<Integer, TournamentGameResult> committedOrder = new TreeMap<>();
+    private final Map<Long, Integer> committedEpochCounts = new HashMap<>();
+    private final NavigableSet<Long> completedEpochs = new TreeSet<>();
+    private CommittedSet cachedCommittedSet;
+    private String cachedHistory;
     private Map<String, String> reportedChecksums = Map.of();
+    private final Object reportPublication = new Object();
     private final Map<UUID, JsonNode> sessions = new HashMap<>();
     private final Set<UUID> attempts = new HashSet<>();
     private final Set<UUID> endedSessions = new HashSet<>();
@@ -541,8 +549,7 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
                 if (!name.equals(result.gameId() + ".json"))
                     throw new IOException("Game filename/payload mismatch: " + p);
                 validateGame(result, payload);
-                committed.put(result.gameId(), result);
-                checksums.put(result.gameId(), CanonicalJson.sha256(CanonicalJson.bytes(payload)));
+                retainCommitted(result, CanonicalJson.sha256(CanonicalJson.bytes(payload)));
                 attempts.add(result.attemptId());
             } catch (IOException | RuntimeException e) {
                 throw new IOException("games/" + name + ": " + e.getMessage(), e);
@@ -648,10 +655,17 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
     private void installSchedule(List<ScheduledTournamentGame> games) {
         schedule = games;
         var index = new HashMap<String, ScheduledTournamentGame>();
-        for (var game : games)
+        var positions = new HashMap<String, Integer>();
+        var counts = new TreeMap<Long, Integer>();
+        for (var game : games) {
+            positions.put(game.gameId(), positions.size());
+            counts.merge(game.epoch(), 1, Integer::sum);
             if (index.put(game.gameId(), game) != null)
                 throw new IllegalArgumentException("Duplicate schedule ID");
+        }
         scheduleById = Map.copyOf(index);
+        scheduleOrder = Map.copyOf(positions);
+        expectedEpochCounts = Map.copyOf(counts);
     }
 
     public Path runDirectory() {
@@ -666,6 +680,7 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
     /** Canonical copied history for audit UI and summary writers. */
     public synchronized String historyJson() throws IOException {
         ensureOpen();
+        if (cachedHistory != null) return cachedHistory;
         var history = CanonicalJson.object();
         for (String directory :
                 List.of("sessions", "failed-attempts", "diagnostics", "lock-history")) {
@@ -688,7 +703,7 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
                     entry.set("payload", read(directory + "/" + name, type));
                 }
         }
-        return CanonicalJson.encode(history);
+        return cachedHistory = CanonicalJson.encode(history);
     }
 
     private static JsonNode algorithmVersions() {
@@ -793,6 +808,10 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
 
     private synchronized void publish(String relative, byte[] bytes, boolean replace)
             throws IOException {
+        publishBytes(relative, bytes, replace);
+    }
+
+    private void publishBytes(String relative, byte[] bytes, boolean replace) throws IOException {
         ensureOpen();
         Path target = safe(relative);
         if (!replace && attributes(target) != null)
@@ -814,6 +833,9 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
     private void record(String relative, String type, JsonNode payload) throws IOException {
         byte[] bytes = TournamentRecords.encode(runId, type, payload);
         TournamentRecords.decode(bytes, runId, type);
+        if (relative.startsWith("sessions/") || relative.startsWith("failed-attempts/")
+                || relative.startsWith("diagnostics/") || relative.startsWith("lock-history/"))
+            cachedHistory = null;
         publish(relative, bytes, false);
     }
 
@@ -940,10 +962,7 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
     @Override
     public synchronized List<TournamentGameResult> committedGames() throws IOException {
         ensureOpen();
-        return schedule.stream()
-                .map(g -> committed.get(g.gameId()))
-                .filter(Objects::nonNull)
-                .toList();
+        return List.copyOf(committedOrder.values());
     }
 
     @Override
@@ -954,9 +973,18 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
         var payload = gamePayload(result);
         validateGame(result, payload);
         record("games/" + result.gameId() + ".json", "game", payload);
-        committed.put(result.gameId(), result);
-        checksums.put(result.gameId(), CanonicalJson.sha256(CanonicalJson.bytes(payload)));
+        retainCommitted(result, CanonicalJson.sha256(CanonicalJson.bytes(payload)));
         attempts.add(result.attemptId());
+    }
+
+    private void retainCommitted(TournamentGameResult result, String checksum) {
+        committed.put(result.gameId(), result);
+        checksums.put(result.gameId(), checksum);
+        committedOrder.put(scheduleOrder.get(result.gameId()), result);
+        long epoch = scheduleById.get(result.gameId()).epoch();
+        if (committedEpochCounts.merge(epoch, 1, Integer::sum).equals(expectedEpochCounts.get(epoch)))
+            completedEpochs.add(epoch);
+        cachedCommittedSet = null;
     }
 
     @Override
@@ -1049,92 +1077,109 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
 
     public synchronized CommittedSet captureCommittedSet() throws IOException {
         ensureOpen();
-        return committedSet(committed.keySet());
+        if (cachedCommittedSet == null)
+            cachedCommittedSet = committedSet(List.copyOf(committedOrder.values()), checksums, List.copyOf(completedEpochs));
+        return cachedCommittedSet;
     }
 
     private CommittedSet committedSet(Set<String> gameIds) {
-        var games = schedule.stream().filter(g -> gameIds.contains(g.gameId()))
-                .map(g -> committed.get(g.gameId())).filter(Objects::nonNull).toList();
+        var games = gameIds.stream().map(committed::get).filter(Objects::nonNull)
+                .sorted(Comparator.comparingInt(g -> scheduleOrder.get(g.gameId()))).toList();
         var snapshotChecksums = new TreeMap<String, String>();
-        for (var game : games) snapshotChecksums.put(game.gameId(), checksums.get(game.gameId()));
-        var epochs = new ArrayList<Long>();
-        var expected = new HashMap<Long, Integer>();
-        var actual = new HashMap<Long, Integer>();
-        for (var game : schedule) {
-            expected.merge(game.epoch(), 1, Integer::sum);
-            if (snapshotChecksums.containsKey(game.gameId())) actual.merge(game.epoch(), 1, Integer::sum);
+        var actual = new TreeMap<Long, Integer>();
+        for (var game : games) {
+            snapshotChecksums.put(game.gameId(), checksums.get(game.gameId()));
+            actual.merge(scheduleById.get(game.gameId()).epoch(), 1, Integer::sum);
         }
-        for (long epoch = 0; epoch < configuration.requested().epochs(); epoch++)
-            if (expected.get(epoch).equals(actual.get(epoch))) epochs.add(epoch);
+        var epochs = actual.entrySet().stream()
+                .filter(e -> e.getValue().equals(expectedEpochCounts.get(e.getKey())))
+                .map(Map.Entry::getKey).toList();
+        return committedSet(games, snapshotChecksums, epochs);
+    }
+
+    private CommittedSet committedSet(List<TournamentGameResult> games,
+            Map<String, String> snapshotChecksums, List<Long> epochs) {
         var inventory = CanonicalJson.object();
-        inventory.set("games", TournamentRecords.tree(snapshotChecksums));
+        inventory.set("games", TournamentRecords.tree(new TreeMap<>(snapshotChecksums)));
         inventory.set("completeEpochs", TournamentRecords.tree(epochs));
-        return new CommittedSet(
-                runId,
-                CanonicalJson.sha256(CanonicalJson.bytes(inventory)),
-                games,
-                snapshotChecksums,
-                epochs);
+        return new CommittedSet(runId, CanonicalJson.sha256(CanonicalJson.bytes(inventory)),
+                games, snapshotChecksums, epochs);
     }
 
     private static final Set<String> EXPORT_NAMES =
             Set.of("summary.json", "leaderboard.csv", "game-scores.csv");
 
-    public synchronized ReportGeneration publishReports(
+    public ReportGeneration publishReports(
             CommittedSet fixed, Map<String, byte[]> exports, JsonNode metadata) throws IOException {
-        ensureOpen();
-        if (!captureCommittedSet().equals(fixed))
-            throw new IOException("Report committed set is stale or foreign");
-        return publishReportSnapshot(fixed, exports, metadata);
+        return publishReport(fixed, exports, metadata, true);
     }
 
     /** Publish an authenticated earlier observation while newer games continue to commit. */
-    synchronized ReportGeneration publishReportSnapshot(
+    ReportGeneration publishReportSnapshot(
             CommittedSet fixed, Map<String, byte[]> exports, JsonNode metadata) throws IOException {
+        return publishReport(fixed, exports, metadata, false);
+    }
+
+    private void validateReportSet(CommittedSet fixed, boolean current) throws IOException {
         ensureOpen();
-        if (!committedSet(fixed.gameChecksums().keySet()).equals(fixed))
+        if (current && !captureCommittedSet().equals(fixed))
+            throw new IOException("Report committed set is stale or foreign");
+        if (!current && !committedSet(fixed.gameChecksums().keySet()).equals(fixed))
             throw new IOException("Report snapshot is foreign or inconsistent with committed games");
         if (!fixed.gameChecksums().entrySet().containsAll(reportedChecksums.entrySet()))
             throw new IOException("Report snapshot would move published progress backwards");
-        if (!exports.keySet().equals(EXPORT_NAMES))
-            throw new IOException(
-                    "A report generation requires exactly summary.json, leaderboard.csv and"
-                            + " game-scores.csv");
-        String generation = UUID.randomUUID().toString();
-        String temporary = "reports/.tmp-" + generation;
-        mkdir(temporary);
-        var manifest = CanonicalJson.object();
-        manifest.put("generationId", generation);
-        manifest.put("setDigest", fixed.digest());
-        manifest.set("gameChecksums", TournamentRecords.tree(fixed.gameChecksums()));
-        manifest.set("completeEpochs", TournamentRecords.tree(fixed.completeEpochs()));
-        manifest.set("metadata", metadata);
-        var hashes = manifest.putObject("exports");
-        for (String name : exports.keySet().stream().sorted().toList()) {
-            byte[] bytes = exports.get(name).clone();
-            publish(temporary + "/" + name, bytes, false);
-            hashes.put(name, CanonicalJson.sha256(bytes));
+    }
+
+    private ReportGeneration publishReport(CommittedSet fixed, Map<String, byte[]> exports,
+            JsonNode metadata, boolean current) throws IOException {
+        // Serialize publishers and close, but let game commits run during immutable-file I/O.
+        synchronized (reportPublication) {
+            synchronized (this) { validateReportSet(fixed, current); }
+            if (!exports.keySet().equals(EXPORT_NAMES))
+                throw new IOException(
+                        "A report generation requires exactly summary.json, leaderboard.csv and"
+                                + " game-scores.csv");
+            String generation = UUID.randomUUID().toString();
+            String temporary = "reports/.tmp-" + generation;
+            mkdir(temporary);
+            var manifest = CanonicalJson.object();
+            manifest.put("generationId", generation);
+            manifest.put("setDigest", fixed.digest());
+            manifest.set("gameChecksums", TournamentRecords.tree(fixed.gameChecksums()));
+            manifest.set("completeEpochs", TournamentRecords.tree(fixed.completeEpochs()));
+            manifest.set("metadata", metadata);
+            var hashes = manifest.putObject("exports");
+            for (String name : exports.keySet().stream().sorted().toList()) {
+                byte[] bytes = exports.get(name).clone();
+                publishBytes(temporary + "/" + name, bytes, false);
+                hashes.put(name, CanonicalJson.sha256(bytes));
+            }
+            byte[] manifestBytes = TournamentRecords.encode(runId, "report-manifest", manifest);
+            TournamentRecords.decode(manifestBytes, runId, "report-manifest");
+            publishBytes(temporary + "/manifest.json", manifestBytes, false);
+            forceDirectory(root.resolve(temporary));
+            Path destination = safe("reports/" + generation);
+            if (attributes(destination) != null)
+                throw new FileAlreadyExistsException(destination.toString());
+            io.atomicMove(root.resolve(temporary), destination, false);
+            io.forceDirectory(root.resolve("reports"));
+            synchronized (this) {
+                validateReportSet(fixed, current);
+                var pointer = CanonicalJson.object();
+                pointer.put("generationId", generation);
+                pointer.put(
+                        "manifestSha256",
+                        CanonicalJson.sha256(readRegular(destination.resolve("manifest.json"))));
+                pointer.put("setDigest", fixed.digest());
+                reportedChecksums = fixed.gameChecksums();
+                publish(
+                        "reports/current.json",
+                        TournamentRecords.encode(runId, "report-current", pointer),
+                        true);
+            }
+            return new ReportGeneration(
+                    generation, fixed.digest(), CanonicalJson.encode(metadata), exports);
         }
-        record(temporary + "/manifest.json", "report-manifest", manifest);
-        forceDirectory(root.resolve(temporary));
-        Path destination = safe("reports/" + generation);
-        if (attributes(destination) != null)
-            throw new FileAlreadyExistsException(destination.toString());
-        io.atomicMove(root.resolve(temporary), destination, false);
-        io.forceDirectory(root.resolve("reports"));
-        var pointer = CanonicalJson.object();
-        pointer.put("generationId", generation);
-        pointer.put(
-                "manifestSha256",
-                CanonicalJson.sha256(readRegular(destination.resolve("manifest.json"))));
-        pointer.put("setDigest", fixed.digest());
-        publish(
-                "reports/current.json",
-                TournamentRecords.encode(runId, "report-current", pointer),
-                true);
-        reportedChecksums = fixed.gameChecksums();
-        return new ReportGeneration(
-                generation, fixed.digest(), CanonicalJson.encode(metadata), exports);
     }
 
     /** Coherent immutable-generation observation, without execution authority or a writer lock. */
@@ -1310,7 +1355,13 @@ public final class DurableTournamentRunStore implements TournamentRunStore {
     }
 
     @Override
-    public synchronized void close() throws IOException {
+    public void close() throws IOException {
+        synchronized (reportPublication) {
+            synchronized (this) { closeStore(); }
+        }
+    }
+
+    private void closeStore() throws IOException {
         if (closed) return;
         Throwable problem = null;
         try {

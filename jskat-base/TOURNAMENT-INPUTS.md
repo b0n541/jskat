@@ -38,12 +38,18 @@ uses enum-ordered card sets so seeded card indices and deterministic ties do
 not depend on identity hash ordering across JVMs.
 
 Capacity is `3 * workers`, counting idle, leased and construction reservations.
-Reservations, creation and idle eviction are synchronized. An idle instance
-closes before its slot is reused. Cleanup uncertainty poisons admission without
+Reservations and idle eviction are synchronized; all reusable seats are protected
+before eviction. Missing players are constructed outside the pool monitor. Up to
+three independent model-backed seats load concurrently using a bounded executor,
+while model-free creation remains synchronous. An idle instance closes before its
+slot is reused. Cleanup uncertainty poisons admission without
 freeing its capacity; terminal cleanup retries quarantined instances and reports
 the failure. `GameLease.close()` returns healthy players;
 `GameLease.discard()` closes all three after any failed attempt. Runner shutdown
-drains leases before `pool.close()` (which waits if leases remain outstanding).
+drains leases before `pool.close()` (which waits for leases and construction
+reservations, then shuts down its loader). Every submitted load is joined before
+failed/cancelled acquisition cleanup; successful siblings are closed if another
+load fails.
 
 Tournament ML construction explicitly selects `ONNXConstructionPolicy.TOURNAMENT`:
 one intra-operation and one inter-operation thread per session, three sessions

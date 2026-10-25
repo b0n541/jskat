@@ -77,6 +77,45 @@ class TournamentReportsTest {
     }
 
     @Test
+    void cachedReportsMatchFreshReportsAcrossOutOfOrderSnapshotsAndChangedAuditData() {
+        var configuration = config();
+        var schedule = schedule();
+        var calculator = new TournamentReports.Calculator();
+        var results = new ArrayList<TournamentGameResult>();
+        try (var pool = new TournamentPlayerPool(configuration.competitors(), 1)) {
+            for (var game : schedule) try (var lease = pool.acquire(game, CancellationToken.NONE)) {
+                results.add(new TournamentGameCore().play(game, lease.players(),
+                        TournamentIdentities.resolvedDigest(configuration), UUID.randomUUID(),
+                        UUID.randomUUID(), lease::fallbacks));
+            }
+        }
+        UUID run = UUID.randomUUID();
+        var snapshots = List.of(
+                List.of(results.get(7)),
+                results.subList(6, 12),
+                java.util.stream.Stream.concat(results.subList(6, 12).stream(), results.subList(0, 1).stream()).toList(),
+                results,
+                results.subList(6, 12));
+        var epochs = List.of(List.<Long>of(), List.of(1L), List.of(1L), List.of(0L, 1L), List.of(1L));
+        for (int i = 0; i < snapshots.size(); i++) {
+            var games = new ArrayList<>(snapshots.get(i));
+            Collections.reverse(games);
+            var set = new DurableTournamentRunStore.CommittedSet(run, "a".repeat(64), games, Map.of(), epochs.get(i));
+            var metadata = CanonicalJson.object().put("observation", i);
+            assertThat(calculator.calculate(configuration, schedule, set, "{}", metadata))
+                    .isEqualTo(TournamentReports.calculate(configuration, schedule, set, "{}", metadata));
+        }
+        var previous = results.getFirst();
+        var fallback = new TournamentInferenceFallback(a, previous.gameId(), "BIDDING", "fixture fallback");
+        results.set(0, new TournamentGameResult(previous.gameId(), previous.attemptId(), previous.sessionId(),
+                previous.inputDigest(), previous.outcome(), previous.seatScores(), previous.events(), List.of(fallback)));
+        var changed = new DurableTournamentRunStore.CommittedSet(run, "b".repeat(64), results, Map.of(), List.of(0L, 1L));
+        var report = calculator.calculate(configuration, schedule, changed, "{}", CanonicalJson.object());
+        assertThat(report).isEqualTo(TournamentReports.calculate(configuration, schedule, changed, "{}", CanonicalJson.object()));
+        assertThat(CanonicalJson.parse(report.summaryJson()).path("inferenceFallbacks")).hasSize(1);
+    }
+
+    @Test
     void partialEpochIsProgressOnlyAndNoEvidenceDoesNotInventRating() {
         var r = report(List.of(allPass(schedule().getFirst())), List.of());
         var s = CanonicalJson.parse(r.summaryJson());

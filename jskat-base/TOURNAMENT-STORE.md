@@ -155,7 +155,8 @@ forces a private complete generation, publishes the directory,
 then atomically replaces and forces `current.json`. The manifest contains exact
 game checksums/epochs, metadata and export hashes. A reader resolves the pointer
 once and reads all exports through that generation. Old/orphan generations stay
-available. Export arrays are defensively copied.
+available. Export arrays are defensively copied. A failed pointer publication
+conservatively retains its progress floor even if the rename outcome is uncertain.
 
 Game admission proceeds across all pending epochs without an epoch barrier.
 Epoch completion requests background reporting. There is at most one in-flight
@@ -163,8 +164,13 @@ report and one coalesced request for the latest snapshot; intermediate epochs
 can be skipped for display. Only complete epochs contribute to ratings, including
 when epochs finish out of order. Progress counts completed epochs independently
 of the latest displayed report. Calculation and durable report publication run on
-the dedicated reporting thread; synchronized store operations still serialize
-report publication with game commits. Failures stop further admission and fail
+the dedicated reporting thread. Immutable generation files are staged and forced
+outside the game-commit monitor. Publishers and store close use a separate
+publication lock; authentication and the monotonic pointer swap still serialize
+with game commits. A strict current-set publication is checked again immediately
+before the pointer swap, so commits during staging cannot certify a stale final
+report. Snapshot and history caches are invalidated by authoritative changes;
+expected epoch counts and committed-game ordering are indexed once. Failures stop further admission and fail
 the run. Finalization drains reporting and publishes a terminal current-set report
 before ending the session or releasing the store.
 
@@ -202,3 +208,15 @@ The ext4 integration fixtures explicitly skip when no ext4 test root is selected
 format/schedule/unit tests remain portable. Acceptance run directories retain
 failure evidence under `jskat-tournament-store-tests` in that root and can be
 removed after reviewing the results.
+
+Report calculators have run-scoped caches: the schedule is indexed once and each
+immutable game's descriptive contributions, bid-event parsing, and score CSV rows
+are prepared once. Every report still reconstructs the same ordered exports and
+recalculates ratings, 5,000-replicate intervals, and predictive diagnostics from
+its complete epochs. No statistical sample count or model prediction changes.
+Caches are not retained by a service after its session ends.
+
+Schedule indexes use memory proportional to the retained schedule, and game-report
+caches grow with committed games. They trade that bounded run-scoped memory for
+less repeated sorting, event parsing and export construction; they do not create
+additional model sessions or share mutable player knowledge.
