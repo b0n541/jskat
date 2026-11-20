@@ -5,7 +5,8 @@ public enum PlayerImplementation {
     RANDOM("random", "org.jskat.ai.rnd.AIPlayerRND", false),
     ALGORITHMIC("algorithmic", "org.jskat.ai.algorithmic.AlgorithmicAIPlayer", false),
     ML("ml", "org.jskat.ai.ml.MLPlayer", true),
-    ML_PRO("ml-pro", "org.jskat.ai.ml.MLPlayerPro", true);
+    ML_PRO("ml-pro", "org.jskat.ai.ml.MLPlayerPro", true),
+    ML_NEXT("ml-next", "org.jskat.ai.ml.MLPlayerNext", true);
     private final String id, className;
     private final boolean modelRequired;
 
@@ -13,6 +14,11 @@ public enum PlayerImplementation {
         this.id = id;
         this.className = className;
         this.modelRequired = modelRequired;
+    }
+
+    @Override
+    public String toString() {
+        return this == ML_NEXT ? "ML next" : name();
     }
 
     public String id() {

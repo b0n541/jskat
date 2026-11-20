@@ -43,6 +43,19 @@ public final class MLPlayerFactory {
                 return PlayerCreationResult.failed("Could not create ML Player Pro: " + e.getMessage());
             }
         }
+        if (MLPlayerNext.class.getName().equals(playerType)) {
+            if (models == null) {
+                return PlayerCreationResult.unavailable(new ModelUnavailable(
+                        ModelUnavailableReason.NO_ACTIVE_RELEASE,
+                        "ML next is unavailable because no Resolved model set was established at startup",
+                        null));
+            }
+            try {
+                return PlayerCreationResult.created(new MLPlayerNext(models));
+            } catch (final RuntimeException e) {
+                return PlayerCreationResult.failed("Could not create ML next: " + e.getMessage());
+            }
+        }
         try {
             return PlayerCreationResult.created((JSkatPlayer) Class.forName(playerType)
                     .getDeclaredConstructor().newInstance());

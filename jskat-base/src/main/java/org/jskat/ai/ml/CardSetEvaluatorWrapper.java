@@ -2,9 +2,11 @@ package org.jskat.ai.ml;
 
 import ai.onnxruntime.OnnxTensor;
 import ai.onnxruntime.OrtException;
+import ai.onnxruntime.TensorInfo;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,6 +30,9 @@ import java.util.Map;
  */
 public class CardSetEvaluatorWrapper extends AbstractONNXWrapper {
 
+    /** Maximum native batch size; callers cannot allocate an unbounded candidate tensor. */
+    public static final int MAX_BATCH_SIZE = 32;
+    private Boolean batchingSupported;
     private static final int MAX_HAND = 10;
     private static final int MAX_SKAT = 2;
     private static final int CARD_PAD_IDX = MLConstants.PAD_INDEX;
@@ -45,6 +50,112 @@ public class CardSetEvaluatorWrapper extends AbstractONNXWrapper {
 
     public CardSetEvaluatorWrapper(String modelPath, ONNXConstructionPolicy policy) throws OrtException, IOException {
         super(modelPath, "CardSetEvaluator", policy);
+    }
+
+    /** Immutable inference request; array inputs are copied to retain the requested encoding. */
+    public record Candidate(int[] handCards, int[] skatCards, int skatLen, int gameType,
+                            int position, boolean hand, int bid) {
+        public Candidate {
+            if (handCards.length != MAX_HAND) throw new IllegalArgumentException("Expected ten hand cards");
+            handCards = handCards.clone();
+            skatCards = skatCards.clone();
+        }
+        @Override public int[] handCards() { return handCards.clone(); }
+        @Override public int[] skatCards() { return skatCards.clone(); }
+    }
+
+    /** Fixed-one releases deliberately retain scalar execution without a failed batch probe. */
+    public boolean supportsBatching() throws OrtException {
+        if (batchingSupported == null) {
+            // Mark scalar first, so failed metadata inspection is never repeated.
+            batchingSupported = false;
+            var inputs = session.getInputInfo();
+            var result = session.getOutputInfo().get("win_prob");
+            batchingSupported = inputs.size() == 7 && inputs.values().stream().allMatch(info ->
+                    info.getInfo() instanceof TensorInfo tensor && tensor.getShape().length > 0
+                            && tensor.getShape()[0] < 0)
+                    && result != null && result.getInfo() instanceof TensorInfo output
+                    && output.getShape().length > 0 && output.getShape()[0] < 0;
+        }
+        return batchingSupported;
+    }
+
+    /**
+     * Predicts candidates in request order in bounded native batches. A dynamic export that
+     * fails execution is disabled for future batches; the caller receives the failure so it
+     * can report diagnostics before scalar recovery.
+     */
+    public float[] predictBatch(List<Candidate> candidates) throws OrtException {
+        float[] predictions = new float[candidates.size()];
+        if (candidates.isEmpty()) return predictions;
+        if (!supportsBatching()) {
+            for (int i = 0; i < candidates.size(); i++) {
+                Candidate c = candidates.get(i);
+                predictions[i] = predict(c.handCards, c.skatCards, c.skatLen, c.gameType,
+                        c.position, c.hand, c.bid);
+            }
+            return predictions;
+        }
+        try {
+            for (int offset = 0; offset < candidates.size(); offset += MAX_BATCH_SIZE) {
+                int count = Math.min(MAX_BATCH_SIZE, candidates.size() - offset);
+                float[] batch = runBatch(candidates.subList(offset, offset + count));
+                System.arraycopy(batch, 0, predictions, offset, count);
+            }
+            return predictions;
+        } catch (OrtException | RuntimeException failure) {
+            batchingSupported = false;
+            throw failure;
+        }
+    }
+
+    private float[] runBatch(List<Candidate> candidates) throws OrtException {
+        int size = candidates.size();
+        long[][] hands = new long[size][MAX_HAND];
+        long[][] skats = new long[size][MAX_SKAT];
+        long[] lengths = new long[size];
+        long[] games = new long[size];
+        long[] positions = new long[size];
+        long[] handFlags = new long[size];
+        float[] bids = new float[size];
+        for (int row = 0; row < size; row++) {
+            Candidate c = candidates.get(row);
+            for (int i = 0; i < MAX_HAND; i++) hands[row][i] = c.handCards[i];
+            for (int i = 0; i < MAX_SKAT; i++) skats[row][i] =
+                    i < c.skatCards.length ? c.skatCards[i] : CARD_PAD_IDX;
+            lengths[row] = c.skatLen;
+            games[row] = c.gameType;
+            positions[row] = c.position;
+            handFlags[row] = c.hand ? 1 : 0;
+            bids[row] = (float) (c.bid - MLConstants.MIN_BID) / (MLConstants.MAX_BID - MLConstants.MIN_BID);
+        }
+        try (OnnxTensor handTensor = OnnxTensor.createTensor(env, hands);
+             OnnxTensor skatTensor = OnnxTensor.createTensor(env, skats);
+             OnnxTensor lengthTensor = OnnxTensor.createTensor(env, lengths);
+             OnnxTensor gameTensor = OnnxTensor.createTensor(env, games);
+             OnnxTensor positionTensor = OnnxTensor.createTensor(env, positions);
+             OnnxTensor handFlagTensor = OnnxTensor.createTensor(env, handFlags);
+             OnnxTensor bidTensor = OnnxTensor.createTensor(env, bids)) {
+            Map<String, OnnxTensor> inputs = Map.of("hand_cards", handTensor, "skat_cards", skatTensor,
+                    "skat_len", lengthTensor, "game_type", gameTensor, "position", positionTensor,
+                    "is_hand", handFlagTensor, "bid", bidTensor);
+            try (var results = session.run(inputs)) {
+                Object value = results.get("win_prob").orElseThrow(() ->
+                        new IllegalStateException("Missing win_prob output")).getValue();
+                if (value instanceof float[] probabilities && probabilities.length == size) {
+                    return probabilities;
+                }
+                if (value instanceof float[][] probabilities && probabilities.length == size) {
+                    float[] output = new float[size];
+                    for (int i = 0; i < size; i++) {
+                        if (probabilities[i].length != 1) throw new OrtException("Expected one probability per candidate");
+                        output[i] = probabilities[i][0];
+                    }
+                    return output;
+                }
+                throw new OrtException("Expected " + size + " win probabilities from batched evaluator");
+            }
+        }
     }
 
     /**

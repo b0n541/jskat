@@ -100,7 +100,7 @@ class TournamentPanel(
         val open = Button("Open run…").apply { setOnAction {
             DirectoryChooser().showDialog(scene?.window)?.let { if (inspectInTab != null) inspectInTab.invoke(it.toPath()) else openRun(it.toPath()) }
         } }
-        val discover = Button("Discover models…").apply { setOnAction { discover(PlayerImplementation.ML); discover(PlayerImplementation.ML_PRO) } }
+        val discover = Button("Discover models…").apply { setOnAction { PlayerImplementation.entries.filter { it.modelRequired() }.forEach { discover(it) } } }
         editingActions.addAll(listOf(new, import, discover))
         val directory = Button("Run directory").apply { setOnAction { openedDirectory?.let(openDirectory) } }
         val refresh = Button("Refresh reports / audit").apply { setOnAction { openedDirectory?.let { loadEvidence(it) } } }

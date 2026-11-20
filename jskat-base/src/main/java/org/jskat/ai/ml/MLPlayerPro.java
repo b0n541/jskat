@@ -75,6 +75,11 @@ public class MLPlayerPro extends AbstractMLPlayer {
     @Override
     public void close() { closeModels(biddingDenseModel, cardPlayTransformerModel, gameEvalTransformerModel, biddingTransformerModel); }
 
+    /** The player owns this evaluator and closes it with its other model sessions. */
+    protected final CardSetEvaluatorWrapper gameEvaluator() {
+        return gameEvalTransformerModel;
+    }
+
     // ==================== Bidding (Transformer override) ====================
 
     /**

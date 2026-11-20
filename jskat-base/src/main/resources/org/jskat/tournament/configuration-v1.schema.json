@@ -72,7 +72,8 @@
               "implementation": {
                 "enum": [
                   "ml",
-                  "ml-pro"
+                  "ml-pro",
+                  "ml-next"
                 ]
               },
               "model": {

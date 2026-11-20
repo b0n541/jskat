@@ -399,53 +399,16 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         GameSearchResult best = null;
         double bestEV = Double.NEGATIVE_INFINITY;
 
-        GameType[] gameTypes = {GameType.DIAMONDS, GameType.HEARTS, GameType.SPADES,
-                GameType.CLUBS, GameType.GRAND, GameType.NULL};
-
         int highestBid = knowledge.getHighestBid(position);
         int bidConstraint = Math.max(highestBid, 18);
 
         try {
-            for (GameType gameType : gameTypes) {
-                // Base game (only for non-hand games)
-                if (!isHandGame) {
-                    GameContract baseGame = new GameContract(gameType);
-                    GameSearchResult baseResult = evaluateGameContract(playingHand, matadorHand, position, baseGame, false, bidConstraint, skatCards);
-                    if (baseResult != null && baseResult.expectedValue > bestEV) {
-                        bestEV = baseResult.expectedValue;
-                        best = baseResult;
-                    }
-                }
-
-                // Hand game
-                if (isHandGame) {
-                    GameContract handGame = new GameContract(gameType).withHand();
-                    GameSearchResult handResult = evaluateGameContract(playingHand, matadorHand, position, handGame, true, bidConstraint, skatCards);
-                    if (handResult != null && handResult.expectedValue > bestEV) {
-                        bestEV = handResult.expectedValue;
-                        best = handResult;
-                    }
-                }
-
-                // Null Ouvert checks
-                if (gameType == GameType.NULL) {
-                    if (!isHandGame) {
-                        GameContract nullOuvert = new GameContract(GameType.NULL).withOuvert(playingHand);
-                        GameSearchResult ouvertResult = evaluateGameContract(playingHand, matadorHand, position, nullOuvert, false, bidConstraint, skatCards);
-                        if (ouvertResult != null && ouvertResult.expectedValue > bestEV) {
-                            bestEV = ouvertResult.expectedValue;
-                            best = ouvertResult;
-                        }
-                    }
-
-                    if (isHandGame) {
-                        GameContract nullHandOuvert = new GameContract(GameType.NULL).withHand().withOuvert(playingHand);
-                        GameSearchResult handOuvertResult = evaluateGameContract(playingHand, matadorHand, position, nullHandOuvert, true, bidConstraint, skatCards);
-                        if (handOuvertResult != null && handOuvertResult.expectedValue > bestEV) {
-                            bestEV = handOuvertResult.expectedValue;
-                            best = handOuvertResult;
-                        }
-                    }
+            for (GameContract contract : gameContracts(playingHand, isHandGame)) {
+                GameSearchResult result = evaluateGameContract(playingHand, matadorHand, position,
+                        contract, isHandGame, bidConstraint, skatCards);
+                if (result != null && result.expectedValue > bestEV) {
+                    bestEV = result.expectedValue;
+                    best = result;
                 }
             }
 
@@ -455,6 +418,18 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         }
 
         return best;
+    }
+
+    /** Candidate order is shared by scalar and batched evaluators, including tie selection. */
+    protected Iterable<GameContract> gameContracts(CardList playingHand, boolean isHandGame) {
+        GameType[] types = {GameType.DIAMONDS, GameType.HEARTS, GameType.SPADES,
+                GameType.CLUBS, GameType.GRAND, GameType.NULL};
+        // Construct each contract only when visited, retaining best-so-far on invalid announcements.
+        return () -> java.util.stream.IntStream.range(0, 7).mapToObj(index -> {
+            GameContract contract = new GameContract(types[Math.min(index, types.length - 1)]);
+            if (isHandGame) contract = contract.withHand();
+            return index == 6 ? contract.withOuvert(playingHand) : contract;
+        }).iterator();
     }
 
     /**

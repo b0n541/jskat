@@ -136,7 +136,7 @@ letting admitted games finish and observing the signal before new admission.
 
 Start with the complete model-free configuration and launcher commands in
 [the CLI manual](../app/TOURNAMENT.md), or use the native editor documented in
-[the JavaFX manual](../jskat-gui/TOURNAMENT.md). `ml` and `ml-pro` require a
+[the JavaFX manual](../jskat-gui/TOURNAMENT.md). `ml`, `ml-pro` and `ml-next` require a
 model variant; replace a model-free implementation with, for example:
 
 ```json
@@ -149,7 +149,14 @@ Other source variants are `{"source":"active"}` and
 directory labels under `~/.jskat/models/releases`, including any `v` prefix.
 Each model implementation can appear with distinct effective fingerprints;
 Random and Algorithmic can each appear only once. A roster may compare the same
-release with different ML implementations. See [inputs and native ownership](TOURNAMENT-INPUTS.md)
+release with different ML implementations. Select **ML next** in ordinary player
+selection, or use `"implementation":"ml-next"` for tournament comparison with
+`ml` and `ml-pro`. ML next uses the same validated model release as ML Pro and
+batches discard/contract inference when the model supports it, with scalar
+compatibility for fixed-one models. Existing ML players remain separate choices.
+See [ML next comparison setup](tools/ML-NEXT.md) to create the separate batch-capable
+development release required by the v1.4.0 evaluator.
+See [inputs and native ownership](TOURNAMENT-INPUTS.md)
 for inventories, signatures and source discovery.
 
 A run always uses standard three-player Skat: no Ramsch or configurable rule

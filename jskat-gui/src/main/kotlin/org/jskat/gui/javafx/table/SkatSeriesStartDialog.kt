@@ -227,6 +227,7 @@ class SkatSeriesStartDialog(
                 "org.jskat.ai.nn.AIPlayerNN" -> strings.getString("neuralNetworkPlayer")
                 "org.jskat.ai.ml.MLPlayer" -> strings.getString("mlPlayer")
                 "org.jskat.ai.ml.MLPlayerPro" -> strings.getString("mlPlayerPro")
+                "org.jskat.ai.ml.MLPlayerNext" -> strings.getString("mlPlayerNext")
                 JSkatPlayerResolver.HUMAN_PLAYER_CLASS -> strings.getString("humanPlayer")
                 else -> item
             }

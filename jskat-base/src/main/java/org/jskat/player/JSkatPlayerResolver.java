@@ -25,6 +25,9 @@ public class JSkatPlayerResolver {
      */
     public static final String ML_PLAYER_PRO_CLASS = "org.jskat.ai.ml.MLPlayerPro";
 
+    /** Fully qualified class name for the next ML player implementation. */
+    public static final String ML_PLAYER_NEXT_CLASS = "org.jskat.ai.ml.MLPlayerNext";
+
     /**
      * Gets all class names including package names of AI player implementations.
      *
@@ -35,7 +38,8 @@ public class JSkatPlayerResolver {
                 "org.jskat.ai.rnd.AIPlayerRND",
                 "org.jskat.ai.newalgorithm.AlgorithmAI",
                 ML_PLAYER_CLASS,
-                ML_PLAYER_PRO_CLASS
+                ML_PLAYER_PRO_CLASS,
+                ML_PLAYER_NEXT_CLASS
         );
     }
 
@@ -45,6 +49,8 @@ public class JSkatPlayerResolver {
      * @return is m l player result.
      */
     public static boolean isMLPlayer(final String playerType) {
-        return ML_PLAYER_CLASS.equals(playerType) || ML_PLAYER_PRO_CLASS.equals(playerType);
+        return ML_PLAYER_CLASS.equals(playerType)
+                || ML_PLAYER_PRO_CLASS.equals(playerType)
+                || ML_PLAYER_NEXT_CLASS.equals(playerType);
     }
 }

@@ -1,4 +1,3 @@
-
 package org.jskat.player;
 
 
@@ -16,6 +15,6 @@ public class JSkatPlayerResolverTest extends AbstractJSkatTest {
 
         final Set<String> implementations = JSkatPlayerResolver.getAllAIPlayerImplementations();
 
-        assertThat(implementations).hasSize(4);
+        assertThat(implementations).hasSize(5);
     }
 }

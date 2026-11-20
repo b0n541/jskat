@@ -28,6 +28,7 @@ public final class TournamentPlayerRegistry {
             case ALGORITHMIC -> new AlgorithmicAIPlayer();
             case ML -> new MLPlayer(models, ONNXConstructionPolicy.TOURNAMENT);
             case ML_PRO -> new MLPlayerPro(models, ONNXConstructionPolicy.TOURNAMENT);
+            case ML_NEXT -> new MLPlayerNext(models, ONNXConstructionPolicy.TOURNAMENT);
         };
     }
 
